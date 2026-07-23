@@ -47,7 +47,7 @@ async def explain_causal(query: str, repo_id: str) -> dict:
             {
                 "sha": ctx["metadata"].get("commit_sha"),
                 "date": ctx["metadata"].get("timestamp", "")[:10],
-                "message": ctx["document"].split("\n")[4].replace("Message: ", ""),
+                "message": next((line.replace("Message: ", "").strip() for line in ctx["document"].split("\n") if line.startswith("Message: ")), "Commit snapshot"),
                 "relevance": ctx["relevance_score"],
             }
             for ctx in raw_contexts[:6]

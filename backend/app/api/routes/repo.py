@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks
+from pydantic import BaseModel
 from loguru import logger
 from app.models.repo import RepoIngestionRequest, RepoMetadata
 from app.models.response import APIResponse, IngestionStatus
 from app.ingestion.git_ingestor import ingest_repo, get_repo_id
+
 
 router = APIRouter()
 

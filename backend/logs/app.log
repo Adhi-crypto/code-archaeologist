@@ -222,3 +222,101 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-07-03 17:18:34.775 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
 2026-07-03 17:20:44.121 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'Who made the last commit?'
 2026-07-03 17:20:44.121 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Who made the last commit?'
+2026-07-23 12:35:22.429 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 12:35:22.429 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 12:35:22.429 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 12:35:31.126 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 12:35:31.139 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 12:35:31.139 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 12:37:09.685 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 12:37:09.685 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 12:37:09.686 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 12:37:09.686 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 12:38:10.911 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 12:38:10.911 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 12:38:10.911 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 12:39:01.959 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 12:39:14.496 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 12:39:14.497 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 12:39:14.497 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 12:42:16.539 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/pallets/flask
+2026-07-23 12:42:23.829 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-23 12:42:46.942 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 100 commits
+2026-07-23 12:42:46.987 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: flask | 100 commits | langs: ['Python']
+2026-07-23 12:42:47.539 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 100 commit snapshots for flask
+2026-07-23 12:42:47.539 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 12:42:54.071 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 100 snapshots in ChromaDB for flask
+2026-07-23 12:42:54.073 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 7e3d4d9940b1
+2026-07-23 12:42:59.163 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 12:43:06.497 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 12:43:06.497 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 12:43:06.497 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 12:44:32.522 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 12:44:36.438 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'What is this repository about?'
+2026-07-23 12:44:36.438 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'What is this repository about?'
+2026-07-23 12:46:47.003 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'Summarize the routing architecture.'
+2026-07-23 12:46:47.003 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Summarize the routing architecture.'
+2026-07-23 12:48:34.279 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'How does Flask handle requests?'
+2026-07-23 12:48:34.279 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'How does Flask handle requests?'
+2026-07-23 12:52:53.583 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for flask (20 sampled commits)
+2026-07-23 12:52:53.606 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for flask (20 sampled commits)
+2026-07-23 12:54:53.893 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 12:54:53.893 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 12:54:53.904 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 12:54:53.904 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 12:59:27.528 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:19 - Generating Repository Intelligence report for flask (7e3d4d9940b1)
+2026-07-23 12:59:27.545 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:19 - Generating Repository Intelligence report for flask (7e3d4d9940b1)
+2026-07-23 12:59:33.615 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:19 - Generating Repository Intelligence report for flask (7e3d4d9940b1)
+2026-07-23 12:59:33.642 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:19 - Generating Repository Intelligence report for flask (7e3d4d9940b1)
+2026-07-23 13:01:33.890 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:01:33.891 | WARNING  | app.reasoning.repository_intelligence:analyze_repository_intelligence:184 - Ollama generation fallback for repository intelligence summary: LLM unavailable: 
+2026-07-23 13:01:33.938 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:01:33.939 | WARNING  | app.reasoning.repository_intelligence:analyze_repository_intelligence:184 - Ollama generation fallback for repository intelligence summary: LLM unavailable: 
+2026-07-23 13:06:23.147 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 13:06:32.357 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 13:06:32.357 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 13:06:32.362 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 13:06:40.060 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 13:06:40.061 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 13:06:40.061 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 13:13:16.157 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/Adhi-crypto/underwater-debris-detection
+2026-07-23 13:13:22.507 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-23 13:13:23.885 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 2 commits
+2026-07-23 13:13:24.091 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: underwater-debris-detection | 2 commits | langs: ['Python']
+2026-07-23 13:13:24.727 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 2 commit snapshots for underwater-debris-detection
+2026-07-23 13:13:24.727 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 13:13:28.696 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 2 snapshots in ChromaDB for underwater-debris-detection
+2026-07-23 13:13:28.696 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 82102aaf75ee
+2026-07-23 13:13:33.795 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 13:13:42.863 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 13:13:42.863 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 13:13:42.864 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 13:14:56.379 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 13:15:00.348 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'What is this repository about?'
+2026-07-23 13:15:00.348 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'What is this repository about?'
+2026-07-23 13:16:17.969 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Summarize this repository.'
+2026-07-23 13:16:17.969 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Summarize this repository.'
+2026-07-23 13:17:35.586 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Explain the overall architecture.'
+2026-07-23 13:17:35.586 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Explain the overall architecture.'
+2026-07-23 13:19:49.866 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'How does the image preprocessing pipeline work?'
+2026-07-23 13:19:49.867 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'How does the image preprocessing pipeline work?'
+2026-07-23 13:21:43.900 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Where is model inference implemented?'
+2026-07-23 13:21:43.901 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'Where is model inference implemented?'
+2026-07-23 13:22:08.449 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Explain the object detection workflow.'
+2026-07-23 13:22:08.450 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'Explain the object detection workflow.'
+2026-07-23 13:23:24.571 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'What are the major components of this repository?'
+2026-07-23 13:23:24.571 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'What are the major components of this repository?'
+2026-07-23 13:24:54.094 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:24:54.108 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:25:18.678 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'How has this repository evolved?'
+2026-07-23 13:25:18.678 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'How has this repository evolved?'
+2026-07-23 13:25:20.194 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:25:20.218 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:26:19.033 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:26:19.055 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:27:20.481 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:27:20.481 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 13:27:20.501 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:27:20.502 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 13:28:19.354 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:28:19.354 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 

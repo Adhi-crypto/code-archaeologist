@@ -1,6 +1,7 @@
 import time
 from collections import defaultdict
 from datetime import datetime
+# pyrefly: ignore [missing-import]
 from loguru import logger
 from app.temporal_rag.snapshot_store import get_collection
 from app.reasoning.ollama_client import generate
@@ -13,8 +14,14 @@ Given automated repository analytics, write an executive technical summary (3-4 
 3. Developer contribution patterns & technical debt
 4. Actionable recommendations for software evolution and maintenance."""
 
+_intelligence_cache: dict[str, dict] = {}
 
-async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Repository") -> dict:
+
+async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Repository", force_refresh: bool = False) -> dict:
+    if not force_refresh and repo_id in _intelligence_cache:
+        logger.info(f"Returning cached Repository Intelligence for {repo_id}")
+        return _intelligence_cache[repo_id]
+
     start_time = time.time()
     logger.info(f"Generating Repository Intelligence report for {repo_name} ({repo_id})")
 
@@ -193,7 +200,7 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
 
     analysis_time = round(time.time() - start_time, 2)
 
-    return {
+    res = {
         "health_score": health_score,
         "risk_level": risk_level,
         "recommendation": recommendation,
@@ -218,3 +225,7 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
         "risk_assessment": risk_assessment,
         "analysis_time": analysis_time,
     }
+
+    _intelligence_cache[repo_id] = res
+    return res
+

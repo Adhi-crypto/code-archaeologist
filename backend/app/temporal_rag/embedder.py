@@ -1,3 +1,4 @@
+from functools import lru_cache
 from sentence_transformers import SentenceTransformer
 from loguru import logger
 from app.core.config import settings
@@ -11,9 +12,13 @@ def get_embedding_model() -> SentenceTransformer:
         _model = SentenceTransformer(settings.EMBEDDING_MODEL)
     return _model
 
-def embed_text(text: str) -> list[float]:
+@lru_cache(maxsize=512)
+def _cached_embed(text: str) -> tuple[float, ...]:
     model = get_embedding_model()
-    return model.encode(text, normalize_embeddings=True).tolist()
+    return tuple(model.encode(text, normalize_embeddings=True).tolist())
+
+def embed_text(text: str) -> list[float]:
+    return list(_cached_embed(text))
 
 def embed_batch(texts: list[str]) -> list[list[float]]:
     model = get_embedding_model()

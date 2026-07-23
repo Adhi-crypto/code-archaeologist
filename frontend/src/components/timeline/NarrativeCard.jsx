@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Sparkles, ChevronDown, ChevronUp, Layers, GitCommit, ShieldCheck, Zap } from 'lucide-react';
 
 export default function NarrativeCard({ narrative, repoName, totalCommits, sampledCommits, archCount }) {
@@ -78,10 +80,24 @@ export default function NarrativeCard({ narrative, repoName, totalCommits, sampl
           </div>
         </div>
 
-        {/* Narrative Text */}
+        {/* Formatted Markdown Narrative Text */}
         {expanded && (
-          <div className="bg-slate-900/80 rounded-xl p-5 border border-slate-800 text-slate-200 text-sm leading-relaxed whitespace-pre-wrap font-sans">
-            {narrative}
+          <div className="bg-slate-900/80 rounded-xl p-5 border border-slate-800 text-slate-200 text-sm leading-relaxed font-sans prose prose-invert max-w-none">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ children }) => <h1 className="text-xl font-bold text-emerald-400 mb-2 mt-4">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-lg font-bold text-emerald-300 mb-2 mt-3 border-b border-slate-800 pb-1">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-base font-bold text-emerald-200 mb-2 mt-3">{children}</h3>,
+                p: ({ children }) => <p className="mb-3 leading-relaxed text-slate-300">{children}</p>,
+                strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
+                ul: ({ children }) => <ul className="list-disc pl-5 mb-3 space-y-1 text-slate-300">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal pl-5 mb-3 space-y-1 text-slate-300">{children}</ol>,
+                li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+              }}
+            >
+              {narrative}
+            </ReactMarkdown>
           </div>
         )}
       </div>
