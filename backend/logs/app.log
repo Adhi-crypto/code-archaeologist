@@ -372,3 +372,6 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-07-23 14:04:17.328 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
 2026-07-23 14:04:17.328 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
 2026-07-23 14:04:25.858 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 14:04:36.320 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 14:04:36.320 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 14:04:36.320 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
