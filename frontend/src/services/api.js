@@ -21,4 +21,8 @@ export const evolutionApi = {
   analyze: (data) => api.post('/api/evolution/analyze', data),
 };
 
+export const bugOriginApi = {
+  analyze: (data) => api.post('/api/bug-origin/analyze', data),
+};
+
 export default api;
