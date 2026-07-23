@@ -87,7 +87,7 @@ async def detect_evolution(repo_id: str, repo_name: str) -> dict:
         })
 
     # Sample up to 20 commits evenly across the timeline for LLM summary
-    step = max(1, len(combined) // 20)
+    step = max(1, -(-len(combined) // 20))  # ceiling division
     sampled = combined[::step][:20]
     context = "\n\n---\n\n".join([doc for doc, _ in sampled])
     prompt = evolution_prompt(repo_name, context)

@@ -25,4 +25,8 @@ export const bugOriginApi = {
   analyze: (data) => api.post('/api/bug-origin/analyze', data),
 };
 
+export const repoIntelligenceApi = {
+  analyze: (data) => api.post('/api/repository/intelligence', data),
+};
+
 export default api;

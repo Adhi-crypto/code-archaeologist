@@ -37,6 +37,27 @@ async def list_repos():
     return APIResponse(success=True, message=f"{len(repos)} repos ready", data=repos)
 
 
+class RepoIntelligenceRequest(BaseModel):
+    repo_id: str
+    repo_name: str = "Repository"
+
+
+@router.post("/intelligence", response_model=APIResponse)
+async def get_repository_intelligence(request: RepoIntelligenceRequest):
+    from app.reasoning.repository_intelligence import analyze_repository_intelligence
+    try:
+        result = await analyze_repository_intelligence(request.repo_id, request.repo_name)
+        if "error" in result:
+            raise HTTPException(status_code=404, detail=result["error"])
+        return APIResponse(success=True, message="Repository intelligence generated", data=result)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Repository intelligence failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 async def _run_ingestion(request: RepoIngestionRequest):
     repo_id = get_repo_id(request.repo_url)
     try:

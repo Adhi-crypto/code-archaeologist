@@ -1,16 +1,18 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { GitBranch, MessageSquare, TrendingUp, Bug, Home } from 'lucide-react';
+import { GitBranch, MessageSquare, TrendingUp, Bug, Home, BarChart3 } from 'lucide-react';
 import { RepoProvider, useRepo } from './store/repoStore';
 import IngestPage from './pages/IngestPage';
 import ChatPage from './pages/ChatPage';
 import EvolutionPage from './pages/EvolutionPage';
 import BugOriginPage from './pages/BugOriginPage';
+import IntelligencePage from './pages/IntelligencePage';
 
 function Sidebar() {
   const { activeRepo } = useRepo();
 
   const navItems = [
     { to: '/', icon: Home, label: 'Repository' },
+    { to: '/intelligence', icon: BarChart3, label: 'Intelligence' },
     { to: '/chat', icon: MessageSquare, label: 'Chat' },
     { to: '/evolution', icon: TrendingUp, label: 'Evolution' },
     { to: '/bug-origin', icon: Bug, label: 'Bug Origin' },
@@ -66,6 +68,7 @@ function AppShell() {
       <main className="flex-1 overflow-y-auto">
         <Routes>
           <Route path="/" element={<IngestPage />} />
+          <Route path="/intelligence" element={<IntelligencePage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/evolution" element={<EvolutionPage />} />
           <Route path="/bug-origin" element={<BugOriginPage />} />

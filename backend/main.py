@@ -32,10 +32,12 @@ app.add_middleware(
 )
 
 app.include_router(repo.router,      prefix="/api/repo",      tags=["Repository"])
+app.include_router(repo.router,      prefix="/api/repository",tags=["Repository"])
 app.include_router(chat.router,      prefix="/api/chat",      tags=["Chat"])
 app.include_router(evolution.router, prefix="/api/evolution", tags=["Evolution"])
 app.include_router(analysis.router,  prefix="/api/analysis",  tags=["Analysis"])
 app.include_router(analysis.router,  prefix="/api/bug-origin",tags=["Bug Origin"])
+
 
 
 @app.get("/health")
