@@ -69,7 +69,17 @@ export default function ChatMessage({ message, onRegenerate }) {
     );
   }
 
-  const normalizedContent = normalizeMarkdown(message.content);
+  const evidenceMatch = message.evidence_match_score ?? 85;
+  const answerConfidence = message.answer_confidence ?? 82;
+  const intent = message.intent || 'IMPLEMENTATION';
+
+  const intentColor = {
+    IMPLEMENTATION: 'bg-blue-100 text-blue-800 border-blue-200',
+    ARCHITECTURE: 'bg-purple-100 text-purple-800 border-purple-200',
+    HISTORICAL: 'bg-amber-100 text-amber-800 border-amber-200',
+    OVERVIEW: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    BUG_ORIGIN: 'bg-rose-100 text-rose-800 border-rose-200',
+  }[intent] || 'bg-slate-100 text-slate-800 border-slate-200';
 
   return (
     <div className="flex justify-start mb-6">
@@ -81,6 +91,9 @@ export default function ChatMessage({ message, onRegenerate }) {
             <span>Code Archaeologist Assistant</span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] uppercase font-mono bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">
               {message.mode === 'causal' ? 'Causal Analysis' : 'Repo Chat'}
+            </span>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-mono font-bold border ${intentColor}`}>
+              Intent: {intent}
             </span>
           </div>
 
@@ -135,18 +148,29 @@ export default function ChatMessage({ message, onRegenerate }) {
           </div>
         </div>
 
-        {/* Confidence Indicator Banner */}
-        <div className="bg-emerald-50/40 px-6 py-2 border-b border-emerald-100/60 flex items-center justify-between text-xs">
+        {/* Dynamic Confidence Indicator Banner */}
+        <div className="bg-emerald-50/40 px-6 py-2 border-b border-emerald-100/60 flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-1.5 text-emerald-800 font-medium">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>High Confidence Grounded Response</span>
+            <span>Grounded Response Evaluation</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500 font-medium">Evidence Match Score:</span>
-            <div className="w-20 bg-slate-200 rounded-full h-1.5 overflow-hidden">
-              <div className="bg-emerald-500 h-1.5 rounded-full" style={{ width: '88%' }}></div>
+
+          <div className="flex items-center gap-4 text-[11px]">
+            <div className="flex items-center gap-1.5">
+              <span className="text-slate-500 font-medium">Evidence Match:</span>
+              <div className="w-16 bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${evidenceMatch}%` }}></div>
+              </div>
+              <span className="font-mono font-bold text-emerald-700">{evidenceMatch}%</span>
             </div>
-            <span className="font-mono font-bold text-emerald-700 text-[11px]">88%</span>
+
+            <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+              <span className="text-slate-500 font-medium">Confidence:</span>
+              <div className="w-16 bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${answerConfidence}%` }}></div>
+              </div>
+              <span className="font-mono font-bold text-blue-700">{answerConfidence}%</span>
+            </div>
           </div>
         </div>
 

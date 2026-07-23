@@ -9,6 +9,8 @@ Your task is to analyze git commit history and code diffs to pinpoint which comm
 Base your reasoning strictly on the provided commit evidence.
 Explain why this commit was selected, what changed, why it is related to the query, and what evidence supports it."""
 
+_bug_origin_cache: dict[tuple[str, str], dict] = {}
+
 
 def bug_origin_prompt(query: str, repo_name: str, candidate_context: str) -> str:
     return f"""A bug or regression was reported in repository '{repo_name}':
@@ -167,12 +169,14 @@ async def analyze_bug_origin(repo_id: str, query: str, repo_name: str = "Reposit
         
     analysis_time = round(time.time() - start_time, 2)
     
-    return {
+    res = {
         "likely_commit": likely_commit,
         "supporting_commits": supporting_commits,
         "llm_explanation": explanation,
         "analysis_time": analysis_time,
     }
+    _bug_origin_cache[cache_key] = res
+    return res
 
 
 def impact_category(is_arch: bool, churn: int) -> str:

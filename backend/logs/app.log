@@ -320,3 +320,55 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-07-23 13:27:20.502 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
 2026-07-23 13:28:19.354 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
 2026-07-23 13:28:19.354 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 13:33:37.479 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 82102aaf75ee
+2026-07-23 13:33:38.491 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-23 13:33:39.406 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 2 commits
+2026-07-23 13:33:39.549 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: underwater-debris-detection | 2 commits | langs: ['Python']
+2026-07-23 13:33:39.947 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 2 commit snapshots for underwater-debris-detection
+2026-07-23 13:33:40.046 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 2 snapshots in ChromaDB for underwater-debris-detection
+2026-07-23 13:33:40.047 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 82102aaf75ee
+2026-07-23 13:33:40.148 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 13:33:51.200 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 13:33:51.201 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 13:33:51.201 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 13:33:51.208 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:26 - Generating Repository Intelligence report for underwater-debris-detection (82102aaf75ee)
+2026-07-23 13:33:51.432 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:26 - Generating Repository Intelligence report for underwater-debris-detection (82102aaf75ee)
+2026-07-23 13:35:51.717 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:35:51.718 | WARNING  | app.reasoning.repository_intelligence:analyze_repository_intelligence:191 - Ollama generation fallback for repository intelligence summary: LLM unavailable: 
+2026-07-23 13:36:23.917 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 13:36:28.832 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'What is this repository about?'
+2026-07-23 13:36:28.833 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'What is this repository about?'
+2026-07-23 13:37:40.227 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Explain the project architecture.'
+2026-07-23 13:37:40.227 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'Explain the project architecture.'
+2026-07-23 13:38:32.274 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'How does the image preprocessing pipeline work?'
+2026-07-23 13:38:32.275 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'How does the image preprocessing pipeline work?'
+2026-07-23 13:40:15.679 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Explain the training pipeline.'
+2026-07-23 13:40:15.680 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'Explain the training pipeline.'
+2026-07-23 13:40:37.101 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Explain the training pipeline.'
+2026-07-23 13:40:37.101 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'Explain the training pipeline.'
+2026-07-23 13:41:48.491 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Why was Faster R-CNN introduced?'
+2026-07-23 13:41:48.493 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Why was Faster R-CNN introduced?'
+2026-07-23 13:42:28.002 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Why was the training pipeline modified?'
+2026-07-23 13:42:28.002 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Why was the training pipeline modified?'
+2026-07-23 13:44:54.602 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'Why was evaluation added?'
+2026-07-23 13:44:54.602 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Why was evaluation added?'
+2026-07-23 13:46:14.951 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:46:14.968 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:46:26.333 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:46:26.351 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for underwater-debris-detection (2 sampled commits)
+2026-07-23 13:46:31.505 | INFO     | app.reasoning.bug_origin_analyzer:analyze_bug_origin:32 - Analyzing bug origin for repo 82102aaf75ee: 'JWT token validation fails during request handling'
+2026-07-23 13:46:31.556 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 2 temporal contexts for query: 'JWT token validation fails during request handling'
+2026-07-23 13:48:26.618 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:48:26.619 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 13:48:26.624 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:48:26.626 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 13:48:31.859 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 13:48:31.859 | WARNING  | app.reasoning.bug_origin_analyzer:analyze_bug_origin:155 - Ollama generation fallback for bug origin explanation: LLM unavailable: 
+2026-07-23 14:04:02.050 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 14:04:10.533 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 14:04:10.534 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 14:04:10.534 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 14:04:17.328 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 14:04:17.328 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 14:04:17.328 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 14:04:25.858 | INFO     | main:lifespan:18 - Shutting down.

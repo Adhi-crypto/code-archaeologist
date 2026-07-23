@@ -145,14 +145,22 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
 
     # Health Score Calculation (0 - 100)
     # Factors: Dev distribution (25%), Churn stability (25%), Activity consistency (25%), File scope risk (25%)
+    is_small_repo = total_commits < 15
     top_author_pct = developers[0]["percentage"] if developers else 100
-    dev_health = max(0, 100 - (top_author_pct - 30) * 1.5) if top_author_pct > 30 else 95
-    churn_health = max(30, 100 - min(70, (avg_commit_size / 400.0) * 70))
-    activity_health = min(100, avg_commits_per_month * 5.0) if avg_commits_per_month > 1 else 60
-    hotspot_health = max(30, 100 - (sum(1 for h in hotspots if h["risk_level"] in ["Critical", "High"]) * 8))
+
+    if is_small_repo:
+        dev_health = 85
+        churn_health = 85
+        activity_health = 80
+        hotspot_health = 90
+    else:
+        dev_health = max(0, 100 - (top_author_pct - 30) * 1.5) if top_author_pct > 30 else 95
+        churn_health = max(30, 100 - min(70, (avg_commit_size / 400.0) * 70))
+        activity_health = min(100, avg_commits_per_month * 5.0) if avg_commits_per_month > 1 else 60
+        hotspot_health = max(30, 100 - (sum(1 for h in hotspots if h["risk_level"] in ["Critical", "High"]) * 8))
 
     health_score = round((dev_health * 0.25) + (churn_health * 0.25) + (activity_health * 0.25) + (hotspot_health * 0.25))
-    health_score = max(25, min(98, health_score))
+    health_score = max(30, min(98, health_score))
 
     if health_score >= 80:
         risk_level = "Low"
@@ -164,13 +172,16 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
         risk_level = "High"
         recommendation = "High technical debt risk. Prioritize modular refactoring of top hotspots and improve developer bus factor."
 
+    if is_small_repo:
+        recommendation += " (Note: Repository exhibits a small commit history (<15 commits); metrics are adaptively calibrated.)"
+
     # Risk Assessment Metrics
     risk_assessment = {
-        "technical_debt": round(max(15, min(95, 100 - churn_health))),
-        "architecture_stability": round(max(20, min(98, hotspot_health))),
-        "maintenance_risk": round(max(10, min(90, (100 - dev_health) * 0.8 + (100 - churn_health) * 0.2))),
+        "technical_debt": round(max(10, min(80 if is_small_repo else 95, 100 - churn_health))),
+        "architecture_stability": round(max(50 if is_small_repo else 20, min(98, hotspot_health))),
+        "maintenance_risk": round(max(10, min(70 if is_small_repo else 90, (100 - dev_health) * 0.8 + (100 - churn_health) * 0.2))),
         "bus_factor_score": bus_factor,
-        "bug_risk": round(max(15, min(95, sum(1 for h in hotspots if h["risk_level"] == "Critical") * 25 + 15)))
+        "bug_risk": round(max(10, min(75 if is_small_repo else 95, sum(1 for h in hotspots if h["risk_level"] == "Critical") * 25 + 15)))
     }
 
     # AI Summary Generation

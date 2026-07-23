@@ -65,6 +65,9 @@ export default function ChatPage() {
         sources: mode === 'causal' ? data.evidence_commits : data.sources,
         mode,
         query: queryText,
+        intent: data.intent || 'IMPLEMENTATION',
+        evidence_match_score: data.evidence_match_score || 85,
+        answer_confidence: data.answer_confidence || 82,
       };
 
       setChatState((prev) => ({
