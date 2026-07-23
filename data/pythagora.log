@@ -1,0 +1,121 @@
+2026-06-14T21:34:28.817Z INFO Is remote: false
+2026-06-14T21:34:28.818Z INFO Starting Local. Installation path: undefined
+2026-06-14T21:34:28.818Z INFO [MainProvider] Creating new MainProvider instance...
+2026-06-14T21:34:28.819Z INFO [TabsManager] Code view listener set up at initialization
+2026-06-14T21:34:28.820Z INFO Installation path exists: c:\Users\adith\code-archaeologist\backend
+2026-06-14T21:34:28.820Z INFO Initializing database with URL: file:C:\Users\adith\AppData\Local\Temp\pythagora-temp\pythagora.db
+2026-06-14T21:34:28.823Z INFO Database file exists, skipping prisma generate/push for faster startup
+2026-06-14T21:34:28.824Z INFO Database initialized successfully
+2026-06-14T21:34:28.824Z INFO [Migration] Checking for database migration...
+2026-06-14T21:34:28.905Z INFO [Migration] No migration needed
+2026-06-14T21:44:12.601Z INFO [TabsManager] First file opened, triggering split view
+2026-06-14T21:44:12.601Z INFO [MainProvider] First file opened, creating split view
+2026-06-14T21:44:17.088Z INFO [TabsManager] First file opened, triggering split view
+2026-06-14T21:44:17.089Z INFO [MainProvider] First file opened, creating split view
+2026-06-14T22:36:01.082Z INFO Closing entire Pythagora extension...
+2026-06-14T22:36:01.093Z ERROR Error closing extension
+Error: Canceled
+Stack: Canceled: Canceled
+	at new nx (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:435:151817)
+	at i._remoteCall (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:435:157869)
+	at r.<computed>.s.charCodeAt.r.<computed> (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:435:154664)
+	at kg._doExecuteCommand (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:534:48252)
+	at kg.executeCommand (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:534:47699)
+	at Object.executeCommand (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:673:136583)
+	at closeEntirePythagoraExtension (c:\Users\adith\.vscode\extensions\pythagoratechnologies.pythagora-vs-code-2.6.19\out\extension.js:542:31)
+	at Object.deactivate (c:\Users\adith\.vscode\extensions\pythagoratechnologies.pythagora-vs-code-2.6.19\out\extension.js:409:15)
+	at SP._deactivate (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:14483)
+	at file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:12010
+	at Array.map (<anonymous>)
+	at SP._deactivateAll (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:11998)
+	at SP.terminate (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:12349)
+	at i.terminate (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:540:1072)
+	at Js (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:837:11733)
+	at up.value (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:837:9880)
+	at E._deliver (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:431:3244)
+	at E.fire (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:431:3562)
+	at ls.fire (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:433:8505)
+	at MessagePortMain.<anonymous> (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/1b50d58d73/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:837:8115)
+	at MessagePortMain.emit (node:events:509:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:2934)
+Extra context: {
+  "message": "Canceled"
+}
+2026-06-30T11:26:17.777Z INFO Is remote: false
+2026-06-30T11:26:17.778Z INFO Starting Local. Installation path: undefined
+2026-06-30T11:26:17.779Z INFO [MainProvider] Creating new MainProvider instance...
+2026-06-30T11:26:17.781Z INFO [TabsManager] Code view listener set up at initialization
+2026-06-30T11:26:17.782Z INFO Installation path exists: c:\Users\adith\code-archaeologist\frontend
+2026-06-30T11:26:17.782Z INFO Initializing database with URL: file:C:\Users\adith\AppData\Local\Temp\pythagora-temp\pythagora.db
+2026-06-30T11:26:17.786Z INFO New database detected, running full prisma setup...
+2026-06-30T11:26:17.787Z INFO [c:\Users\adith\.vscode\extensions\pythagoratechnologies.pythagora-vs-code-2.6.19] Project root:
+2026-06-30T11:26:17.787Z INFO [c:\Users\adith\.vscode\extensions\pythagoratechnologies.pythagora-vs-code-2.6.19\prisma\schema.prisma] Schema path:
+2026-06-30T11:26:17.787Z INFO [file:C:\Users\adith\AppData\Local\Temp\pythagora-temp\pythagora.db] Database URL:
+2026-06-30T11:26:17.788Z INFO [true] Schema exists:
+2026-06-30T11:26:17.788Z INFO Running prisma generate first...
+2026-06-30T11:26:19.894Z INFO [Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (6.19.1) to .\src\generated\prisma in 256ms
+
+] Prisma generate result:
+2026-06-30T11:26:19.894Z INFO Running prisma db push to sync schema...
+2026-06-30T11:26:22.542Z INFO [Prisma schema loaded from prisma\schema.prisma
+Datasource "db": SQLite database "pythagora.db" at "file:C:\Users\adith\AppData\Local\Temp\pythagora-temp\pythagora.db"
+
+SQLite database pythagora.db created at file:C:\Users\adith\AppData\Local\Temp\pythagora-temp\pythagora.db
+
+Your database is now in sync with your Prisma schema. Done in 62ms
+
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[G✔ Generated Prisma Client (6.19.1) to .\src\generated\prisma in 228ms
+
+] Prisma db push result:
+2026-06-30T11:26:22.543Z INFO Database initialized successfully
+2026-06-30T11:26:22.543Z INFO [Migration] Checking for database migration...
+2026-06-30T11:26:22.709Z INFO [Migration] No migration needed
+2026-06-30T11:26:22.749Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:26:22.749Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:26:23.176Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:26:23.177Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:26:31.370Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:26:31.370Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:29:15.795Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:29:15.796Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:29:48.404Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:29:48.404Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:30:08.243Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:30:08.243Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:31:06.808Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:31:06.808Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:31:11.675Z INFO [TabsManager] First file opened, triggering split view
+2026-06-30T11:31:11.676Z INFO [MainProvider] First file opened, creating split view
+2026-06-30T11:52:06.256Z INFO Closing entire Pythagora extension...
+2026-06-30T11:52:06.261Z ERROR Error closing extension
+Error: Canceled
+Stack: Canceled: Canceled
+	at new nx (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:435:151812)
+	at i._remoteCall (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:435:157864)
+	at r.<computed>.s.charCodeAt.r.<computed> (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:435:154659)
+	at kg._doExecuteCommand (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:534:48252)
+	at kg.executeCommand (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:534:47699)
+	at Object.executeCommand (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:673:136583)
+	at closeEntirePythagoraExtension (c:\Users\adith\.vscode\extensions\pythagoratechnologies.pythagora-vs-code-2.6.19\out\extension.js:542:31)
+	at Object.deactivate (c:\Users\adith\.vscode\extensions\pythagoratechnologies.pythagora-vs-code-2.6.19\out\extension.js:409:15)
+	at SP._deactivate (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:14483)
+	at file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:12010
+	at Array.map (<anonymous>)
+	at SP._deactivateAll (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:11998)
+	at SP.terminate (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:538:12349)
+	at i.terminate (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:540:1072)
+	at Js (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:837:11733)
+	at up.value (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:837:9880)
+	at E._deliver (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:431:3244)
+	at E.fire (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:431:3562)
+	at ls.fire (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:433:8505)
+	at MessagePortMain.<anonymous> (file:///c:/Users/adith/AppData/Local/Programs/Microsoft%20VS%20Code/6928394f91/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:837:8115)
+	at MessagePortMain.emit (node:events:509:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:2934)
+Extra context: {
+  "message": "Canceled"
+}

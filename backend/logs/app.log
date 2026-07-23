@@ -1,0 +1,224 @@
+2026-06-15 03:16:10.293 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:16:10.293 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:16:10.293 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:18:40.079 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:18:41.032 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:18:41.034 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:18:41.034 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:18:41.899 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:18:41.899 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:18:41.899 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:18:45.022 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:19:10.491 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:19:10.491 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:19:10.491 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:21:08.613 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: string
+2026-06-15 03:21:08.643 | ERROR    | app.api.routes.repo:_run_ingestion:57 - Ingestion failed for b45cffe084dd: Cmd('git') failed due to: exit code(128)
+  cmdline: git clone -v -- string C:\Users\adith\code-archaeologist\backend\data\repos\b45cffe084dd
+  stderr: 'fatal: repository 'string' does not exist
+'
+2026-06-15 03:21:10.177 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: b45cffe084dd
+2026-06-15 03:21:10.177 | ERROR    | app.api.routes.repo:_run_ingestion:57 - Ingestion failed for b45cffe084dd: C:\Users\adith\code-archaeologist\backend\data\repos\b45cffe084dd
+2026-06-15 03:21:11.611 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: b45cffe084dd
+2026-06-15 03:21:11.626 | ERROR    | app.api.routes.repo:_run_ingestion:57 - Ingestion failed for b45cffe084dd: C:\Users\adith\code-archaeologist\backend\data\repos\b45cffe084dd
+2026-06-15 03:21:13.206 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: b45cffe084dd
+2026-06-15 03:21:13.211 | ERROR    | app.api.routes.repo:_run_ingestion:57 - Ingestion failed for b45cffe084dd: C:\Users\adith\code-archaeologist\backend\data\repos\b45cffe084dd
+2026-06-15 03:21:35.364 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:22:23.726 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:22:23.726 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:22:23.726 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:23:07.493 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/tiangolo/fastapi
+2026-06-15 03:23:26.510 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:23:38.192 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:23:38.279 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:23:38.307 | SUCCESS  | app.api.routes.repo:_run_ingestion:55 - Ingestion complete for 8e11fa45d6f0
+2026-06-15 03:23:38.307 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-15 03:23:39.584 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:23:50.420 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:23:50.496 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:23:50.525 | SUCCESS  | app.api.routes.repo:_run_ingestion:55 - Ingestion complete for 8e11fa45d6f0
+2026-06-15 03:23:50.525 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-15 03:23:51.756 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:24:02.648 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:24:02.731 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:24:02.759 | SUCCESS  | app.api.routes.repo:_run_ingestion:55 - Ingestion complete for 8e11fa45d6f0
+2026-06-15 03:24:02.863 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:24:03.730 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:24:03.730 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:24:03.730 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:24:04.599 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:24:04.599 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:24:04.599 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:26:02.960 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:26:03.852 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:26:03.852 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:26:03.852 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:26:04.749 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:26:04.749 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:26:04.749 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:26:44.771 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:26:45.664 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:26:45.664 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:26:45.664 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:28:31.471 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:28:32.315 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:28:32.315 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:28:32.315 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:28:33.161 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:28:33.161 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:28:33.161 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:31:49.796 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-15 03:31:50.995 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:32:01.804 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:32:01.883 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:32:02.612 | ERROR    | app.api.routes.repo:_run_ingestion:62 - Ingestion failed for 8e11fa45d6f0: `np.float_` was removed in the NumPy 2.0 release. Use `np.float64` instead.
+2026-06-15 03:32:02.615 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-15 03:32:03.761 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:32:14.016 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:32:14.082 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:32:14.117 | ERROR    | app.api.routes.repo:_run_ingestion:62 - Ingestion failed for 8e11fa45d6f0: `np.float_` was removed in the NumPy 2.0 release. Use `np.float64` instead.
+2026-06-15 03:32:55.435 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:33:46.176 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:33:46.176 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:33:46.180 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:34:28.249 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-15 03:34:38.194 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:34:57.506 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:34:57.615 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:35:17.449 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 50 commit snapshots for fastapi
+2026-06-15 03:35:17.449 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-06-15 03:35:31.806 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 50 snapshots in ChromaDB for fastapi
+2026-06-15 03:35:31.806 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
+2026-06-15 03:35:31.820 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-15 03:35:33.341 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 50 commits from branch: master
+2026-06-15 03:35:43.696 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 50 commits
+2026-06-15 03:35:43.773 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 50 commits | langs: ['Python', 'JavaScript']
+2026-06-15 03:35:43.967 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 50 commit snapshots for fastapi
+2026-06-15 03:35:44.972 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 50 snapshots in ChromaDB for fastapi
+2026-06-15 03:35:44.972 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
+2026-06-15 03:38:45.430 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-15 03:40:23.082 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:40:23.082 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:40:23.082 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:40:31.961 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:40:31.961 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:40:31.961 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:40:39.385 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:40:39.385 | INFO     | main:lifespan:15 - Ollama model : deepseek-coder-v2
+2026-06-15 03:40:39.385 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:42:08.615 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:42:08.615 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-06-15 03:42:08.615 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:42:34.103 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-06-15 03:42:38.388 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'How did the routing system evolve?'
+2026-06-15 03:42:38.388 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'How did the routing system evolve?'
+2026-06-15 03:42:38.674 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: Client error '404 Not Found' for url 'http://localhost:11434/api/generate'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-06-15 03:44:16.439 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-15 03:44:16.439 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-06-15 03:44:16.439 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-15 03:44:33.894 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-06-15 03:44:37.582 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'How did the routing system evolve?'
+2026-06-15 03:44:37.582 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'How did the routing system evolve?'
+2026-06-15 03:46:42.090 | INFO     | app.reasoning.evolution_detector:detect_evolution:29 - Detecting evolution for fastapi (20 sampled commits)
+2026-06-30 17:08:07.568 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-30 17:08:07.568 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-06-30 17:08:07.568 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-30 17:09:12.307 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-30 17:09:23.503 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: master
+2026-06-30 17:09:49.291 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 100 commits
+2026-06-30 17:09:49.363 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 100 commits | langs: ['Python', 'JavaScript']
+2026-06-30 17:10:03.776 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 100 commit snapshots for fastapi
+2026-06-30 17:10:03.776 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-06-30 17:10:12.304 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 100 snapshots in ChromaDB for fastapi
+2026-06-30 17:10:12.304 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
+2026-06-30 17:10:17.375 | INFO     | main:lifespan:18 - Shutting down.
+2026-06-30 17:10:26.385 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-30 17:10:26.385 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-06-30 17:10:26.385 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-30 17:10:32.787 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-06-30 17:10:32.787 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-06-30 17:10:32.787 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-06-30 17:17:03.691 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-06-30 17:17:05.312 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 10 commits from branch: master
+2026-06-30 17:17:07.573 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 10 commits
+2026-06-30 17:17:07.656 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 10 commits | langs: ['Python', 'JavaScript']
+2026-06-30 17:17:08.016 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 10 commit snapshots for fastapi
+2026-06-30 17:17:08.016 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-06-30 17:17:12.682 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 10 snapshots in ChromaDB for fastapi
+2026-06-30 17:17:12.682 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
+2026-06-30 17:17:50.370 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'Why was the routing system refactored?'
+2026-06-30 17:17:50.370 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Why was the routing system refactored?'
+2026-07-03 13:11:15.568 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 13:11:15.568 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 13:11:15.568 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 13:30:53.068 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/fastapi/fastapi
+2026-07-03 13:31:42.880 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 10 commits from branch: main
+2026-07-03 13:31:45.277 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 10 commits
+2026-07-03 13:31:45.325 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 10 commits | langs: ['Python', 'JavaScript']
+2026-07-03 13:31:45.803 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 10 commit snapshots for fastapi
+2026-07-03 13:31:45.803 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-03 13:31:50.652 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 10 snapshots in ChromaDB for fastapi
+2026-07-03 13:31:50.652 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 01f8d446752c
+2026-07-03 13:31:55.775 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-03 13:32:04.743 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 13:32:04.743 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 13:32:04.743 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 13:32:11.659 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 13:32:11.659 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 13:32:11.659 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 13:32:11.785 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-03 13:32:16.098 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'what was changed last?'
+2026-07-03 13:32:16.098 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'what was changed last?'
+2026-07-03 13:32:35.457 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'What was last changed?'
+2026-07-03 13:32:35.457 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'What was last changed?'
+2026-07-03 13:34:31.981 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 8 temporal contexts for query: 'why was last commit made?'
+2026-07-03 13:34:31.981 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'why was last commit made?'
+2026-07-03 13:47:00.778 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 8 temporal contexts for query: 'who made the commit?'
+2026-07-03 13:47:00.778 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'who made the commit?'
+2026-07-03 13:52:39.165 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 8 temporal contexts for query: 'on which date the last commit was made'
+2026-07-03 13:52:39.165 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:16 - Answering repo question: 'on which date the last commit was made'
+2026-07-03 13:54:23.386 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'Why was the commit made?'
+2026-07-03 13:54:23.386 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Why was the commit made?'
+2026-07-03 16:36:12.494 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-03 16:36:40.969 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 16:36:40.969 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 16:36:40.969 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 16:37:20.427 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/react/react
+2026-07-03 16:47:22.978 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 16:47:22.978 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 16:47:22.978 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 16:47:34.401 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-03 16:47:42.455 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 16:47:42.455 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 16:47:42.455 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 16:48:58.281 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-07-03 16:49:04.104 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 10 commits from branch: main
+2026-07-03 16:49:06.987 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 10 commits
+2026-07-03 16:49:07.039 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 10 commits | langs: ['Python', 'JavaScript']
+2026-07-03 16:49:07.518 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 10 commit snapshots for fastapi
+2026-07-03 16:49:07.518 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-03 16:49:12.807 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 10 snapshots in ChromaDB for fastapi
+2026-07-03 16:49:12.807 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
+2026-07-03 16:49:17.826 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-03 16:49:25.605 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 16:49:25.605 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 16:49:25.606 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 16:49:31.371 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-03 16:49:35.972 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'what was the last the commit happened?'
+2026-07-03 16:49:35.972 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'what was the last the commit happened?'
+2026-07-03 16:50:21.085 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'why was it happened?'
+2026-07-03 16:50:21.085 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'why was it happened?'
+2026-07-03 17:10:55.765 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-03 17:10:55.765 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-03 17:10:55.765 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-03 17:18:02.234 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 8e11fa45d6f0
+2026-07-03 17:18:04.644 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-03 17:18:27.977 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 100 commits
+2026-07-03 17:18:28.045 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: fastapi | 100 commits | langs: ['Python', 'JavaScript']
+2026-07-03 17:18:28.445 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 100 commit snapshots for fastapi
+2026-07-03 17:18:28.447 | INFO     | app.temporal_rag.embedder:get_embedding_model:10 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-03 17:18:34.775 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 100 snapshots in ChromaDB for fastapi
+2026-07-03 17:18:34.775 | SUCCESS  | app.api.routes.repo:_run_ingestion:60 - Ingestion + embedding complete for 8e11fa45d6f0
+2026-07-03 17:20:44.121 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 10 temporal contexts for query: 'Who made the last commit?'
+2026-07-03 17:20:44.121 | INFO     | app.reasoning.causal_reasoner:explain_causal:40 - Causal reasoning: 'Who made the last commit?'
