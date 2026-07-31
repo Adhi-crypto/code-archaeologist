@@ -1,5 +1,4 @@
-import React from 'react';
-import { Search, Filter, ArrowUpDown, User, FileText, Layers, RotateCcw } from 'lucide-react';
+import { Search, ArrowUpDown, User, FileText, Layers, RotateCcw } from 'lucide-react';
 
 export default function TimelineFilters({
   searchTerm,

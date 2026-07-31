@@ -1,4 +1,3 @@
-import React from 'react';
 import { GitCommit, Users, FileCode, Calendar, TrendingUp, Layers, Zap, Clock } from 'lucide-react';
 
 export default function RepositoryStatisticsCard({ statistics }) {

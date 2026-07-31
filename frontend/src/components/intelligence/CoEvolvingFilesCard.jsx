@@ -1,4 +1,3 @@
-import React from 'react';
 import { GitMerge, ArrowRight, FileCode } from 'lucide-react';
 
 export default function CoEvolvingFilesCard({ coEvolvingFiles = [] }) {

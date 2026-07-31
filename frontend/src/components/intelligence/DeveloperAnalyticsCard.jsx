@@ -1,6 +1,5 @@
-import React from 'react';
 import { Users, AlertTriangle, ShieldCheck } from 'lucide-react';
-import { ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip } from 'recharts';
 
 const COLORS = ['#10B981', '#6366F1', '#F59E0B', '#EC4899', '#8B5CF6', '#3B82F6', '#14B8A6'];
 

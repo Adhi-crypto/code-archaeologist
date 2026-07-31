@@ -1,9 +1,8 @@
-import os
 import hashlib
 from pathlib import Path
 from datetime import datetime
 from loguru import logger
-from git import Repo, GitCommandError
+from git import Repo
 from app.core.config import settings
 from app.models.repo import CommitRecord, RepoMetadata
 

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Flame, FileCode, Layers, AlertCircle } from 'lucide-react';
+import { Flame, FileCode } from 'lucide-react';
 
 export default function HotspotCard({ hotspots = [] }) {
   if (!hotspots || hotspots.length === 0) return null;

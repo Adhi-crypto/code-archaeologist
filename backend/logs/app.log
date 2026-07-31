@@ -375,3 +375,284 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-07-23 14:04:36.320 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
 2026-07-23 14:04:36.320 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
 2026-07-23 14:04:36.320 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 14:05:31.667 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/Adhi-crypto/code-archaeologist
+2026-07-23 14:05:33.675 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-23 14:05:35.274 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 5 commits
+2026-07-23 14:05:35.317 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: code-archaeologist | 5 commits | langs: ['Python', 'JavaScript']
+2026-07-23 14:05:35.486 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 5 commit snapshots for code-archaeologist
+2026-07-23 14:05:35.486 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 14:05:39.379 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 5 snapshots in ChromaDB for code-archaeologist
+2026-07-23 14:05:39.379 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 69676b45e71e
+2026-07-23 14:05:44.408 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 14:05:51.377 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 14:05:51.377 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 14:05:51.377 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 14:06:18.479 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:26 - Generating Repository Intelligence report for code-archaeologist (69676b45e71e)
+2026-07-23 14:06:18.709 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:26 - Generating Repository Intelligence report for code-archaeologist (69676b45e71e)
+2026-07-23 14:06:27.645 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:71 - Answering repo question [Intent: OVERVIEW]: 'What is this repository about?'
+2026-07-23 14:06:27.645 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-23 14:06:31.785 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 5 temporal contexts for query: 'What is this repository about?'
+2026-07-23 14:08:41.231 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:71 - Answering repo question [Intent: OVERVIEW]: 'What is this repository about?'
+2026-07-23 14:08:41.241 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 5 temporal contexts for query: 'What is this repository about?'
+2026-07-23 14:10:16.494 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for 69676b45e71e
+2026-07-23 14:10:16.496 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for 69676b45e71e
+2026-07-23 14:10:48.313 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for code-archaeologist (5 sampled commits)
+2026-07-23 14:10:48.326 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for code-archaeologist (5 sampled commits)
+2026-07-23 14:12:48.633 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 14:12:48.634 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 14:13:11.219 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for code-archaeologist (5 sampled commits)
+2026-07-23 14:13:27.250 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for 69676b45e71e
+2026-07-23 14:13:49.035 | INFO     | app.reasoning.causal_reasoner:explain_causal:122 - Causal reasoning [Intent: OVERVIEW]: 'What is this repository about?'
+2026-07-23 14:13:49.049 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 5 temporal contexts for query: 'What is this repository about?'
+2026-07-23 14:16:45.066 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 69676b45e71e
+2026-07-23 14:16:46.105 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-23 14:16:47.448 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 5 commits
+2026-07-23 14:16:47.482 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: code-archaeologist | 5 commits | langs: ['Python', 'JavaScript']
+2026-07-23 14:16:47.710 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 5 commit snapshots for code-archaeologist
+2026-07-23 14:16:47.891 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 5 snapshots in ChromaDB for code-archaeologist
+2026-07-23 14:16:47.892 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 69676b45e71e
+2026-07-23 14:16:49.183 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for code-archaeologist (5 sampled commits)
+2026-07-23 14:16:49.203 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for code-archaeologist (5 sampled commits)
+2026-07-23 14:16:58.951 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:71 - Answering repo question [Intent: OVERVIEW]: 'What is this repository about?'
+2026-07-23 14:16:58.965 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 5 temporal contexts for query: 'What is this repository about?'
+2026-07-23 14:18:49.502 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 14:18:49.503 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: LLM unavailable: 
+2026-07-23 14:18:59.247 | ERROR    | app.reasoning.ollama_client:generate:23 - Ollama generation failed: 
+2026-07-23 14:20:14.652 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for 69676b45e71e
+2026-07-23 14:20:14.656 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for 69676b45e71e
+2026-07-23 14:24:09.716 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-23 14:24:21.280 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 14:24:21.280 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 14:24:21.280 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-23 14:24:29.960 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-23 14:24:29.960 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-23 14:24:29.960 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-31 23:35:26.451 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-31 23:35:26.457 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-31 23:35:26.457 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-31 23:43:05.752 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 7e3d4d9940b1
+2026-07-31 23:43:07.936 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-31 23:43:30.583 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 100 commits
+2026-07-31 23:43:30.597 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: flask | 100 commits | langs: ['Python']
+2026-07-31 23:43:30.903 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 100 commit snapshots for flask
+2026-07-31 23:43:30.903 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-31 23:43:36.764 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 100 snapshots in ChromaDB for flask
+2026-07-31 23:43:36.770 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 7e3d4d9940b1
+2026-07-31 23:43:41.776 | INFO     | main:lifespan:18 - Shutting down.
+2026-07-31 23:43:50.154 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-07-31 23:43:50.154 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-07-31 23:43:50.154 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-07-31 23:44:06.301 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: 7e3d4d9940b1 | Query: 'What is this repo is about?'
+2026-07-31 23:44:06.301 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'What is this repo is about?' | Repo ID: 7e3d4d9940b1
+2026-07-31 23:44:06.301 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-07-31 23:44:06.477 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-07-31 23:44:10.425 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 8 temporal contexts for query: 'What is this repo is about?'
+2026-07-31 23:44:10.425 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 8 commit snapshots from ChromaDB
+2026-07-31 23:44:10.425 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 4409 chars | System Length: 695 chars
+2026-07-31 23:44:10.425 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-07-31 23:44:10.425 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 4409
+2026-07-31 23:44:26.017 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for flask (18 sampled commits)
+2026-07-31 23:44:26.017 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 5716
+2026-07-31 23:44:26.041 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for flask (18 sampled commits)
+2026-07-31 23:44:26.041 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 5716
+2026-07-31 23:44:39.075 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 772
+2026-07-31 23:44:39.075 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 772 chars from Ollama
+2026-07-31 23:44:39.076 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 32.774s] Successfully processed query 'What is this repo is about?'
+2026-07-31 23:44:53.518 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: 7e3d4d9940b1
+2026-07-31 23:44:54.979 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-07-31 23:45:27.942 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 100 commits
+2026-07-31 23:45:28.010 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: flask | 100 commits | langs: ['Python']
+2026-07-31 23:45:28.396 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 100 commit snapshots for flask
+2026-07-31 23:45:30.897 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 100 snapshots in ChromaDB for flask
+2026-07-31 23:45:30.897 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for 7e3d4d9940b1
+2026-07-31 23:45:46.753 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: 7e3d4d9940b1 | Query: 'What is this repo about?'
+2026-07-31 23:45:46.753 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'What is this repo about?' | Repo ID: 7e3d4d9940b1
+2026-07-31 23:45:46.762 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-07-31 23:45:46.802 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 8 temporal contexts for query: 'What is this repo about?'
+2026-07-31 23:45:46.802 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 8 commit snapshots from ChromaDB
+2026-07-31 23:45:46.804 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 4701 chars | System Length: 695 chars
+2026-07-31 23:45:46.804 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-07-31 23:45:46.804 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 4701
+2026-07-31 23:46:15.948 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 3699
+2026-07-31 23:46:26.334 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-07-31 23:46:26.334 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-07-31 23:46:54.279 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 1307
+2026-07-31 23:46:54.280 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 1307 chars from Ollama
+2026-07-31 23:46:54.280 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 67.527s] Successfully processed query 'What is this repo about?'
+2026-08-01 00:25:40.690 | INFO     | app.ingestion.git_ingestor:clone_or_pull:26 - Cloning repo: https://github.com/Vishwasgithu/CloudVision-RS
+2026-08-01 00:26:15.205 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-08-01 00:26:27.712 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 6 commits
+2026-08-01 00:26:27.865 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: CloudVision-RS | 6 commits | langs: ['Python']
+2026-08-01 00:26:28.242 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 6 commit snapshots for CloudVision-RS
+2026-08-01 00:26:28.415 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 6 snapshots in ChromaDB for CloudVision-RS
+2026-08-01 00:26:28.415 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for dcd59072432c
+2026-08-01 00:26:33.515 | INFO     | main:lifespan:18 - Shutting down.
+2026-08-01 00:26:44.709 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-08-01 00:26:44.709 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-08-01 00:26:44.709 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-08-01 00:26:50.975 | INFO     | main:lifespan:14 - Starting Code Archaeologist v1.0.0
+2026-08-01 00:26:50.975 | INFO     | main:lifespan:15 - Ollama model : qwen2.5-coder:7b
+2026-08-01 00:26:50.975 | INFO     | main:lifespan:16 - ChromaDB     : C:\Users\adith\code-archaeologist\backend\data\chroma_db
+2026-08-01 00:27:00.283 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:26 - Generating Repository Intelligence report for CloudVision-RS (dcd59072432c)
+2026-08-01 00:27:00.504 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 461
+2026-08-01 00:27:00.520 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:26 - Generating Repository Intelligence report for CloudVision-RS (dcd59072432c)
+2026-08-01 00:27:00.520 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 461
+2026-08-01 00:28:22.641 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 3269
+2026-08-01 00:29:00.791 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 00:29:00.791 | WARNING  | app.reasoning.repository_intelligence:analyze_repository_intelligence:202 - Ollama generation fallback for repository intelligence summary: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 00:29:38.838 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: dcd59072432c | Query: 'Summary of this project?'
+2026-08-01 00:29:38.838 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'Summary of this project?' | Repo ID: dcd59072432c
+2026-08-01 00:29:38.838 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 00:29:38.838 | INFO     | app.temporal_rag.embedder:get_embedding_model:11 - Loading embedding model: all-MiniLM-L6-v2
+2026-08-01 00:29:43.426 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'Summary of this project?'
+2026-08-01 00:29:43.426 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 00:29:43.426 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 3002 chars | System Length: 695 chars
+2026-08-01 00:29:43.428 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 00:29:43.428 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3002
+2026-08-01 00:30:24.658 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 1890
+2026-08-01 00:30:24.658 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 1890 chars from Ollama
+2026-08-01 00:30:24.659 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 45.821s] Successfully processed query 'Summary of this project?'
+2026-08-01 00:31:37.216 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: dcd59072432c
+2026-08-01 00:31:38.430 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 15 commits from branch: main
+2026-08-01 00:31:51.262 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 6 commits
+2026-08-01 00:31:51.374 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: CloudVision-RS | 6 commits | langs: ['Python']
+2026-08-01 00:31:51.595 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 6 commit snapshots for CloudVision-RS
+2026-08-01 00:31:51.780 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 6 snapshots in ChromaDB for CloudVision-RS
+2026-08-01 00:31:51.780 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for dcd59072432c
+2026-08-01 00:31:55.044 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 00:31:55.044 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 00:31:55.056 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 00:31:55.056 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 00:33:55.322 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 00:33:55.323 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 00:33:55.328 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 00:33:55.328 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 00:37:44.877 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: dcd59072432c | Query: 'Give me the summary of this repo?'
+2026-08-01 00:37:44.877 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'Give me the summary of this repo?' | Repo ID: dcd59072432c
+2026-08-01 00:37:44.877 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 00:37:44.906 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'Give me the summary of this repo?'
+2026-08-01 00:37:44.906 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 00:37:44.906 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 3013 chars | System Length: 695 chars
+2026-08-01 00:37:44.906 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 00:37:44.906 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3013
+2026-08-01 00:38:38.367 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 2298
+2026-08-01 00:38:38.368 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 2298 chars from Ollama
+2026-08-01 00:38:38.368 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 53.491s] Successfully processed query 'Give me the summary of this re'
+2026-08-01 00:40:52.606 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: dcd59072432c
+2026-08-01 00:40:54.020 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-08-01 00:41:07.611 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 6 commits
+2026-08-01 00:41:07.739 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: CloudVision-RS | 6 commits | langs: ['Python']
+2026-08-01 00:41:07.996 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 6 commit snapshots for CloudVision-RS
+2026-08-01 00:41:08.142 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 6 snapshots in ChromaDB for CloudVision-RS
+2026-08-01 00:41:08.142 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for dcd59072432c
+2026-08-01 00:41:08.149 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: dcd59072432c
+2026-08-01 00:41:09.461 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-08-01 00:41:22.911 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 6 commits
+2026-08-01 00:41:23.056 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: CloudVision-RS | 6 commits | langs: ['Python']
+2026-08-01 00:41:23.295 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 6 commit snapshots for CloudVision-RS
+2026-08-01 00:41:23.432 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 6 snapshots in ChromaDB for CloudVision-RS
+2026-08-01 00:41:23.432 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for dcd59072432c
+2026-08-01 00:41:35.070 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 00:41:35.070 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 00:41:35.083 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 00:41:35.083 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 00:43:04.234 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 4113
+2026-08-01 00:43:35.361 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 00:43:35.362 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 00:44:26.280 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: dcd59072432c | Query: 'What is the summary of this repo?'
+2026-08-01 00:44:26.280 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'What is the summary of this repo?' | Repo ID: dcd59072432c
+2026-08-01 00:44:26.280 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 00:44:26.301 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'What is the summary of this repo?'
+2026-08-01 00:44:26.301 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 00:44:26.301 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 3013 chars | System Length: 695 chars
+2026-08-01 00:44:26.301 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 00:44:26.301 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3013
+2026-08-01 00:45:04.454 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 1596
+2026-08-01 00:45:04.455 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 1596 chars from Ollama
+2026-08-01 00:45:04.456 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 38.176s] Successfully processed query 'What is the summary of this re'
+2026-08-01 00:48:21.686 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for dcd59072432c
+2026-08-01 00:48:21.696 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for dcd59072432c
+2026-08-01 00:49:52.018 | INFO     | app.ingestion.git_ingestor:clone_or_pull:22 - Repo already cloned, pulling latest: dcd59072432c
+2026-08-01 00:49:53.292 | INFO     | app.ingestion.git_ingestor:extract_commits:33 - Extracting up to 100 commits from branch: main
+2026-08-01 00:50:06.560 | INFO     | app.ingestion.git_ingestor:extract_commits:63 - Extracted 6 commits
+2026-08-01 00:50:06.693 | INFO     | app.ingestion.git_ingestor:ingest_repo:113 - Ingestion complete: CloudVision-RS | 6 commits | langs: ['Python']
+2026-08-01 00:50:06.923 | INFO     | app.temporal_rag.snapshot_store:store_commit_snapshots:52 - Storing 6 commit snapshots for CloudVision-RS
+2026-08-01 00:50:07.070 | SUCCESS  | app.temporal_rag.snapshot_store:store_commit_snapshots:88 - Stored 6 snapshots in ChromaDB for CloudVision-RS
+2026-08-01 00:50:07.070 | SUCCESS  | app.api.routes.repo:_run_ingestion:83 - Ingestion + embedding complete for dcd59072432c
+2026-08-01 00:50:41.051 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: causal | Repo: dcd59072432c | Query: 'GIve me the summary of this repo'
+2026-08-01 00:50:41.055 | INFO     | app.reasoning.causal_reasoner:explain_causal:148 - [STAGE 1 START Causal Query] Query: 'GIve me the summary of this repo' | Repo ID: dcd59072432c
+2026-08-01 00:50:41.055 | INFO     | app.reasoning.causal_reasoner:explain_causal:151 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 00:50:41.071 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'GIve me the summary of this repo'
+2026-08-01 00:50:41.071 | INFO     | app.reasoning.causal_reasoner:explain_causal:154 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 00:50:41.073 | INFO     | app.reasoning.causal_reasoner:explain_causal:180 - [STAGE 4 Prompt Construction] Prompt Length: 3101 chars | System Length: 356 chars
+2026-08-01 00:50:41.073 | INFO     | app.reasoning.causal_reasoner:explain_causal:182 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 00:50:41.073 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3101
+2026-08-01 00:51:22.262 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 1403
+2026-08-01 00:51:22.262 | INFO     | app.reasoning.causal_reasoner:explain_causal:185 - [STAGE 6 LLM Response Success] Received 1403 chars from Ollama
+2026-08-01 00:51:22.263 | INFO     | app.reasoning.causal_reasoner:explain_causal:207 - [STAGE COMPLETE Execution Time: 41.207s] Successfully processed causal query 'GIve me the summary of this re'
+2026-08-01 00:59:05.457 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: causal | Repo: dcd59072432c | Query: 'Give me the summary of this repo'
+2026-08-01 00:59:05.457 | INFO     | app.reasoning.causal_reasoner:explain_causal:148 - [STAGE 1 START Causal Query] Query: 'Give me the summary of this repo' | Repo ID: dcd59072432c
+2026-08-01 00:59:05.459 | INFO     | app.reasoning.causal_reasoner:explain_causal:151 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 00:59:05.480 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'Give me the summary of this repo'
+2026-08-01 00:59:05.480 | INFO     | app.reasoning.causal_reasoner:explain_causal:154 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 00:59:05.480 | INFO     | app.reasoning.causal_reasoner:explain_causal:180 - [STAGE 4 Prompt Construction] Prompt Length: 3101 chars | System Length: 356 chars
+2026-08-01 00:59:05.480 | INFO     | app.reasoning.causal_reasoner:explain_causal:182 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 00:59:05.480 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3101
+2026-08-01 00:59:54.905 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 2028
+2026-08-01 00:59:54.907 | INFO     | app.reasoning.causal_reasoner:explain_causal:185 - [STAGE 6 LLM Response Success] Received 2028 chars from Ollama
+2026-08-01 00:59:54.907 | INFO     | app.reasoning.causal_reasoner:explain_causal:207 - [STAGE COMPLETE Execution Time: 49.451s] Successfully processed causal query 'Give me the summary of this re'
+2026-08-01 01:00:53.227 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: dcd59072432c | Query: 'give me summary of this repo'
+2026-08-01 01:00:53.229 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'give me summary of this repo' | Repo ID: dcd59072432c
+2026-08-01 01:00:53.229 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 01:00:53.252 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'give me summary of this repo'
+2026-08-01 01:00:53.252 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 01:00:53.252 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 3008 chars | System Length: 695 chars
+2026-08-01 01:00:53.252 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 01:00:53.252 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3008
+2026-08-01 01:01:44.942 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 2240
+2026-08-01 01:01:44.942 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 2240 chars from Ollama
+2026-08-01 01:01:44.943 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 51.713s] Successfully processed query 'give me summary of this repo'
+2026-08-01 01:03:11.803 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: dcd59072432c | Query: 'what is the use of this project?'
+2026-08-01 01:03:11.803 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'what is the use of this project?' | Repo ID: dcd59072432c
+2026-08-01 01:03:11.805 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: OVERVIEW
+2026-08-01 01:03:11.821 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'what is the use of this project?'
+2026-08-01 01:03:11.821 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 01:03:11.821 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 3011 chars | System Length: 695 chars
+2026-08-01 01:03:11.823 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 01:03:11.823 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3011
+2026-08-01 01:03:38.313 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 1293
+2026-08-01 01:03:38.313 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 1293 chars from Ollama
+2026-08-01 01:03:38.314 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 26.511s] Successfully processed query 'what is the use of this projec'
+2026-08-01 01:04:46.182 | INFO     | app.api.routes.chat:query_repo:22 - [POST /api/chat/query] Mode: chat | Repo: dcd59072432c | Query: 'which was the hardest part of this repo?'
+2026-08-01 01:04:46.182 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:64 - [STAGE 1 START Query] Query: 'which was the hardest part of this repo?' | Repo ID: dcd59072432c
+2026-08-01 01:04:46.182 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:67 - [STAGE 2 Intent Classified] Category: IMPLEMENTATION
+2026-08-01 01:04:46.198 | INFO     | app.temporal_rag.temporal_retriever:retrieve_temporal_context:73 - Retrieved 6 temporal contexts for query: 'which was the hardest part of this repo?'
+2026-08-01 01:04:46.198 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:70 - [STAGE 3 Temporal Retrieval] Retrieved 6 commit snapshots from ChromaDB
+2026-08-01 01:04:46.208 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:98 - [STAGE 4 Prompt Construction] Prompt Length: 3020 chars | System Length: 695 chars
+2026-08-01 01:04:46.208 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:100 - [STAGE 5 LLM API Call] Provider: Ollama | Model: qwen2.5-coder:7b
+2026-08-01 01:04:46.208 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 3020
+2026-08-01 01:05:13.909 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 1326
+2026-08-01 01:05:13.910 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:103 - [STAGE 6 LLM Response Success] Received 1326 chars from Ollama
+2026-08-01 01:05:13.910 | INFO     | app.reasoning.causal_reasoner:answer_repo_question:125 - [STAGE COMPLETE Execution Time: 27.728s] Successfully processed query 'which was the hardest part of '
+2026-08-01 01:06:49.475 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 01:06:49.475 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 01:06:49.499 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 01:06:49.499 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 01:06:51.982 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for dcd59072432c
+2026-08-01 01:06:52.004 | INFO     | app.reasoning.repository_intelligence:analyze_repository_intelligence:22 - Returning cached Repository Intelligence for dcd59072432c
+2026-08-01 01:07:37.004 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 01:07:37.004 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 01:07:37.014 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 01:07:37.014 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 01:08:15.207 | INFO     | app.reasoning.ollama_client:generate:27 - [LLM SUCCESS] Model: qwen2.5-coder:7b | Response Chars: 3539
+2026-08-01 01:08:49.773 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 01:08:49.777 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 01:08:57.686 | INFO     | app.reasoning.evolution_detector:detect_evolution:95 - Detecting evolution for CloudVision-RS (6 sampled commits)
+2026-08-01 01:08:57.686 | INFO     | app.reasoning.ollama_client:generate:19 - [LLM START] Provider: Ollama | Model: qwen2.5-coder:7b | URL: http://localhost:11434/api/generate | Prompt Chars: 2696
+2026-08-01 01:09:37.270 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 01:09:37.271 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 01:09:37.300 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 01:09:37.301 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 01:10:57.991 | ERROR    | app.reasoning.ollama_client:generate:52 - [LLM UNEXPECTED ERROR] Generation failed for model 'qwen2.5-coder:7b': ReadTimeout: 
+2026-08-01 01:10:57.992 | WARNING  | app.reasoning.evolution_detector:detect_evolution:99 - Ollama generation fallback for evolution narrative: Ollama LLM generation error (ReadTimeout): 
+2026-08-01 01:45:53.615 | INFO     | main:lifespan:18 - Shutting down.

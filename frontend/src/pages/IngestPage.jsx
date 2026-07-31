@@ -55,7 +55,7 @@ export default function IngestPage() {
         setLoading(false);
         setError(data.message);
       }
-    } catch (err) {
+    } catch {
       stopped = true;
       clearInterval(interval);
       setLoading(false);

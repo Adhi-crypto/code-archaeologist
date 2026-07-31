@@ -1,5 +1,5 @@
 import React from 'react';
-import { GitCommit, AlertTriangle, ShieldCheck, ArrowRight, Layers } from 'lucide-react';
+import { GitCommit, AlertTriangle, ShieldCheck, ArrowRight } from 'lucide-react';
 
 export default function BugTimelineVisualizer({ likelyCommit, supportingCommits = [] }) {
   if (!likelyCommit) return null;

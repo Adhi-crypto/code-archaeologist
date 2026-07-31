@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { AlertCircle, RefreshCw, Layers, GitBranch, ArrowLeft } from 'lucide-react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 import { useRepo } from '../store/repoStore';
 import { evolutionApi } from '../services/api';
 import NarrativeCard from '../components/timeline/NarrativeCard';

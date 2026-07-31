@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Bug, Search, Loader2, Sparkles, AlertCircle, Clock, ShieldAlert, FileText, CheckCircle2, ChevronRight, RefreshCw } from 'lucide-react';
+import { Bug, Search, Loader2, Sparkles, AlertCircle, Clock, ShieldAlert, FileText, CheckCircle2, RefreshCw } from 'lucide-react';
 
 import { useRepo } from '../store/repoStore';
 import { bugOriginApi } from '../services/api';
