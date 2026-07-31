@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
+  GitCommit,
   Copy,
   Check,
   Calendar,
@@ -13,7 +14,7 @@ import {
   ThumbsDown,
   RotateCcw,
   ShieldCheck,
-  GitCommit
+  CheckCircle2
 } from 'lucide-react';
 
 /**
@@ -79,8 +80,6 @@ export default function ChatMessage({ message, onRegenerate }) {
     OVERVIEW: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     BUG_ORIGIN: 'bg-rose-100 text-rose-800 border-rose-200',
   }[intent] || 'bg-slate-100 text-slate-800 border-slate-200';
-
-  const normalizedContent = normalizeMarkdown(message.content || "");
 
   return (
     <div className="flex justify-start mb-6">
@@ -211,7 +210,7 @@ export default function ChatMessage({ message, onRegenerate }) {
               tr: ({ children }) => <tr className="hover:bg-slate-50/80">{children}</tr>,
               th: ({ children }) => <th className="p-2.5 font-bold">{children}</th>,
               td: ({ children }) => <td className="p-2.5 text-slate-700">{children}</td>,
-              code({ className, children, ...props }) {
+              code({ node, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || '');
                 const isInline = !className && !String(children).includes('\n');
                 if (isInline) {

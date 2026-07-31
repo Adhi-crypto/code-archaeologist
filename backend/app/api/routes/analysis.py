@@ -13,7 +13,11 @@ class BugOriginRequest(BaseModel):
     repo_name: str = "Repository"
 
 
+@router.post("", response_model=dict)
+@router.post("/", response_model=dict)
 @router.post("/analyze", response_model=dict)
+@router.post("/bug-origin", response_model=dict)
+@router.post("/bug-origin/analyze", response_model=dict)
 async def analyze_bug(request: BugOriginRequest):
     if not request.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")

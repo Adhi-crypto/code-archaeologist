@@ -1,3 +1,4 @@
+import React from 'react';
 import { HeartPulse, ShieldCheck, ShieldAlert, AlertTriangle, Lightbulb } from 'lucide-react';
 
 export default function RepositoryHealthCard({ healthScore, riskLevel, recommendation }) {

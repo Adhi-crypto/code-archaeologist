@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { BarChart3, AlertCircle, RefreshCw, GitBranch } from 'lucide-react';
 import { useRepo } from '../store/repoStore';
 import { repoIntelligenceApi } from '../services/api';
 import AIRepositorySummaryCard from '../components/intelligence/AIRepositorySummaryCard';

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Copy, Check, ExternalLink, Calendar, User, Layers, FileCode, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { GitCommit, Copy, Check, ExternalLink, Calendar, User, Layers, FileCode, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 
 export default function BugCommitCard({ commit, repoUrl, isPrimary = true }) {
   const [copied, setCopied] = useState(false);

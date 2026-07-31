@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function IntelligenceSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { GitCommit, Calendar, User, ChevronDown, ChevronUp, FileCode, Layers, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { GitCommit, Calendar, User, ChevronDown, ChevronUp, FileCode, Layers, ShieldAlert, Sparkles } from 'lucide-react';
 
 export default function TimelineCard({ event, isLast }) {
   const [expanded, setExpanded] = useState(false);

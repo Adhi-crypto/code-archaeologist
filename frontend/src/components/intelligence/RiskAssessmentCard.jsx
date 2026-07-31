@@ -1,4 +1,5 @@
-import { Cpu } from 'lucide-react';
+import React from 'react';
+import { ShieldAlert, AlertTriangle, ShieldCheck, Cpu } from 'lucide-react';
 
 export default function RiskAssessmentCard({ riskAssessment }) {
   if (!riskAssessment) return null;

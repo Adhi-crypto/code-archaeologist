@@ -1,4 +1,5 @@
-import { Sparkles, Activity } from 'lucide-react';
+import React from 'react';
+import { Sparkles, Activity, ShieldCheck } from 'lucide-react';
 
 export default function AIRepositorySummaryCard({ summary, repoName, healthScore, riskLevel }) {
   return (

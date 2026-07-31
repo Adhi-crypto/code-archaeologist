@@ -1,3 +1,4 @@
+import React from 'react';
 import { ShieldCheck, ShieldAlert, AlertTriangle } from 'lucide-react';
 
 export default function ConfidenceGauge({ score }) {
