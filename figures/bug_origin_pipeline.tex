@@ -16,7 +16,7 @@
 \begin{tikzpicture}[
     font=\sffamily\small,
     >=Stealth,
-    node distance=0.65cm and 0.8cm,
+    node distance=0.5cm and 1cm,
     box/.style={
         draw=acmPrimary,
         fill=acmBoxBg,
@@ -25,7 +25,7 @@
         line width=1.1pt,
         align=center,
         inner sep=6pt,
-        minimum width=8.8cm,
+        minimum width=9.2cm,
         minimum height=0.85cm,
         font=\sffamily\small\bfseries\color{acmPrimary}
     },
@@ -37,7 +37,7 @@
         line width=0.9pt,
         align=center,
         inner sep=5pt,
-        minimum width=4.2cm,
+        minimum width=4.4cm,
         minimum height=0.8cm,
         font=\sffamily\footnotesize\bfseries\color{acmDarkGray}
     },
@@ -63,7 +63,7 @@
     }
 ]
 
-% Phase 1: Candidate Retrieval
+% --- PHASE 1 ---
 \node[box, fill=acmPrimary!12] (query) {Bug Description / Natural Language Query};
 \node[box, below=of query] (embed) {Embedding Generation (all-MiniLM-L6-v2)};
 \node[box, below=of embed] (retrieve) {Semantic Retrieval (ChromaDB KNN)};
@@ -78,28 +78,34 @@
     \node[header, anchor=south west, yshift=2pt] at (phase1.north west) {PHASE 1: CANDIDATE COMMIT RETRIEVAL};
 \end{scope}
 
-% Phase 2: Multi-Factor Weighted Confidence Scoring Engine
-\node[box, fill=acmSecondary!15, below=1.4cm of snapshots] (engine) {Multi-Factor Scoring Engine};
+% --- PHASE 2 ---
+\node[box, fill=acmSecondary!15, below=1.5cm of snapshots] (engine) {Multi-Factor Scoring Engine};
 \draw[arrow] (snapshots) -- (engine);
 
-\node[factor, below left=0.6cm and 0.1cm of engine] (f1) {Semantic Similarity Match\\$w_{1}=0.40 \ (40\%)$};
-\node[factor, right=0.4cm of f1] (f2) {File Scope Relevance Match\\$w_{2}=0.20 \ (20\%)$};
-\node[factor, below=0.4cm of f1] (f3) {Temporal Context \& Recency\\$w_{3}=0.15 \ (15\%)$};
-\node[factor, right=0.4cm of f3] (f4) {Architectural Modification Impact\\$w_{4}=0.10 \ (10\%)$};
-\node[factor, below=0.4cm of f3] (f5) {Commit Importance Score\\$w_{5}=0.10 \ (10\%)$};
-\node[factor, right=0.4cm of f5] (f6) {Developer Activity Frequency\\$w_{6}=0.05 \ (5\%)$};
+% Left Column: Symmetrically anchored to the center
+\node[factor, below left=0.6cm and 0.2cm of engine.south, anchor=north east] (f1) {Semantic Similarity Match\\$w_{1}=0.40 \ (40\%)$};
+\node[factor, below=0.25cm of f1] (f3) {Temporal Context \& Recency\\$w_{3}=0.15 \ (15\%)$};
+\node[factor, below=0.25cm of f3] (f5) {Commit Importance Score\\$w_{5}=0.10 \ (10\%)$};
 
-% Branching arrows from engine to factor grid
+% Right Column: Symmetrically anchored to the center
+\node[factor, below right=0.6cm and 0.2cm of engine.south, anchor=north west] (f2) {File Scope Relevance Match\\$w_{2}=0.20 \ (20\%)$};
+\node[factor, below=0.25cm of f2] (f4) {Architectural Modification Impact\\$w_{4}=0.10 \ (10\%)$};
+\node[factor, below=0.25cm of f4] (f6) {Developer Activity Frequency\\$w_{6}=0.05 \ (5\%)$};
+
+% Arrows from engine routing to the top factors
 \draw[arrow] (engine.south) -- ++(0,-0.3) -| (f1.north);
 \draw[arrow] (engine.south) -- ++(0,-0.3) -| (f2.north);
 
 \begin{scope}[on background layer]
-    \node[container, fit=(engine) (f5) (f6)] (phase2) {};
+    \node[container, fit=(engine) (f1) (f6)] (phase2) {};
     \node[header, anchor=south west, yshift=2pt] at (phase2.north west) {PHASE 2: MULTI-FACTOR WEIGHTED CONFIDENCE SCORING};
 \end{scope}
 
-% Phase 3: Forensic Attribution & Timeline Propagation
-\node[box, fill=acmPrimary!10, below=1.8cm of f5, xshift=2.3cm] (calc) {Weighted Score Calculation\\$\text{Score}=\sum_{i=1}^{6} w_{i}\cdot S_{i}$};
+% --- PHASE 3 ---
+% Calculate the absolute center point below the two bottom factors
+\path (f5.south) -- (f6.south) node[midway] (mid);
+
+\node[box, fill=acmPrimary!10, below=1.2cm of mid] (calc) {Weighted Score Calculation\\$\text{Score}=\sum_{i=1}^{6}w_{i}\cdot S_{i}$};
 \node[box, fill=acmPrimary!20, below=of calc] (root) {Most Probable Bug-Introducing Commit\\(Root Cause SHA Attribution)};
 \node[box, below=of root] (support) {Supporting Commits Identification};
 \node[box, fill=acmPrimary, text=white, below=of support] (viz) {Bug Timeline Regression Visualization};
@@ -108,9 +114,9 @@
 \draw[arrow] (root) -- (support);
 \draw[arrow] (support) -- (viz);
 
-% Dashed arrows from bottom factors to weighted score calculation box
-\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f5.south) -- ++(0,-0.4) -| (calc.130);
-\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f6.south) -- ++(0,-0.4) -| (calc.50);
+% Arrows from bottom factors routing cleanly into the calculation node
+\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f5.south) -- ++(0,-0.4) -| (calc.140);
+\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f6.south) -- ++(0,-0.4) -| (calc.40);
 
 \begin{scope}[on background layer]
     \node[container, fit=(calc) (viz)] (phase3) {};
