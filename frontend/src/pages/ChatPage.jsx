@@ -9,31 +9,37 @@ export default function ChatPage() {
   const { messages, input, mode } = chatState;
 
   const [loading, setLoading] = useState(false);
-  const [loadingStep, setLoadingStep] = useState(1);
+  const [statusMessage, setStatusMessage] = useState('Initializing search...');
   const bottomRef = useRef(null);
+  const abortControllerRef = useRef(null);
+  const tokenBufferRef = useRef('');
+  const bufferTimerRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, loadingStep]);
+  }, [messages, statusMessage]);
 
   useEffect(() => {
-    let timer1, timer2;
-    if (loading) {
-      setLoadingStep(1);
-      timer1 = setTimeout(() => setLoadingStep(2), 1200);
-      timer2 = setTimeout(() => setLoadingStep(3), 2800);
-    }
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
+      // Abort in-flight requests on unmount
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      if (bufferTimerRef.current) {
+        clearInterval(bufferTimerRef.current);
+      }
     };
-  }, [loading]);
+  }, []);
 
   const updateInput = (val) => {
     setChatState((prev) => ({ ...prev, input: val }));
   };
 
   const updateMode = (newMode) => {
+    if (loading && abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      setLoading(false);
+    }
     setChatState((prev) => ({ ...prev, mode: newMode }));
   };
 
@@ -41,47 +47,129 @@ export default function ChatPage() {
     if (e) e.preventDefault();
     if (!input.trim() || !activeRepo) return;
 
+    // Abort previous in-flight request if present
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     const queryText = input.trim();
     const userMsg = { role: 'user', content: queryText };
 
+    // Optimistic Assistant Message placeholder
+    const streamingAssistantIdx = messages.length + 1;
+    const initialAssistantMsg = {
+      role: 'assistant',
+      content: '',
+      sources: [],
+      mode,
+      query: queryText,
+      intent: 'IMPLEMENTATION',
+      evidence_match_score: null,
+      answer_confidence: null,
+      isStreaming: true,
+
+    };
+
+    // Optimistic UI Update: append user message + assistant placeholder immediately
     setChatState((prev) => ({
       ...prev,
-      messages: [...prev.messages, userMsg],
+      messages: [...prev.messages, userMsg, initialAssistantMsg],
       input: '',
     }));
+
     setLoading(true);
+    setStatusMessage('Connecting to temporal RAG pipeline...');
+    tokenBufferRef.current = '';
+
+    // Setup 25ms token buffer interval to minimize React re-renders during 60 FPS streaming
+    bufferTimerRef.current = setInterval(() => {
+      if (tokenBufferRef.current) {
+        const chunkToFlush = tokenBufferRef.current;
+        tokenBufferRef.current = '';
+
+        setChatState((prev) => {
+          const newMsgs = [...prev.messages];
+          const lastIdx = newMsgs.length - 1;
+          if (lastIdx >= 0 && newMsgs[lastIdx].role === 'assistant') {
+            newMsgs[lastIdx] = {
+              ...newMsgs[lastIdx],
+              content: (newMsgs[lastIdx].content || '') + chunkToFlush,
+            };
+          }
+          return { ...prev, messages: newMsgs };
+        });
+      }
+    }, 25);
 
     try {
-      const res = await chatApi.query({
-        query: queryText,
-        repo_id: activeRepo.repo_id,
-        mode,
-      });
-      const data = res.data.data;
-
-      const assistantMsg = {
-        role: 'assistant',
-        content: mode === 'causal' ? data.explanation : data.answer,
-        sources: mode === 'causal' ? data.evidence_commits : data.sources,
-        mode,
-        query: queryText,
-        intent: data.intent || 'IMPLEMENTATION',
-        evidence_match_score: data.evidence_match_score || 85,
-        answer_confidence: data.answer_confidence || 82,
-      };
-
-      setChatState((prev) => ({
-        ...prev,
-        messages: [...prev.messages, assistantMsg],
-      }));
+      await chatApi.queryStream(
+        {
+          query: queryText,
+          repo_id: activeRepo.repo_id,
+          mode,
+        },
+        {
+          signal: controller.signal,
+          onStatus: (msg) => {
+            setStatusMessage(msg);
+          },
+          onMetadata: (meta) => {
+            setChatState((prev) => {
+              const newMsgs = [...prev.messages];
+              const lastIdx = newMsgs.length - 1;
+              if (lastIdx >= 0 && newMsgs[lastIdx].role === 'assistant') {
+                newMsgs[lastIdx] = {
+                  ...newMsgs[lastIdx],
+                  sources: meta.sources || [],
+                  intent: meta.intent || 'IMPLEMENTATION',
+                  evidence_match_score: meta.evidence_match_score || 85,
+                  answer_confidence: meta.answer_confidence || 82,
+                };
+              }
+              return { ...prev, messages: newMsgs };
+            });
+          },
+          onToken: (token) => {
+            tokenBufferRef.current += token;
+          },
+          onDone: () => {
+            // Flush remaining buffer
+            if (tokenBufferRef.current) {
+              const remaining = tokenBufferRef.current;
+              tokenBufferRef.current = '';
+              setChatState((prev) => {
+                const newMsgs = [...prev.messages];
+                const lastIdx = newMsgs.length - 1;
+                if (lastIdx >= 0 && newMsgs[lastIdx].role === 'assistant') {
+                  newMsgs[lastIdx] = {
+                    ...newMsgs[lastIdx],
+                    content: (newMsgs[lastIdx].content || '') + remaining,
+                    isStreaming: false,
+                  };
+                }
+                return { ...prev, messages: newMsgs };
+              });
+            }
+          },
+        }
+      );
     } catch (err) {
-      console.error('Chat API Error:', err);
-      const errMsg = err.response?.data?.detail || 'Query failed. Ensure local Ollama model is running.';
+      if (err.name === 'AbortError') {
+        console.log('Stream request aborted by user');
+        return;
+      }
+      console.error('Streaming Chat API Error:', err);
+      const errMsg = err.message || 'Query failed. Ensure local Ollama model is running.';
       setChatState((prev) => ({
         ...prev,
         messages: [...prev.messages, { role: 'error', content: errMsg }],
       }));
     } finally {
+      if (bufferTimerRef.current) {
+        clearInterval(bufferTimerRef.current);
+      }
       setLoading(false);
     }
   };
@@ -205,33 +293,12 @@ export default function ChatPage() {
             <ChatMessage key={idx} message={msg} onRegenerate={handleRegenerate} />
           ))}
 
-          {/* Step-by-Step Progress Pipeline Loader */}
+          {/* Real-time SSE Retrieval Status Indicator */}
           {loading && (
             <div className="flex justify-start mb-6">
-              <div className="max-w-xl w-full bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">
-                  <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />
-                  <span>Executing Temporal RAG & LLM Reasoning Pipeline</span>
-                </div>
-
-                <div className="space-y-2 text-xs">
-                  <div className={`flex items-center gap-2 transition ${loadingStep >= 1 ? 'text-slate-800 font-medium' : 'text-slate-300'}`}>
-                    <Database className="w-3.5 h-3.5 text-blue-500" />
-                    <span>Step 1: Retrieving time-stamped commit snapshots from ChromaDB...</span>
-                    {loadingStep > 1 && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 ml-auto" />}
-                  </div>
-
-                  <div className={`flex items-center gap-2 transition ${loadingStep >= 2 ? 'text-slate-800 font-medium' : 'text-slate-300'}`}>
-                    <Layers className="w-3.5 h-3.5 text-purple-500" />
-                    <span>Step 2: Ranking evidence relevance & calculating impact scores...</span>
-                    {loadingStep > 2 && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 ml-auto" />}
-                  </div>
-
-                  <div className={`flex items-center gap-2 transition ${loadingStep >= 3 ? 'text-slate-800 font-medium' : 'text-slate-300'}`}>
-                    <Cpu className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>Step 3: Synthesizing reasoning with local Ollama LLM engine...</span>
-                  </div>
-                </div>
+              <div className="max-w-xl w-full bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex items-center gap-3">
+                <Loader2 className="w-4 h-4 text-emerald-600 animate-spin flex-shrink-0" />
+                <span className="text-xs font-semibold text-slate-700">{statusMessage}</span>
               </div>
             </div>
           )}
@@ -268,3 +335,4 @@ export default function ChatPage() {
     </div>
   );
 }
+

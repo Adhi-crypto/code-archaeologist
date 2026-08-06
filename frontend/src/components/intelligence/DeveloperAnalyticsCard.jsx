@@ -4,7 +4,7 @@ import { ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, 
 
 const COLORS = ['#10B981', '#6366F1', '#F59E0B', '#EC4899', '#8B5CF6', '#3B82F6', '#14B8A6'];
 
-export default function DeveloperAnalyticsCard({ developers = [] }) {
+export default React.memo(function DeveloperAnalyticsCard({ developers = [] }) {
   if (!developers || developers.length === 0) return null;
 
   const topDevs = developers.slice(0, 7);
@@ -77,4 +77,5 @@ export default function DeveloperAnalyticsCard({ developers = [] }) {
       </div>
     </div>
   );
-}
+});
+

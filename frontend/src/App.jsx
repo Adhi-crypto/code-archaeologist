@@ -1,11 +1,22 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { GitBranch, MessageSquare, TrendingUp, Bug, Home, BarChart3 } from 'lucide-react';
+import { GitBranch, MessageSquare, TrendingUp, Bug, Home, BarChart3, Loader2 } from 'lucide-react';
 import { RepoProvider, useRepo } from './store/repoStore';
-import IngestPage from './pages/IngestPage';
-import ChatPage from './pages/ChatPage';
-import EvolutionPage from './pages/EvolutionPage';
-import BugOriginPage from './pages/BugOriginPage';
-import IntelligencePage from './pages/IntelligencePage';
+
+const IngestPage = lazy(() => import('./pages/IngestPage'));
+const ChatPage = lazy(() => import('./pages/ChatPage'));
+const EvolutionPage = lazy(() => import('./pages/EvolutionPage'));
+const BugOriginPage = lazy(() => import('./pages/BugOriginPage'));
+const IntelligencePage = lazy(() => import('./pages/IntelligencePage'));
+
+function RouteLoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh] text-slate-500 gap-2">
+      <Loader2 className="w-5 h-5 animate-spin text-emerald-600" />
+      <span className="text-sm font-medium">Loading view...</span>
+    </div>
+  );
+}
 
 function Sidebar() {
   const { activeRepo } = useRepo();
@@ -66,13 +77,15 @@ function AppShell() {
     <div className="flex bg-slate-50 min-h-screen">
       <Sidebar />
       <main className="flex-1 overflow-y-auto">
-        <Routes>
-          <Route path="/" element={<IngestPage />} />
-          <Route path="/intelligence" element={<IntelligencePage />} />
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/evolution" element={<EvolutionPage />} />
-          <Route path="/bug-origin" element={<BugOriginPage />} />
-        </Routes>
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<IngestPage />} />
+            <Route path="/intelligence" element={<IntelligencePage />} />
+            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/evolution" element={<EvolutionPage />} />
+            <Route path="/bug-origin" element={<BugOriginPage />} />
+          </Routes>
+        </Suspense>
       </main>
     </div>
   );

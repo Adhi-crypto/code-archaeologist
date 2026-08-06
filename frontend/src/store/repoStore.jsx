@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import { useState, useEffect, createContext, useContext, useCallback, useMemo } from 'react';
 
 const RepoContext = createContext(null);
 
@@ -79,24 +79,41 @@ export function RepoProvider({ children }) {
     });
   }, [clearModuleCaches]);
 
+  const value = useMemo(
+    () => ({
+      activeRepo,
+      setActiveRepo,
+      repos,
+      setRepos,
+      chatState,
+      setChatState,
+      evolutionCache,
+      setEvolutionCache,
+      bugOriginCache,
+      setBugOriginCache,
+      intelligenceCache,
+      setIntelligenceCache,
+      clearModuleCaches,
+    }),
+    [
+      activeRepo,
+      setActiveRepo,
+      repos,
+      setRepos,
+      chatState,
+      setChatState,
+      evolutionCache,
+      setEvolutionCache,
+      bugOriginCache,
+      setBugOriginCache,
+      intelligenceCache,
+      setIntelligenceCache,
+      clearModuleCaches,
+    ]
+  );
+
   return (
-    <RepoContext.Provider
-      value={{
-        activeRepo,
-        setActiveRepo,
-        repos,
-        setRepos,
-        chatState,
-        setChatState,
-        evolutionCache,
-        setEvolutionCache,
-        bugOriginCache,
-        setBugOriginCache,
-        intelligenceCache,
-        setIntelligenceCache,
-        clearModuleCaches,
-      }}
-    >
+    <RepoContext.Provider value={value}>
       {children}
     </RepoContext.Provider>
   );
@@ -106,4 +123,4 @@ export function useRepo() {
   const ctx = useContext(RepoContext);
   if (!ctx) throw new Error('useRepo must be used within RepoProvider');
   return ctx;
-}
+}

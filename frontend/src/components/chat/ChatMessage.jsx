@@ -31,7 +31,7 @@ function normalizeMarkdown(text) {
     .trim();
 }
 
-export default function ChatMessage({ message, onRegenerate }) {
+export default React.memo(function ChatMessage({ message, onRegenerate }) {
   const [copiedResponse, setCopiedResponse] = useState(false);
   const [feedback, setFeedback] = useState(null); // 'up' | 'down' | null
 
@@ -69,9 +69,11 @@ export default function ChatMessage({ message, onRegenerate }) {
     );
   }
 
-  const evidenceMatch = message.evidence_match_score ?? 85;
-  const answerConfidence = message.answer_confidence ?? 82;
+  const evidenceMatch = message.evidence_match_score;
+  const answerConfidence = message.answer_confidence;
   const intent = message.intent || 'IMPLEMENTATION';
+
+const normalizedContent = normalizeMarkdown(message.content || "");
 
   const intentColor = {
     IMPLEMENTATION: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -158,21 +160,34 @@ export default function ChatMessage({ message, onRegenerate }) {
           <div className="flex items-center gap-4 text-[11px]">
             <div className="flex items-center gap-1.5">
               <span className="text-slate-500 font-medium">Evidence Match:</span>
-              <div className="w-16 bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${evidenceMatch}%` }}></div>
-              </div>
-              <span className="font-mono font-bold text-emerald-700">{evidenceMatch}%</span>
+              {evidenceMatch !== undefined && evidenceMatch !== null ? (
+                <>
+                  <div className="w-16 bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${evidenceMatch}%` }}></div>
+                  </div>
+                  <span className="font-mono font-bold text-emerald-700">{evidenceMatch}%</span>
+                </>
+              ) : (
+                <span className="font-mono text-slate-400 animate-pulse text-[10px]">Calculating...</span>
+              )}
             </div>
 
             <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
               <span className="text-slate-500 font-medium">Confidence:</span>
-              <div className="w-16 bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${answerConfidence}%` }}></div>
-              </div>
-              <span className="font-mono font-bold text-blue-700">{answerConfidence}%</span>
+              {answerConfidence !== undefined && answerConfidence !== null ? (
+                <>
+                  <div className="w-16 bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${answerConfidence}%` }}></div>
+                  </div>
+                  <span className="font-mono font-bold text-blue-700">{answerConfidence}%</span>
+                </>
+              ) : (
+                <span className="font-mono text-slate-400 animate-pulse text-[10px]">Calculating...</span>
+              )}
             </div>
           </div>
         </div>
+
 
         {/* Formatted Markdown Body */}
         <div className="p-6 text-slate-800 text-sm leading-relaxed font-sans prose prose-slate max-w-none">
@@ -260,9 +275,9 @@ export default function ChatMessage({ message, onRegenerate }) {
       </div>
     </div>
   );
-}
+});
 
-function EvidenceCard({ source }) {
+const EvidenceCard = React.memo(function EvidenceCard({ source }) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -333,4 +348,5 @@ function EvidenceCard({ source }) {
       )}
     </div>
   );
-}
+});
+

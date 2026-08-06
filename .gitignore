@@ -9,10 +9,12 @@ __pycache__/
 
 # Node
 node_modules/
+frontend/node_modules/
 
 # Build
 dist/
 build/
+frontend/dist/
 
 # IDE
 .vscode/
@@ -21,9 +23,12 @@ build/
 # Jupyter
 .ipynb_checkpoints/
 
-# ChromaDB
+# Runtime data & repositories
+backend/data/
 backend/chroma_db/
 backend/chroma/
-
-# Cloned repositories
 backend/cloned_repos/
+
+# Logs
+backend/logs/
+*.log

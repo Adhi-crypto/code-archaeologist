@@ -31,6 +31,21 @@ def get_collection():
     return _collection
 
 
+def close_chroma_client():
+    """Gracefully stop ChromaDB system and close SQLite file handles."""
+    global _client, _collection
+    if _client is not None:
+        try:
+            if hasattr(_client, "_system") and hasattr(_client._system, "stop"):
+                _client._system.stop()
+            logger.info("ChromaDB client system stopped gracefully.")
+        except Exception as e:
+            logger.warning(f"Error closing ChromaDB system: {e}")
+        _client = None
+        _collection = None
+
+
+
 def build_commit_document(commit: CommitRecord, repo_id: str, repo_name: str) -> str:
     """Build a rich text document for each commit snapshot — this is what gets embedded."""
     return f"""Repository: {repo_name}

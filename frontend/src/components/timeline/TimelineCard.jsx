@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GitCommit, Calendar, User, ChevronDown, ChevronUp, FileCode, Layers, ShieldAlert, Sparkles } from 'lucide-react';
 
-export default function TimelineCard({ event, isLast }) {
+export default React.memo(function TimelineCard({ event, isLast }) {
   const [expanded, setExpanded] = useState(false);
 
   const getImportanceBadge = (score) => {
@@ -126,4 +126,5 @@ export default function TimelineCard({ event, isLast }) {
       </div>
     </div>
   );
-}
+});
+
