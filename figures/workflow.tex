@@ -1,135 +1,131 @@
-\documentclass[tikz,border=12pt]{standalone}
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+\documentclass[tikz,border=15pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.misc, fit, backgrounds, calc}
 
-% Professional ACM/IEEE Academic Blue Palette
-\definecolor{ieeePrimary}{RGB}{15, 65, 120}       % Deep Navy Blue
-\definecolor{ieeeSecondary}{RGB}{40, 110, 170}   % Steel Blue
-\definecolor{ieeeAccent}{RGB}{65, 150, 210}      % Sky Accent Blue
-\definecolor{ieeeDarkGray}{RGB}{45, 55, 70}       % Slate Text Gray
-\definecolor{ieeeLightBg}{RGB}{245, 248, 252}    % Node Shading Gray
-\definecolor{ieeeBoxBg}{RGB}{255, 255, 255}      % Card White Fill
-\definecolor{ieeeGroupBg}{RGB}{236, 242, 249}    % Layer Grouping Fill
+% Professional ACM/IEEE Academic Color Palette
+\definecolor{acmPrimary}{RGB}{15, 60, 115}       % Deep Academic Blue
+\definecolor{acmSecondary}{RGB}{35, 105, 165}   % Medium Steel Blue
+\definecolor{acmAccent}{RGB}{60, 145, 205}      % Accent Blue
+\definecolor{acmDarkGray}{RGB}{45, 55, 70}       % Dark Slate Text
+\definecolor{acmLightBg}{RGB}{246, 248, 252}    % Box Light Shading
+\definecolor{acmBoxBg}{RGB}{255, 255, 255}      % Card White Fill
+\definecolor{acmGroupBg}{RGB}{236, 242, 249}    % Container Fill
 
 \begin{document}
 \begin{tikzpicture}[
     font=\sffamily\small,
     >=Stealth,
-    node distance=0.65cm and 1.2cm,
-    % Standard Process Block
-    process/.style={
-        draw=ieeePrimary,
-        fill=ieeeBoxBg,
+    node distance=0.65cm and 1.5cm,
+    box/.style={
+        draw=acmPrimary,
+        fill=acmBoxBg,
         rectangle,
         rounded corners=4pt,
         line width=1.1pt,
         align=center,
         inner sep=6pt,
-        minimum width=6.5cm,
-        minimum height=0.85cm,
-        font=\sffamily\small\bfseries\color{ieeePrimary}
+        minimum width=5.0cm,
+        minimum height=0.9cm,
+        font=\sffamily\small\bfseries\color{acmPrimary}
     },
-    % Input / Terminal Node
-    terminal/.style={
-        draw=ieeePrimary,
-        fill=ieeePrimary!12,
+    userbox/.style={
+        draw=acmPrimary,
+        fill=acmPrimary!12,
         rectangle,
-        rounded corners=12pt,
+        rounded corners=8pt,
         line width=1.2pt,
         align=center,
-        inner sep=7pt,
-        minimum width=6.5cm,
-        font=\sffamily\small\bfseries\color{ieeePrimary}
+        inner sep=6pt,
+        minimum width=5.0cm,
+        minimum height=0.9cm,
+        font=\sffamily\small\bfseries\color{acmPrimary}
     },
-    % Decision Diamond Style
-    decision/.style={
-        draw=ieeeSecondary,
-        fill=ieeeLightBg,
-        diamond,
-        aspect=2.2,
-        line width=1.1pt,
-        align=center,
-        inner sep=4pt,
-        font=\sffamily\footnotesize\bfseries\color{ieeeDarkGray}
-    },
-    % Data Storage Node
-    storage/.style={
-        draw=ieeePrimary,
-        fill=ieeeSecondary!15,
+    highlightbox/.style={
+        draw=acmPrimary,
+        fill=acmPrimary,
         rectangle,
-        rounded corners=4pt,
-        line width=1.1pt,
+        rounded corners=8pt,
+        line width=1.2pt,
         align=center,
         inner sep=6pt,
-        minimum width=6.5cm,
-        font=\sffamily\small\bfseries\color{ieeePrimary}
+        minimum width=5.0cm,
+        minimum height=0.9cm,
+        font=\sffamily\small\bfseries\color{white}
     },
-    % Container Layer Style with generous padding
+    header/.style={
+        font=\sffamily\tiny\bfseries,
+        color=acmPrimary,
+        align=center
+    },
+    arrow/.style={
+        draw=acmDarkGray,
+        ->,
+        line width=1.1pt
+    },
     container/.style={
-        draw=ieeePrimary!45,
-        fill=ieeeGroupBg,
+        draw=acmPrimary!50,
+        fill=acmGroupBg,
         rectangle,
         dashed,
         rounded corners=6pt,
         line width=1.0pt,
         inner ysep=14pt,
-        inner xsep=14pt
-    },
-    % Arrow Connection Style
-    arrow/.style={
-        draw=ieeeDarkGray,
-        ->,
-        line width=1.1pt
+        inner xsep=12pt
     }
 ]
 
-    % Stage 1: User & Repository Ingestion Phase
-    \node (user) [terminal] {User};
-    \node (url) [process, below=1.0cm of user] {Enter GitHub Repository URL};
-    \node (clone) [process, below=of url] {Clone Repository};
-    \node (commits) [process, below=of clone] {Extract Commit History};
-    \node (readme) [process, below=of commits] {Extract README \& Context};
-    \node (snapshots) [process, below=of readme] {Generate Temporal Snapshots};
-    \node (embeddings) [process, below=of snapshots] {Generate Sentence Embeddings};
-    \node (chromadb) [storage, below=of embeddings] {Store in ChromaDB Vector Database};
+% ================= STAGE 1 (Column 1) =================
+\node[userbox] (url) {Enter GitHub Repository URL};
+\node[box, below=of url] (clone) {Clone Repository};
+\node[box, below=of clone] (history) {Extract Commit History};
+\node[box, below=of history] (context) {Extract README \& Context};
+\node[box, below=of context] (snapshot) {Generate Temporal Snapshots};
+\node[box, below=of snapshot] (embed) {Generate Sentence Embeddings};
+\node[box, fill=acmSecondary!15, below=of embed] (chroma) {Store in ChromaDB Vector Database};
 
-    % Stage 2: Conversational Retrieval & Reasoning Phase
-    \node (question) [terminal, below=1.2cm of chromadb] {User Question};
-    \node (intent) [decision, below=1.0cm of question] {Intent Classification\\(Overview / Historical / Bug Origin)};
-    \node (retrieval) [process, below=0.8cm of intent] {Temporal Retrieval};
-    \node (topk) [process, below=of retrieval] {Top-k Commit Selection};
-    \node (prompt) [process, below=of topk] {Prompt Construction};
-    \node (llm) [storage, below=of prompt] {Local Ollama LLM (Qwen2.5-Coder 7B)};
-    \node (response) [process, below=of llm] {Grounded Response Synthesis};
-    \node (display) [terminal, fill=ieeePrimary, text=white, below=1.0cm of response] {
-        Display Evidence + Confidence + Timeline
-    };
+% Stage 1 Background
+\begin{scope}[on background layer]
+    \node[container, fit=(url) (chroma)] (stage1) {};
+    \node[header, anchor=south west, yshift=2pt] at (stage1.north west) {STAGE 1: REPOSITORY INGESTION \& TEMPORAL INDEXING};
+\end{scope}
 
-    % Layer Grouping Containers with Header Labels Positioned Cleanly ABOVE Boxes
-    \begin{scope}[on background layer]
-        \node (ingest_layer) [container, fit=(url) (clone) (commits) (readme) (snapshots) (embeddings) (chromadb)] {};
-        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{ieeePrimary}, yshift=2pt] at (ingest_layer.north west) {STAGE 1: REPOSITORY INGESTION \& TEMPORAL INDEXING};
+% Stage 1 Arrows
+\draw[arrow] (url) -- (clone);
+\draw[arrow] (clone) -- (history);
+\draw[arrow] (history) -- (context);
+\draw[arrow] (context) -- (snapshot);
+\draw[arrow] (snapshot) -- (embed);
+\draw[arrow] (embed) -- (chroma);
 
-        \node (rag_layer) [container, fit=(intent) (retrieval) (topk) (prompt) (llm) (response)] {};
-        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{ieeePrimary}, yshift=2pt] at (rag_layer.north west) {STAGE 2: TEMPORAL RETRIEVAL \& LLM REASONING};
-    \end{scope}
 
-    % Connector Arrows
-    \draw [arrow] (user) -- (url);
-    \draw [arrow] (url) -- (clone);
-    \draw [arrow] (clone) -- (commits);
-    \draw [arrow] (commits) -- (readme);
-    \draw [arrow] (readme) -- (snapshots);
-    \draw [arrow] (snapshots) -- (embeddings);
-    \draw [arrow] (embeddings) -- (chromadb);
-    
-    \draw [arrow] (chromadb) -- (question);
-    \draw [arrow] (question) -- (intent);
-    \draw [arrow] (intent) -- node[right, font=\sffamily\tiny\bfseries, color=ieeeDarkGray] {Filtered Intent Context} (retrieval);
-    \draw [arrow] (retrieval) -- (topk);
-    \draw [arrow] (topk) -- (prompt);
-    \draw [arrow] (prompt) -- (llm);
-    \draw [arrow] (llm) -- (response);
-    \draw [arrow] (response) -- (display);
+% ================= STAGE 2 (Column 2) =================
+\node[userbox, right=3.5cm of url] (question) {User Question};
+\node[box, below=of question] (intent) {Intent Classification\\(Overview / Historical / Bug Origin)};
+\node[box, below=of intent] (retrieve) {Temporal Retrieval\\\& Filtered Intent Context};
+\node[box, below=of retrieve] (topk) {Top-k Commit Selection};
+\node[box, below=of topk] (prompt) {Prompt Construction};
+\node[box, fill=acmSecondary!15, below=of prompt] (llm) {Local Ollama LLM\\(Qwen2.5-Coder 7B)};
+\node[box, below=of llm] (synth) {Grounded Response Synthesis};
+\node[highlightbox, below=of synth] (display) {Display Evidence +\\Confidence + Timeline};
+
+% Stage 2 Background
+\begin{scope}[on background layer]
+    \node[container, fit=(question) (display)] (stage2) {};
+    \node[header, anchor=south west, yshift=2pt] at (stage2.north west) {STAGE 2: TEMPORAL RETRIEVAL \& LLM REASONING};
+\end{scope}
+
+% Stage 2 Arrows
+\draw[arrow] (question) -- (intent);
+\draw[arrow] (intent) -- (retrieve);
+\draw[arrow] (retrieve) -- (topk);
+\draw[arrow] (topk) -- (prompt);
+\draw[arrow] (prompt) -- (llm);
+\draw[arrow] (llm) -- (synth);
+\draw[arrow] (synth) -- (display);
+
+% ================= CROSS-STAGE CONNECTION =================
+\draw[arrow, dashed, color=acmSecondary, line width=1.2pt] (chroma.east) -- ++(1.4,0) |- (retrieve.west) 
+    node[pos=0.25, right, align=left, font=\sffamily\tiny\bfseries, color=acmPrimary, xshift=2pt] {Vector Data\\Feed};
 
 \end{tikzpicture}
 \end{document}
