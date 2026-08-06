@@ -79,15 +79,16 @@
 \end{scope}
 
 % --- PHASE 2 ---
-\node[box, fill=acmSecondary!15, below=1.5cm of snapshots] (engine) {Multi-Factor Scoring Engine};
+% Increased spacing to strictly clear the Phase 1 boundary
+\node[box, fill=acmSecondary!15, below=2cm of snapshots] (engine) {Multi-Factor Scoring Engine};
 \draw[arrow] (snapshots) -- (engine);
 
-% Left Column: Symmetrically anchored to the center
+% Left Column: Symmetrically anchored
 \node[factor, below left=0.6cm and 0.2cm of engine.south, anchor=north east] (f1) {Semantic Similarity Match\\$w_{1}=0.40 \ (40\%)$};
 \node[factor, below=0.25cm of f1] (f3) {Temporal Context \& Recency\\$w_{3}=0.15 \ (15\%)$};
 \node[factor, below=0.25cm of f3] (f5) {Commit Importance Score\\$w_{5}=0.10 \ (10\%)$};
 
-% Right Column: Symmetrically anchored to the center
+% Right Column: Symmetrically anchored
 \node[factor, below right=0.6cm and 0.2cm of engine.south, anchor=north west] (f2) {File Scope Relevance Match\\$w_{2}=0.20 \ (20\%)$};
 \node[factor, below=0.25cm of f2] (f4) {Architectural Modification Impact\\$w_{4}=0.10 \ (10\%)$};
 \node[factor, below=0.25cm of f4] (f6) {Developer Activity Frequency\\$w_{6}=0.05 \ (5\%)$};
@@ -102,10 +103,11 @@
 \end{scope}
 
 % --- PHASE 3 ---
-% Calculate the absolute center point below the two bottom factors
+% Calculate absolute center
 \path (f5.south) -- (f6.south) node[midway] (mid);
 
-\node[box, fill=acmPrimary!10, below=1.2cm of mid] (calc) {Weighted Score Calculation\\$\text{Score}=\sum_{i=1}^{6}w_{i}\cdot S_{i}$};
+% Increased spacing to 2.5cm to strictly clear the Phase 2 boundary and Phase 3 header
+\node[box, fill=acmPrimary!10, below=2.5cm of mid] (calc) {Weighted Score Calculation\\$\text{Score}=\sum_{i=1}^{6}w_{i}\cdot S_{i}$};
 \node[box, fill=acmPrimary!20, below=of calc] (root) {Most Probable Bug-Introducing Commit\\(Root Cause SHA Attribution)};
 \node[box, below=of root] (support) {Supporting Commits Identification};
 \node[box, fill=acmPrimary, text=white, below=of support] (viz) {Bug Timeline Regression Visualization};
@@ -114,9 +116,9 @@
 \draw[arrow] (root) -- (support);
 \draw[arrow] (support) -- (viz);
 
-% Arrows from bottom factors routing cleanly into the calculation node
-\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f5.south) -- ++(0,-0.4) -| (calc.140);
-\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f6.south) -- ++(0,-0.4) -| (calc.40);
+% Extended downward drop (0.8cm) to push past the dashed boundary box before turning
+\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f5.south) -- ++(0,-0.8) -| (calc.140);
+\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f6.south) -- ++(0,-0.8) -| (calc.40);
 
 \begin{scope}[on background layer]
     \node[container, fit=(calc) (viz)] (phase3) {};
