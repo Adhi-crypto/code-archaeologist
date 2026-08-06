@@ -72,19 +72,15 @@
     }
 ]
 
-% ================= INPUT CONTEXT =================
-\node[inputbox] (input) {\textbf{INPUT CONTEXT}\\Repository Summary\\Commit Snapshots\\Temporal Metadata};
-
 % ================= STAGE 1 =================
-\node[box, fill=acmPrimary!12, below=0.8cm of input] (n1) {User Query};
+\node[box, fill=acmPrimary!12] (n1) {User Query};
 \node[box, right=of n1] (n2) {Normalize Query};
 \node[box, right=of n2] (n3) {Intent Classifier};
 
-\node[box, below=0.8cm of n3] (n4) {Sentence Transformer};
+\node[box, below=1cm of n3] (n4) {Sentence Transformer};
 \node[box, left=of n4] (n5) {Query Embedding};
 \node[box, fill=acmSecondary!15, left=of n5] (n6) {ChromaDB\\Vector Search};
 
-\draw[arrow, dashed, color=acmSecondary] (input) -- (n1);
 \draw[arrow] (n1) -- (n2);
 \draw[arrow] (n2) -- (n3);
 \draw[arrow] (n3) -- (n4);
@@ -92,16 +88,21 @@
 \draw[arrow] (n5) -- (n6);
 
 \begin{scope}[on background layer]
-    \node[container, fit=(n1) (n6)] (stage1) {};
+    \node[container, fit=(n1) (n2) (n3) (n4) (n5) (n6)] (stage1) {};
     \node[header, anchor=south west, yshift=2pt] at (stage1.north west) {STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
 \end{scope}
 
+% ================= INPUT CONTEXT =================
+% Pushed further up (2.2cm) so it cleanly clears the dashed boundary and title
+\node[inputbox, above=2.2cm of n1] (input) {\textbf{INPUT CONTEXT}\\Repository Summary\\Commit Snapshots\\Temporal Metadata};
+\draw[arrow, dashed, color=acmSecondary] (input) -- (n1);
+
 % ================= STAGE 2 =================
-\node[box, below=1.6cm of n6] (m6) {Top-K Candidate\\Retrieval};
+\node[box, below=2cm of n6] (m6) {Top-K Candidate\\Retrieval};
 \node[box, right=of m6] (m5) {Temporal\\Filtering};
 \node[box, right=of m5] (m4) {Commit\\Ranking};
 
-\node[box, below=0.8cm of m4] (m3) {Prompt Builder};
+\node[box, below=1cm of m4] (m3) {Prompt Builder};
 \node[box, fill=acmSecondary!15, left=of m3] (m2) {Local Ollama LLM\\(Qwen2.5-Coder)};
 \node[highlight, left=of m2] (m1) {Evidence Grounded\\Response};
 
@@ -113,12 +114,13 @@
 \draw[arrow] (m2) -- (m1);
 
 \begin{scope}[on background layer]
-    \node[container, fit=(m1) (m6)] (stage2) {};
+    \node[container, fit=(m1) (m2) (m3) (m4) (m5) (m6)] (stage2) {};
     \node[header, anchor=south west, yshift=2pt] at (stage2.north west) {STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
 \end{scope}
 
 % ================= OUTPUT METRICS =================
-\node[inputbox, below=0.8cm of m1] (output) {\textbf{OUTPUT METRICS}\\Evidence Score\\Confidence Score\\Source Citations\\Evolution Timeline};
+% Pushed further down (1.5cm) to clear the bottom boundary
+\node[inputbox, below=1.5cm of m1] (output) {\textbf{OUTPUT METRICS}\\Evidence Score\\Confidence Score\\Source Citations\\Evolution Timeline};
 \draw[arrow, dashed, color=acmSecondary] (m1) -- (output);
 
 \end{tikzpicture}
