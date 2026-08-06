@@ -1,0 +1,159 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+
+% Professional ACM Academic Blue Palette
+\definecolor{acmPrimary}{RGB}{18, 55, 105}       % Deep Navy Blue
+\definecolor{acmSecondary}{RGB}{40, 110, 175}   % Medium Steel Blue
+\definecolor{acmAccent}{RGB}{65, 150, 210}      % Sky Accent Blue
+\definecolor{acmDarkGray}{RGB}{45, 55, 70}       % Dark Slate Text
+\definecolor{acmLightBg}{RGB}{246, 248, 252}    % Box Light Background
+\definecolor{acmBoxBg}{RGB}{255, 255, 255}      % Card White Fill
+\definecolor{acmGroupBg}{RGB}{236, 242, 249}    % Container Fill
+\definecolor{acmMathBg}{RGB}{240, 245, 252}     % Math Weight Box Fill
+
+\begin{document}
+\begin{tikzpicture}[
+    font=\sffamily\small,
+    >=Stealth,
+    node distance=0.65cm and 1.2cm,
+    % Standard Primary Node
+    block/.style={
+        draw=acmPrimary,
+        fill=acmBoxBg,
+        rectangle,
+        rounded corners=4pt,
+        line width=1.1pt,
+        align=center,
+        inner sep=6pt,
+        minimum width=6.5cm,
+        minimum height=0.85cm,
+        font=\sffamily\small\bfseries\color{acmPrimary}
+    },
+    % Sub-Factor Scoring Node Style
+    factor/.style={
+        draw=acmSecondary,
+        fill=acmLightBg,
+        rectangle,
+        rounded corners=3pt,
+        line width=0.9pt,
+        align=center,
+        inner sep=5pt,
+        minimum width=5.8cm,
+        minimum height=0.75cm,
+        font=\sffamily\footnotesize\bfseries\color{acmDarkGray}
+    },
+    % Input/Output Terminal Node Style
+    terminal/.style={
+        draw=acmPrimary,
+        fill=acmPrimary!12,
+        rectangle,
+        rounded corners=10pt,
+        line width=1.2pt,
+        align=center,
+        inner sep=7pt,
+        minimum width=6.5cm,
+        font=\sffamily\small\bfseries\color{acmPrimary}
+    },
+    % Container Layer Style
+    container/.style={
+        draw=acmPrimary!45,
+        fill=acmGroupBg,
+        rectangle,
+        dashed,
+        rounded corners=6pt,
+        line width=1.0pt,
+        inner sep=8pt
+    },
+    % Arrow Connection Style
+    arrow/.style={
+        draw=acmDarkGray,
+        ->,
+        line width=1.1pt
+    },
+    % Math Weight Label Style
+    mathlabel/.style={
+        font=\sffamily\tiny\bfseries,
+        color=acmPrimary,
+        fill=acmMathBg,
+        draw=acmSecondary!50,
+        inner sep=2.5pt,
+        rounded corners=2pt
+    }
+]
+
+    % Stage 1: Candidate Extraction
+    \node (desc) [terminal] {Bug Description / Natural Language Query};
+    \node (embed) [block, below=of desc] {Embedding Generation (all-MiniLM-L6-v2)};
+    \node (retrieval) [block, below=of embed] {Semantic Retrieval (ChromaDB KNN)};
+    \node (candidates) [block, below=of retrieval] {Candidate Commit Snapshots};
+
+    % Stage 2: Multi-Factor Weighting Sub-System
+    \node (scoring_hdr) [block, fill=acmSecondary!15, below=0.8cm of candidates] {Multi-Factor Scoring Engine};
+    
+    \node (f1) [factor, below=0.45cm of scoring_hdr] {Semantic Similarity Match};
+    \node (f2) [factor, below=0.35cm of f1] {File Scope Relevance Match};
+    \node (f3) [factor, below=0.35cm of f2] {Temporal Context \& Recency};
+    \node (f4) [factor, below=0.35cm of f3] {Architectural Modification Impact};
+    \node (f5) [factor, below=0.35cm of f4] {Commit Importance Score};
+    \node (f6) [factor, below=0.35cm of f5] {Developer Activity Frequency};
+
+    % Side Mathematical Weight Labels
+    \node (m1) [mathlabel, right=0.3cm of f1] {$w_1 = 0.40$ (40\%)};
+    \node (m2) [mathlabel, right=0.3cm of f2] {$w_2 = 0.20$ (20\%)};
+    \node (m3) [mathlabel, right=0.3cm of f3] {$w_3 = 0.15$ (15\%)};
+    \node (m4) [mathlabel, right=0.3cm of f4] {$w_4 = 0.10$ (10\%)};
+    \node (m5) [mathlabel, right=0.3cm of f5] {$w_5 = 0.10$ (10\%)};
+    \node (m6) [mathlabel, right=0.3cm of f6] {$w_6 = 0.05$ (5\%)};
+
+    % Stage 3: Attribution & Visualization Output
+    \node (weighted) [block, fill=acmPrimary!10, below=0.6cm of f6] {
+        Weighted Score Calculation\\
+        $\text{Score} = \sum_{i=1}^{6} w_i \cdot S_i$
+    };
+    
+    \node (probable) [block, fill=acmPrimary!20, below=of weighted] {
+        Most Probable Bug-Introducing Commit\\
+        (Root Cause SHA Attribution)
+    };
+    
+    \node (supporting) [block, below=of probable] {Supporting Commits Identification};
+    \node (timeline) [terminal, fill=acmPrimary, text=white, below=of supporting] {Bug Timeline Regression Visualization};
+
+    % Layer Containers
+    \begin{scope}[on background layer]
+        \node (stage1_bg) [container, fit=(desc) (embed) (retrieval) (candidates)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage1_bg.north west) {\;PHASE 1: CANDIDATE COMMIT RETRIEVAL};
+
+        \node (stage2_bg) [container, fit=(scoring_hdr) (f1) (f6) (m1) (m6)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage2_bg.north west) {\;PHASE 2: MULTI-FACTOR WEIGHTED CONFIDENCE SCORING};
+
+        \node (stage3_bg) [container, fit=(weighted) (probable) (supporting) (timeline)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage3_bg.north west) {\;PHASE 3: FORENSIC ATTRIBUTION \& TIMELINE PROPAGATION};
+    \end{scope}
+
+    % Connector Arrows
+    \draw [arrow] (desc) -- (embed);
+    \draw [arrow] (embed) -- (retrieval);
+    \draw [arrow] (retrieval) -- (candidates);
+    \draw [arrow] (candidates) -- (scoring_hdr);
+    \draw [arrow] (scoring_hdr) -- (f1);
+    \draw [arrow] (f1) -- (f2);
+    \draw [arrow] (f2) -- (f3);
+    \draw [arrow] (f3) -- (f4);
+    \draw [arrow] (f4) -- (f5);
+    \draw [arrow] (f5) -- (f6);
+    \draw [arrow] (f6) -- (weighted);
+    \draw [arrow] (weighted) -- (probable);
+    \draw [arrow] (probable) -- (supporting);
+    \draw [arrow] (supporting) -- (timeline);
+
+    % Connectors to math labels
+    \draw [acmSecondary!60, dotted, line width=0.8pt] (f1) -- (m1);
+    \draw [acmSecondary!60, dotted, line width=0.8pt] (f2) -- (m2);
+    \draw [acmSecondary!60, dotted, line width=0.8pt] (f3) -- (m3);
+    \draw [acmSecondary!60, dotted, line width=0.8pt] (f4) -- (m4);
+    \draw [acmSecondary!60, dotted, line width=0.8pt] (f5) -- (m5);
+    \draw [acmSecondary!60, dotted, line width=0.8pt] (f6) -- (m6);
+
+\end{tikzpicture}
+\end{document}
