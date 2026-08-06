@@ -1,4 +1,4 @@
-\documentclass[tikz,border=15pt]{standalone}
+\documentclass[tikz,border=10pt]{standalone}
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta, fit, backgrounds, calc}
 
@@ -7,7 +7,7 @@
 \definecolor{acmSecondary}{RGB}{35, 105, 165}   % Medium Steel Blue
 \definecolor{acmAccent}{RGB}{60, 145, 205}      % Accent Blue
 \definecolor{acmDarkGray}{RGB}{45, 55, 70}       % Dark Slate Text
-\definecolor{acmLightBg}{RGB}{246, 248, 252}    % Box Light Shading
+\definecolor{acmLightBg}{RGB}{246, 248, 252}    % Box Light Background
 \definecolor{acmBoxBg}{RGB}{255, 255, 255}      % Card White Fill
 \definecolor{acmGroupBg}{RGB}{236, 242, 249}    % Container Fill
 \definecolor{acmAnnoBg}{RGB}{240, 245, 252}     % Input/Output Box Shading
@@ -16,17 +16,16 @@
 \begin{tikzpicture}[
     font=\sffamily\footnotesize,
     >=Stealth,
-    node distance=0.8cm and 0.6cm,
+    node distance=0.8cm and 0.8cm,
     box/.style={
         draw=acmPrimary,
         fill=acmBoxBg,
         rectangle,
         rounded corners=4pt,
         line width=1.0pt,
+        minimum width=3.2cm,
+        minimum height=1.0cm,
         align=center,
-        inner sep=5pt,
-        minimum width=2.4cm,
-        minimum height=1.2cm,
         font=\sffamily\footnotesize\bfseries\color{acmPrimary}
     },
     highlight/.style={
@@ -35,10 +34,9 @@
         rectangle,
         rounded corners=4pt,
         line width=1.1pt,
+        minimum width=3.2cm,
+        minimum height=1.0cm,
         align=center,
-        inner sep=5pt,
-        minimum width=2.4cm,
-        minimum height=1.2cm,
         font=\sffamily\footnotesize\bfseries\color{white}
     },
     inputbox/.style={
@@ -47,10 +45,9 @@
         rectangle,
         rounded corners=4pt,
         line width=0.9pt,
+        minimum width=3.2cm,
+        minimum height=1.0cm,
         align=center,
-        inner sep=5pt,
-        minimum width=3.0cm,
-        minimum height=1.2cm,
         font=\sffamily\tiny\color{acmDarkGray}
     },
     header/.style={
@@ -64,25 +61,30 @@
         line width=1.0pt
     },
     container/.style={
-        draw=acmPrimary!40,
+        draw=acmPrimary!50,
         fill=acmGroupBg,
         rectangle,
         dashed,
-        rounded corners=5pt,
-        line width=0.9pt,
+        rounded corners=6pt,
+        line width=1.0pt,
         inner ysep=14pt,
-        inner xsep=14pt
+        inner xsep=12pt
     }
 ]
 
-% Top Row: Stage 1 (Left to Right)
-\node[box, fill=acmPrimary!12] (n1) {User Query};
+% ================= INPUT CONTEXT =================
+\node[inputbox] (input) {\textbf{INPUT CONTEXT}\\Repository Summary\\Commit Snapshots\\Temporal Metadata};
+
+% ================= STAGE 1 =================
+\node[box, fill=acmPrimary!12, below=0.8cm of input] (n1) {User Query};
 \node[box, right=of n1] (n2) {Normalize Query};
 \node[box, right=of n2] (n3) {Intent Classifier};
-\node[box, right=of n3] (n4) {Sentence Transformer};
-\node[box, right=of n4] (n5) {Query Embedding};
-\node[box, fill=acmSecondary!15, right=of n5] (n6) {ChromaDB\\Vector Search};
 
+\node[box, below=0.8cm of n3] (n4) {Sentence Transformer};
+\node[box, left=of n4] (n5) {Query Embedding};
+\node[box, fill=acmSecondary!15, left=of n5] (n6) {ChromaDB\\Vector Search};
+
+\draw[arrow, dashed, color=acmSecondary] (input) -- (n1);
 \draw[arrow] (n1) -- (n2);
 \draw[arrow] (n2) -- (n3);
 \draw[arrow] (n3) -- (n4);
@@ -94,11 +96,12 @@
     \node[header, anchor=south west, yshift=2pt] at (stage1.north west) {STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
 \end{scope}
 
-% Bottom Row: Stage 2 (Right to Left)
-\node[box, below=1.8cm of n6] (m6) {Top-K Candidate\\Retrieval};
-\node[box, left=of m6] (m5) {Temporal\\Filtering};
-\node[box, left=of m5] (m4) {Commit\\Ranking};
-\node[box, left=of m4] (m3) {Prompt Builder};
+% ================= STAGE 2 =================
+\node[box, below=1.6cm of n6] (m6) {Top-K Candidate\\Retrieval};
+\node[box, right=of m6] (m5) {Temporal\\Filtering};
+\node[box, right=of m5] (m4) {Commit\\Ranking};
+
+\node[box, below=0.8cm of m4] (m3) {Prompt Builder};
 \node[box, fill=acmSecondary!15, left=of m3] (m2) {Local Ollama LLM\\(Qwen2.5-Coder)};
 \node[highlight, left=of m2] (m1) {Evidence Grounded\\Response};
 
@@ -114,12 +117,8 @@
     \node[header, anchor=south west, yshift=2pt] at (stage2.north west) {STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
 \end{scope}
 
-% Input Context (Left of Stage 1)
-\node[inputbox, left=1.2cm of n1] (input) {\textbf{INPUT CONTEXT}\\Repository Summary\\Commit Snapshots\\Temporal Metadata};
-\draw[arrow, dashed, color=acmSecondary] (input) -- (n1);
-
-% Output Metrics (Left of Stage 2)
-\node[inputbox, left=1.2cm of m1] (output) {\textbf{OUTPUT METRICS}\\Evidence Score\\Confidence Score\\Source Citations\\Evolution Timeline};
+% ================= OUTPUT METRICS =================
+\node[inputbox, below=0.8cm of m1] (output) {\textbf{OUTPUT METRICS}\\Evidence Score\\Confidence Score\\Source Citations\\Evolution Timeline};
 \draw[arrow, dashed, color=acmSecondary] (m1) -- (output);
 
 \end{tikzpicture}
