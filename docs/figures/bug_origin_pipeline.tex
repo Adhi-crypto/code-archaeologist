@@ -2,7 +2,7 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta, fit, backgrounds, calc}
 
-% Professional ACM/IEEE Academic Color Palette
+% Professional ACM/IEEE Academic Blue Palette
 \definecolor{acmPrimary}{RGB}{15, 60, 115}       % Deep Academic Blue
 \definecolor{acmSecondary}{RGB}{35, 105, 165}   % Medium Steel Blue
 \definecolor{acmAccent}{RGB}{60, 145, 205}      % Accent Blue
@@ -14,8 +14,9 @@
 
 \begin{document}
 \begin{tikzpicture}[
-    font=\sffamily\scriptsize,
+    font=\sffamily\footnotesize,
     >=Stealth,
+    node distance=0.6cm and 1cm,
     box/.style={
         draw=acmPrimary,
         fill=acmBoxBg,
@@ -23,20 +24,20 @@
         rounded corners=4pt,
         line width=1.0pt,
         minimum width=4.2cm,
-        minimum height=0.85cm,
+        minimum height=0.9cm,
         align=center,
-        font=\sffamily\scriptsize\bfseries\color{acmPrimary}
+        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
     },
-    box_wide/.style={
+    enginebox/.style={
         draw=acmPrimary,
         fill=acmSecondary!15,
         rectangle,
         rounded corners=4pt,
         line width=1.1pt,
         minimum width=7.4cm,
-        minimum height=0.85cm,
+        minimum height=0.9cm,
         align=center,
-        font=\sffamily\scriptsize\bfseries\color{acmPrimary}
+        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
     },
     factor/.style={
         draw=acmSecondary,
@@ -45,9 +46,20 @@
         rounded corners=3pt,
         line width=0.8pt,
         minimum width=3.5cm,
-        minimum height=0.65cm,
+        minimum height=0.7cm,
         align=center,
         font=\sffamily\tiny\bfseries\color{acmDarkGray}
+    },
+    highlight/.style={
+        draw=acmPrimary,
+        fill=acmPrimary,
+        rectangle,
+        rounded corners=4pt,
+        line width=1.1pt,
+        minimum width=4.2cm,
+        minimum height=0.9cm,
+        align=center,
+        font=\sffamily\footnotesize\bfseries\color{white}
     },
     header/.style={
         font=\sffamily\tiny\bfseries,
@@ -71,67 +83,63 @@
     }
 ]
 
-% ================= COLUMN 1: PHASE 1 =================
-\node[box, fill=acmPrimary!12] (n1) at (0, 2.1) {Bug Description /\\Natural Language Query};
-\node[box] (n2) at (0, 0.7) {Embedding Generation\\(all-MiniLM-L6-v2)};
-\node[box] (n3) at (0, -0.7) {Semantic Retrieval\\(ChromaDB KNN)};
-\node[box] (n4) at (0, -2.1) {Candidate Commit\\Snapshots};
+% ================= PHASE 1 (Top Left) =================
+\node[box, fill=acmPrimary!12] (n1) {Bug Description /\\Natural Lang. Query};
+\node[box, below=of n1] (n2) {Embedding Generation\\(all-MiniLM-L6-v2)};
+\node[box, below=of n2] (n3) {Semantic Retrieval\\(ChromaDB KNN)};
+\node[box, below=of n3] (n4) {Candidate Commit\\Snapshots};
 
 \draw[arrow] (n1) -- (n2);
 \draw[arrow] (n2) -- (n3);
 \draw[arrow] (n3) -- (n4);
 
 \begin{scope}[on background layer]
-    \node[container, fit=(n1) (n4)] (phase1) {};
+    \node[container, fit=(n1) (n2) (n3) (n4)] (phase1) {};
     \node[header, anchor=south west, yshift=2pt] at (phase1.north west) {PHASE 1: CANDIDATE COMMIT RETRIEVAL};
 \end{scope}
 
-% ================= COLUMN 2: PHASE 2 =================
-\node[box_wide] (engine) at (6.4, 2.1) {Multi-Factor Scoring Engine};
+% ================= PHASE 2 (Right Side) =================
+\node[enginebox, right=2.5cm of n2, yshift=-0.4cm] (engine) {Multi-Factor Scoring Engine};
 
-% Left side factors
-\node[factor] (f1) at (4.55, 0.7) {Semantic Similarity Match\\$w_{1}=0.40 \ (40\%)$};
-\node[factor] (f3) at (4.55, -0.7) {Temporal Context \& Recency\\$w_{3}=0.15 \ (15\%)$};
-\node[factor] (f5) at (4.55, -2.1) {Commit Importance Score\\$w_{5}=0.10 \ (10\%)$};
+\node[factor, below left=0.6cm and 0.1cm of engine.south, anchor=north east] (f1) {Semantic Similarity\\$w_{1}=0.40 \ (40\%)$};
+\node[factor, below=0.2cm of f1] (f3) {Temporal Recency\\$w_{3}=0.15 \ (15\%)$};
+\node[factor, below=0.2cm of f3] (f5) {Commit Importance\\$w_{5}=0.10 \ (10\%)$};
 
-% Right side factors
-\node[factor] (f2) at (8.25, 0.7) {File Scope Relevance Match\\$w_{2}=0.20 \ (20\%)$};
-\node[factor] (f4) at (8.25, -0.7) {Architectural Mod Impact\\$w_{4}=0.10 \ (10\%)$};
-\node[factor] (f6) at (8.25, -2.1) {Developer Activity Frequency\\$w_{6}=0.05 \ (5\%)$};
+\node[factor, below right=0.6cm and 0.1cm of engine.south, anchor=north west] (f2) {File Scope Match\\$w_{2}=0.20 \ (20\%)$};
+\node[factor, below=0.2cm of f2] (f4) {Architectural Impact\\$w_{4}=0.10 \ (10\%)$};
+\node[factor, below=0.2cm of f4] (f6) {Developer Activity\\$w_{6}=0.05 \ (5\%)$};
 
-% Feed arrows from engine to factors
-\draw[arrow] (engine.south) -- (6.4, 1.4) -| (f1.north);
-\draw[arrow] (engine.south) -- (6.4, 1.4) -| (f2.north);
+\draw[arrow] (engine.south) -- ++(0,-0.3) -| (f1.north);
+\draw[arrow] (engine.south) -- ++(0,-0.3) -| (f2.north);
 
 \begin{scope}[on background layer]
-    \node[container, fit=(engine) (f5) (f6)] (phase2) {};
-    \node[header, anchor=south west, yshift=2pt] at (phase2.north west) {PHASE 2: MULTI-FACTOR WEIGHTED CONFIDENCE SCORING};
+    \node[container, fit=(engine) (f1) (f2) (f5) (f6)] (phase2) {};
+    \node[header, anchor=south west, yshift=2pt] at (phase2.north west) {PHASE 2: MULTI-FACTOR WEIGHTED SCORING};
 \end{scope}
 
-% ================= COLUMN 3: PHASE 3 =================
-\node[box, fill=acmPrimary!10] (c1) at (12.8, 2.1) {Weighted Score Calculation\\$\text{Score}=\sum_{i=1}^{6}w_{i}\cdot S_{i}$};
-\node[box, fill=acmPrimary!20] (c2) at (12.8, 0.7) {Most Probable Bug Commit\\(Root Cause SHA Attribution)};
-\node[box] (c3) at (12.8, -0.7) {Supporting Commits\\Identification};
-\node[box, fill=acmPrimary, text=white] (c4) at (12.8, -2.1) {Bug Timeline Regression\\Visualization};
+% ================= PHASE 3 (Bottom Left) =================
+\node[box, fill=acmPrimary!10, below=2cm of n4] (c1) {Weighted Score Calc\\$\text{Score}=\sum w_{i}\cdot S_{i}$};
+\node[box, fill=acmPrimary!20, below=of c1] (c2) {Probable Bug Commit\\(Root Cause SHA)};
+\node[box, below=of c2] (c3) {Supporting Commits\\Identification};
+\node[highlight, below=of c3] (c4) {Bug Timeline\\Visualization};
 
 \draw[arrow] (c1) -- (c2);
 \draw[arrow] (c2) -- (c3);
 \draw[arrow] (c3) -- (c4);
 
 \begin{scope}[on background layer]
-    \node[container, fit=(c1) (c4)] (phase3) {};
-    \node[header, anchor=south west, yshift=2pt] at (phase3.north west) {PHASE 3: FORENSIC ATTRIBUTION \& TIMELINE PROPAGATION};
+    \node[container, fit=(c1) (c2) (c3) (c4)] (phase3) {};
+    \node[header, anchor=south west, yshift=2pt] at (phase3.north west) {PHASE 3: FORENSIC ATTRIBUTION \& TIMELINE};
 \end{scope}
 
 % ================= CROSS-PHASE ROUTING =================
-% Route Phase 1 to Phase 2 (Snapshots up to Engine)
-\draw[arrow] (n4.east) -- (2.4, -2.1) |- (engine.west);
+% Arrows routing from Phase 1 -> Phase 2
+\draw[arrow] (n4.east) -- ++(1.2,0) |- (engine.west);
 
-% Route Phase 2 to Phase 3 (Factors combining into Calculation via bus line)
-\draw[line width=1.0pt, dashed, draw=acmSecondary] (f2.east) -- (10.35, 0.7);
-\draw[line width=1.0pt, dashed, draw=acmSecondary] (f4.east) -- (10.35, -0.7);
-\draw[line width=1.0pt, dashed, draw=acmSecondary] (f6.east) -- (10.35, -2.1);
-\draw[arrow, dashed, draw=acmSecondary, line width=1.1pt] (10.35, -2.1) -- (10.35, 2.1) -- (c1.west);
+% Arrows routing from Phase 2 -> Phase 3
+\path (f5.south) -- (f6.south) node[midway] (mid);
+\draw[arrow, dashed, color=acmSecondary, line width=1.0pt] (f5.south) -- ++(0,-0.6) coordinate (j1) -- (j1 -| mid) |- (c1.east);
+\draw[line width=1.0pt, dashed, color=acmSecondary] (f6.south) -- ++(0,-0.6) -- (j1 -| mid);
 
 \end{tikzpicture}
 \end{document}
