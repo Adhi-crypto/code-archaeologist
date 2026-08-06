@@ -1,23 +1,23 @@
-\documentclass[tikz,border=12pt]{standalone}
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+\documentclass[tikz,border=15pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, fit, backgrounds, calc}
 
 % Professional ACM/IEEE Academic Color Palette
 \definecolor{acmPrimary}{RGB}{15, 60, 115}       % Deep Academic Blue
 \definecolor{acmSecondary}{RGB}{35, 105, 165}   % Medium Steel Blue
 \definecolor{acmAccent}{RGB}{60, 145, 205}      % Accent Blue
-\definecolor{acmDarkGray}{RGB}{45, 55, 70}       % Dark Text Gray
+\definecolor{acmDarkGray}{RGB}{45, 55, 70}       % Dark Slate Text
 \definecolor{acmLightBg}{RGB}{246, 248, 252}    % Box Light Shading
 \definecolor{acmBoxBg}{RGB}{255, 255, 255}      % Card White Fill
-\definecolor{acmGroupBg}{RGB}{236, 242, 249}    % Outer Container Shading
-\definecolor{acmAnnoBg}{RGB}{240, 244, 250}     % Annotation Container Fill
+\definecolor{acmGroupBg}{RGB}{236, 242, 249}    % Container Fill
+\definecolor{acmAnnoBg}{RGB}{240, 245, 252}     % Input/Output Box Shading
 
 \begin{document}
 \begin{tikzpicture}[
     font=\sffamily\footnotesize,
     >=Stealth,
-    node distance=0.55cm and 0.55cm,
-    % Standard Horizontal Pipeline Block Style
-    block/.style={
+    node distance=0.8cm and 0.6cm,
+    box/.style={
         draw=acmPrimary,
         fill=acmBoxBg,
         rectangle,
@@ -26,48 +26,43 @@
         align=center,
         inner sep=5pt,
         minimum width=2.4cm,
-        minimum height=1.0cm,
+        minimum height=1.2cm,
         font=\sffamily\footnotesize\bfseries\color{acmPrimary}
     },
-    % Input/Output Terminal Node Style
-    terminal/.style={
+    highlight/.style={
         draw=acmPrimary,
-        fill=acmPrimary!12,
-        rectangle,
-        rounded corners=8pt,
-        line width=1.1pt,
-        align=center,
-        inner sep=6pt,
-        minimum width=2.4cm,
-        minimum height=1.0cm,
-        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
-    },
-    % Storage Node Style
-    storage/.style={
-        draw=acmPrimary,
-        fill=acmSecondary!15,
+        fill=acmPrimary,
         rectangle,
         rounded corners=4pt,
         line width=1.1pt,
         align=center,
         inner sep=5pt,
         minimum width=2.4cm,
-        minimum height=1.0cm,
-        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
+        minimum height=1.2cm,
+        font=\sffamily\footnotesize\bfseries\color{white}
     },
-    % Annotation Node Style
-    anno/.style={
-        draw=acmSecondary!60,
+    inputbox/.style={
+        draw=acmSecondary!70,
         fill=acmAnnoBg,
         rectangle,
-        rounded corners=3pt,
-        line width=0.8pt,
+        rounded corners=4pt,
+        line width=0.9pt,
         align=center,
-        inner sep=4pt,
-        minimum width=2.6cm,
-        font=\sffamily\tiny\bfseries\color{acmDarkGray}
+        inner sep=5pt,
+        minimum width=3.0cm,
+        minimum height=1.2cm,
+        font=\sffamily\tiny\color{acmDarkGray}
     },
-    % Container Layer Style with generous padding
+    header/.style={
+        font=\sffamily\tiny\bfseries,
+        color=acmPrimary,
+        align=left
+    },
+    arrow/.style={
+        draw=acmDarkGray,
+        ->,
+        line width=1.0pt
+    },
     container/.style={
         draw=acmPrimary!40,
         fill=acmGroupBg,
@@ -76,85 +71,56 @@
         rounded corners=5pt,
         line width=0.9pt,
         inner ysep=14pt,
-        inner xsep=12pt
-    },
-    % Arrow Style
-    arrow/.style={
-        draw=acmDarkGray,
-        ->,
-        line width=1.0pt
-    },
-    % Dashed Connector Line
-    dasharrow/.style={
-        draw=acmSecondary,
-        ->,
-        dashed,
-        line width=0.9pt
+        inner xsep=14pt
     }
 ]
 
-    % Left Context Inputs Annotation Box
-    \node (anno_ctx) [anno] {
-        \textbf{INPUT CONTEXT}\\
-        Repository Summary\\
-        Commit Snapshots\\
-        Temporal Metadata
-    };
+% Top Row: Stage 1 (Left to Right)
+\node[box, fill=acmPrimary!12] (n1) {User Query};
+\node[box, right=of n1] (n2) {Normalize Query};
+\node[box, right=of n2] (n3) {Intent Classifier};
+\node[box, right=of n3] (n4) {Sentence Transformer};
+\node[box, right=of n4] (n5) {Query Embedding};
+\node[box, fill=acmSecondary!15, right=of n5] (n6) {ChromaDB\\Vector Search};
 
-    % Row 1: Pipeline Nodes 1 to 6 (Left to Right)
-    \node (query) [terminal, right=0.6cm of anno_ctx] {User Query};
-    \node (norm) [block, right=of query] {Normalize Query};
-    \node (intent) [block, right=of norm] {Intent Classifier};
-    \node (embedder) [block, right=of intent] {Sentence Transformer};
-    \node (qembed) [block, right=of embedder] {Query Embedding};
-    \node (chroma) [storage, right=of qembed] {ChromaDB\\Vector Search};
+\draw[arrow] (n1) -- (n2);
+\draw[arrow] (n2) -- (n3);
+\draw[arrow] (n3) -- (n4);
+\draw[arrow] (n4) -- (n5);
+\draw[arrow] (n5) -- (n6);
 
-    % Row 2: Pipeline Nodes 7 to 12 (Left to Right)
-    \node (topk) [block, below=1.5cm of chroma] {Top-K Candidate\\Retrieval};
-    \node (filter) [block, left=of topk] {Temporal\\Filtering};
-    \node (ranking) [block, left=of filter] {Commit\\Ranking};
-    \node (prompt) [block, left=of ranking] {Prompt Builder};
-    \node (ollama) [storage, left=of prompt] {Local Ollama LLM\\(Qwen2.5-Coder)};
-    \node (response) [terminal, fill=acmPrimary, text=white, left=of ollama] {Evidence Grounded\\Response};
+\begin{scope}[on background layer]
+    \node[container, fit=(n1) (n6)] (stage1) {};
+    \node[header, anchor=south west, yshift=2pt] at (stage1.north west) {STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
+\end{scope}
 
-    % Right Output Metrics Annotation Box
-    \node (anno_out) [anno, left=0.6cm of response] {
-        \textbf{OUTPUT METRICS}\\
-        Evidence Score\\
-        Confidence Score\\
-        Source Citations\\
-        Evolution Timeline
-    };
+% Bottom Row: Stage 2 (Right to Left)
+\node[box, below=1.8cm of n6] (m6) {Top-K Candidate\\Retrieval};
+\node[box, left=of m6] (m5) {Temporal\\Filtering};
+\node[box, left=of m5] (m4) {Commit\\Ranking};
+\node[box, left=of m4] (m3) {Prompt Builder};
+\node[box, fill=acmSecondary!15, left=of m3] (m2) {Local Ollama LLM\\(Qwen2.5-Coder)};
+\node[highlight, left=of m2] (m1) {Evidence Grounded\\Response};
 
-    % Layer Containers with Title Labels Positioned Cleanly ABOVE Box Lines
-    \begin{scope}[on background layer]
-        \node (stage1) [container, fit=(query) (norm) (intent) (embedder) (qembed) (chroma)] {};
-        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage1.north west) {STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
+\draw[arrow] (n6) -- (m6);
+\draw[arrow] (m6) -- (m5);
+\draw[arrow] (m5) -- (m4);
+\draw[arrow] (m4) -- (m3);
+\draw[arrow] (m3) -- (m2);
+\draw[arrow] (m2) -- (m1);
 
-        \node (stage2) [container, fit=(topk) (filter) (ranking) (prompt) (ollama) (response)] {};
-        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage2.north west) {STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
-    \end{scope}
+\begin{scope}[on background layer]
+    \node[container, fit=(m1) (m6)] (stage2) {};
+    \node[header, anchor=south west, yshift=2pt] at (stage2.north west) {STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
+\end{scope}
 
-    % Main Horizontal Pipeline Flow Connections
-    \draw [arrow] (query) -- (norm);
-    \draw [arrow] (norm) -- (intent);
-    \draw [arrow] (intent) -- (embedder);
-    \draw [arrow] (embedder) -- (qembed);
-    \draw [arrow] (qembed) -- (chroma);
-    
-    % Connecting Row 1 to Row 2
-    \draw [arrow] (chroma.south) -- ++(0,-0.5) -| (topk.north);
+% Input Context (Left of Stage 1)
+\node[inputbox, left=1.2cm of n1] (input) {\textbf{INPUT CONTEXT}\\Repository Summary\\Commit Snapshots\\Temporal Metadata};
+\draw[arrow, dashed, color=acmSecondary] (input) -- (n1);
 
-    % Row 2 Connections
-    \draw [arrow] (topk) -- (filter);
-    \draw [arrow] (filter) -- (ranking);
-    \draw [arrow] (ranking) -- (prompt);
-    \draw [arrow] (prompt) -- (ollama);
-    \draw [arrow] (ollama) -- (response);
-
-    % Side Annotation Connectors
-    \draw [dasharrow] (anno_ctx) -- (query);
-    \draw [dasharrow] (response) -- (anno_out);
+% Output Metrics (Left of Stage 2)
+\node[inputbox, left=1.2cm of m1] (output) {\textbf{OUTPUT METRICS}\\Evidence Score\\Confidence Score\\Source Citations\\Evolution Timeline};
+\draw[arrow, dashed, color=acmSecondary] (m1) -- (output);
 
 \end{tikzpicture}
 \end{document}
