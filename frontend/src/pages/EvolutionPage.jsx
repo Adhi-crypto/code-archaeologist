@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { AlertCircle, RefreshCw, Layers, GitBranch, ArrowLeft } from 'lucide-react';
+import { AlertCircle, RefreshCw, Layers, GitBranch, ArrowLeft, ChevronDown } from 'lucide-react';
 import { useRepo } from '../store/repoStore';
 import { evolutionApi } from '../services/api';
 import NarrativeCard from '../components/timeline/NarrativeCard';
@@ -11,11 +11,29 @@ export default function EvolutionPage() {
   const { activeRepo, evolutionCache, setEvolutionCache } = useRepo();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [visibleCount, setVisibleCount] = useState(25);
 
   const cachedData = evolutionCache.repo_id === activeRepo?.repo_id ? evolutionCache.data : null;
   const filters = evolutionCache.filters || { search: '', author: '', file: '', archOnly: false, sort: 'oldest' };
 
-  const setSearchTerm = (val) => setEvolutionCache((prev) => ({ ...prev, filters: { ...prev.filters, search: val } }));
+  // Debounced input search local state
+  const [searchInput, setSearchInput] = useState(filters.search);
+
+  useEffect(() => {
+    setSearchInput(filters.search);
+  }, [filters.search]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setEvolutionCache((prev) => ({
+        ...prev,
+        filters: { ...prev.filters, search: searchInput },
+      }));
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [searchInput, setEvolutionCache]);
+
+  const setSearchTerm = (val) => setSearchInput(val);
   const setSelectedAuthor = (val) => setEvolutionCache((prev) => ({ ...prev, filters: { ...prev.filters, author: val } }));
   const setSelectedFile = (val) => setEvolutionCache((prev) => ({ ...prev, filters: { ...prev.filters, file: val } }));
   const setArchOnly = (val) => setEvolutionCache((prev) => ({ ...prev, filters: { ...prev.filters, archOnly: typeof val === 'function' ? val(prev.filters.archOnly) : val } }));
@@ -101,6 +119,11 @@ export default function EvolutionPage() {
       });
   }, [cachedData?.timeline, filters]);
 
+  // Windowed visible subset to minimize DOM node overhead
+  const visibleTimeline = useMemo(() => {
+    return filteredTimeline.slice(0, visibleCount);
+  }, [filteredTimeline, visibleCount]);
+
   if (!activeRepo) {
     return (
       <div className="p-8 max-w-4xl">
@@ -176,7 +199,7 @@ export default function EvolutionPage() {
           />
 
           <TimelineFilters
-            searchTerm={filters.search}
+            searchTerm={searchInput}
             setSearchTerm={setSearchTerm}
             selectedAuthor={filters.author}
             setSelectedAuthor={setSelectedAuthor}
@@ -192,9 +215,9 @@ export default function EvolutionPage() {
           />
 
           <div className="space-y-4 relative before:absolute before:left-[17px] before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200">
-            {filteredTimeline.length > 0 ? (
-              filteredTimeline.map((event, idx) => (
-                <TimelineCard key={event.sha || idx} event={event} index={idx} />
+            {visibleTimeline.length > 0 ? (
+              visibleTimeline.map((event, idx) => (
+                <TimelineCard key={event.sha || idx} event={event} isLast={idx === visibleTimeline.length - 1} />
               ))
             ) : (
               <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500 ml-8">
@@ -202,8 +225,21 @@ export default function EvolutionPage() {
               </div>
             )}
           </div>
+
+          {/* Windowed Pagination Trigger */}
+          {visibleCount < filteredTimeline.length && (
+            <div className="text-center pt-4">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + 30)}
+                className="inline-flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-700 font-semibold px-5 py-2.5 rounded-xl border border-slate-300 text-xs shadow-xs transition"
+              >
+                <span>Load More Commits ({filteredTimeline.length - visibleCount} remaining)</span>
+                <ChevronDown className="w-4 h-4 text-slate-500" />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
-}
+}

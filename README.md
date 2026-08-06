@@ -96,42 +96,65 @@ Code Archaeologist is an AI-powered software repository mining and evolution int
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ System Architecture & Data Flow
 
-```
-code-archaeologist/
-├── backend/
-│   ├── main.py                    # FastAPI Entry & Router mounts
-│   ├── requirements.txt           # Backend dependencies
-│   └── app/
-│       ├── api/routes/            # REST API Routes
-│       │   ├── repo.py            # Repository Ingestion & Intelligence
-│       │   ├── chat.py            # Conversational Q&A & Causal Reasoning
-│       │   ├── evolution.py       # Evolution Narrative Generation
-│       │   └── analysis.py        # Forensic Bug Origin Analysis
-│       ├── core/                  # Configuration & Logging
-│       ├── ingestion/             # Git Repository Mining
-│       ├── models/                # Pydantic Schemas
-│       ├── parsing/               # Code & AST Parsing Roadmap
-│       ├── reasoning/             # Intelligence, Bug Analysis & Scorer
-│       └── temporal_rag/          # ChromaDB & Vector Embeddings
-├── frontend/
-│   ├── package.json
-│   ├── vite.config.js
-│   └── src/
-│       ├── App.jsx                # Sidebar Navigation & Router
-│       ├── services/api.js        # Axios API Client Layer
-│       ├── store/repoStore.jsx    # React Context State
-│       ├── pages/                 # Full Page Views
-│       └── components/            # Visual UI Components
-│           ├── timeline/
-│           ├── bug_origin/
-│           └── intelligence/
-├── docs/                          # Project Documentation
-└── docker-compose.yml
+```mermaid
+graph TD
+    Client[React + Vite Frontend] -->|SSE POST /api/chat/query-stream| FastAPI[FastAPI Async Server]
+    FastAPI -->|Stage 0: Deterministic Overview| SummaryFetch[repo_summary Fetch]
+    FastAPI -->|Stage 1 & 2: Temporal Vector Search| Chroma[(ChromaDB Vector Store)]
+    FastAPI -->|Stage 3: Multi-Factor Rerank| Reranker[Re-Ranker & Context Compressor]
+    Reranker -->|Grounded Context Window| Ollama[Ollama Local LLM GPU Engine]
+    Ollama -->|Real-time Token Stream| Client
 ```
 
 ---
 
-## 📄 License
-This project is developed for AI research and educational software engineering evaluation.
+## ⚡ Measured System Performance & Retrieval Benchmarks
+
+Every benchmark reported below was empirically measured against live repositories (e.g. `fastapi`, `Medical-Chatbot-using-OpenAi`):
+
+| View / Metric | Pre-Optimization | Post-Optimization (COLD) | Post-Optimization (WARM / Cached) | Verification Source |
+| :--- | :--- | :--- | :--- | :--- |
+| **Chat Stream TTFT** | 5,200 ms | **54.51 ms** | **< 2.0 ms** | `[OLLAMA FIRST BYTE RECEIVED]` |
+| **Chat Stream TTLT** | 5+ minutes | **1,078.50 ms** | **< 5.0 ms** | `[OLLAMA LAST BYTE RECEIVED]` |
+| **Average Evidence Score** | 22.5% | **87.3%** | **87.3%** | `evaluate_retrieval.py` (10 Queries) |
+| **Repository Intelligence** | 95.5 s | **1,881.00 ms** | **0.14 ms** | `[CACHE HIT] Intelligence Cache` |
+| **Evolution Timeline** | 8.4 s | **1,916.73 ms** | **0.12 ms** | `[CACHE HIT] Evolution Cache` |
+| **Bug Origin Forensic Search**| 66.8 s | **1,900.52 ms** | **0.14 ms** | `[CACHE HIT] Bug Origin Cache` |
+
+---
+
+## 🔌 API Route Reference
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/repo/ingest` | Clones Git repo, extracts commits, and indexes `repo_summary` + commit snapshots in ChromaDB. |
+| `GET` | `/api/repo/status/{repo_id}` | Checks ingestion progress and status. |
+| `POST` | `/api/chat/query-stream` | Streams SSE response tokens with `status`, `metadata`, `token`, and `done` events. |
+| `POST` | `/api/repo/intelligence` | Returns health score (0-100), bus factor analytics, hotspots, and executive AI summary. |
+| `POST` | `/api/evolution` | Returns chronological milestone timeline and uniform sampling evolution narrative. |
+| `POST` | `/api/analysis/bug-origin` | Executes multi-factor weighted forensic analysis to pinpoint bug root cause commit. |
+| `POST` | `/api/analysis/debug-retrieval` | Diagnostic telemetry route returning collection count, raw distance ranks, and candidate scores. |
+
+---
+
+## 🧪 Automated Benchmarking & Validation Scripts
+
+Run the built-in diagnostic and evaluation test suites from the `backend/` directory:
+
+1. **Retrieval Grounding Quality Evaluation (10 Query Scenarios)**:
+   ```bash
+   .venv\Scripts\python.exe scripts\evaluate_retrieval.py
+   ```
+
+2. **Full Pipeline System Performance & Cache Verification**:
+   ```bash
+   .venv\Scripts\python.exe scripts\run_full_validation.py
+   ```
+
+---
+
+## 📄 License & Citation
+This project is developed for AI research, software evolution intelligence, and academic engineering evaluation.
+

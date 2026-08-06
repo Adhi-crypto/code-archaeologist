@@ -43,25 +43,70 @@ Changes: +{commit.additions} -{commit.deletions} lines
 Summary: {commit.diff_summary}"""
 
 
-def store_commit_snapshots(metadata: RepoMetadata, commits: list[CommitRecord]):
-    """Store all commits as time-stamped embeddings in ChromaDB."""
+def store_commit_snapshots(metadata: RepoMetadata, commits: list[CommitRecord], overview_info: dict = None):
+    """Store all commits as time-stamped embeddings in ChromaDB, skipping already indexed SHAs."""
     collection = get_collection()
     repo_id = metadata.repo_id
     repo_name = metadata.repo_name
 
-    logger.info(f"Storing {len(commits)} commit snapshots for {repo_name}")
+    logger.info(f"Checking existing snapshots in ChromaDB for {repo_name}")
 
     documents = []
-    embeddings = []
     metadatas = []
     ids = []
 
+    # Store or update the dedicated repo_summary document
+    if overview_info:
+        summary_id = f"{repo_id}_overview"
+        summary_doc = f"""Repository Overview: {repo_name}
+Primary Languages: {', '.join(metadata.languages)}
+Total Commits: {len(commits)}
+Directory Structure & Entry Points:
+{overview_info.get('file_tree', '')}
+
+README Content & Documentation:
+{overview_info.get('readme', '')}
+
+Key Project Dependencies:
+{overview_info.get('dependencies', '')}"""
+
+        summary_meta = {
+            "repo_id": repo_id,
+            "repo_name": repo_name,
+            "doc_type": "repo_summary",
+            "commit_sha": "overview",
+            "timestamp": metadata.ingested_at.isoformat(),
+            "timestamp_unix": int(metadata.ingested_at.timestamp()),
+            "commit_index": -1,
+            "total_commits": len(commits),
+        }
+        documents.append(summary_doc)
+        metadatas.append(summary_meta)
+        ids.append(summary_id)
+
+    # Query existing commit IDs to avoid re-embedding
+    target_ids = [f"{repo_id}_{c.sha}" for c in commits]
+    existing_ids = set()
+    try:
+        existing_res = collection.get(ids=target_ids, include=[])
+        if existing_res and existing_res.get("ids"):
+            existing_ids = set(existing_res["ids"])
+    except Exception as e:
+        logger.warning(f"Could not query existing IDs in Chroma: {e}")
+
+    skipped_count = 0
     for i, commit in enumerate(commits):
+        c_id = f"{repo_id}_{commit.sha}"
+        if c_id in existing_ids:
+            skipped_count += 1
+            continue
+
         doc = build_commit_document(commit, repo_id, repo_name)
         documents.append(doc)
         metadatas.append({
             "repo_id": repo_id,
             "repo_name": repo_name,
+            "doc_type": "commit_snapshot",
             "commit_sha": commit.sha,
             "author": commit.author,
             "timestamp": commit.timestamp.isoformat(),
@@ -69,23 +114,35 @@ def store_commit_snapshots(metadata: RepoMetadata, commits: list[CommitRecord]):
             "files_changed": ",".join(commit.files_changed[:10]),
             "additions": commit.additions,
             "deletions": commit.deletions,
-            "commit_index": i,       # 0 = most recent
+            "commit_index": i,
             "total_commits": len(commits),
         })
-        ids.append(f"{repo_id}_{commit.sha}")
+        ids.append(c_id)
 
-    # Batch embed
+    if skipped_count > 0:
+        logger.info(f"Skipped {skipped_count} already indexed commits for {repo_name}")
+
+    if not ids:
+        logger.info(f"All {len(commits)} commits are already fully indexed for {repo_name}.")
+        return
+
+    # Batch embed missing documents
     embeddings = embed_batch(documents)
 
-    # Upsert into ChromaDB (safe to re-run)
-    collection.upsert(
-        ids=ids,
-        documents=documents,
-        embeddings=embeddings,
-        metadatas=metadatas,
-    )
+    # Batch upsert into ChromaDB in chunks of 100
+    chunk_size = 100
+    for start in range(0, len(ids), chunk_size):
+        end = start + chunk_size
+        collection.upsert(
+            ids=ids[start:end],
+            documents=documents[start:end],
+            embeddings=embeddings[start:end],
+            metadatas=metadatas[start:end],
+        )
 
-    logger.success(f"Stored {len(commits)} snapshots in ChromaDB for {repo_name}")
+    logger.success(f"Stored {len(ids)} new snapshots (including overview) in ChromaDB for {repo_name}")
+
+
 
 
 def get_collection_stats(repo_id: str) -> dict:

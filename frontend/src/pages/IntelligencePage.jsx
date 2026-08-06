@@ -1,15 +1,25 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { BarChart3, AlertCircle, RefreshCw, GitBranch } from 'lucide-react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { BarChart3, AlertCircle, RefreshCw, GitBranch, Loader2 } from 'lucide-react';
 import { useRepo } from '../store/repoStore';
 import { repoIntelligenceApi } from '../services/api';
 import AIRepositorySummaryCard from '../components/intelligence/AIRepositorySummaryCard';
 import RepositoryHealthCard from '../components/intelligence/RepositoryHealthCard';
 import RepositoryStatisticsCard from '../components/intelligence/RepositoryStatisticsCard';
-import DeveloperAnalyticsCard from '../components/intelligence/DeveloperAnalyticsCard';
 import HotspotCard from '../components/intelligence/HotspotCard';
 import CoEvolvingFilesCard from '../components/intelligence/CoEvolvingFilesCard';
 import RiskAssessmentCard from '../components/intelligence/RiskAssessmentCard';
 import IntelligenceSkeleton from '../components/intelligence/IntelligenceSkeleton';
+
+const DeveloperAnalyticsCard = lazy(() => import('../components/intelligence/DeveloperAnalyticsCard'));
+
+function ChartLoadingSkeleton() {
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex items-center justify-center min-h-[250px] text-slate-400 gap-2">
+      <Loader2 className="w-5 h-5 animate-spin text-purple-600" />
+      <span className="text-xs font-medium">Loading contribution & chart analytics...</span>
+    </div>
+  );
+}
 
 export default function IntelligencePage() {
   const { activeRepo, intelligenceCache, setIntelligenceCache } = useRepo();
@@ -146,8 +156,10 @@ export default function IntelligencePage() {
           {/* Vital Statistics 8-Card Grid */}
           <RepositoryStatisticsCard stats={cachedData.statistics} />
 
-          {/* Developer Analytics (Recharts Bar & Pie Charts) */}
-          <DeveloperAnalyticsCard developers={cachedData.developers} />
+          {/* Developer Analytics (Recharts Bar & Pie Charts Lazy-Loaded) */}
+          <Suspense fallback={<ChartLoadingSkeleton />}>
+            <DeveloperAnalyticsCard developers={cachedData.developers} />
+          </Suspense>
 
           {/* Hotspots & Co-Evolving Files Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -159,3 +171,4 @@ export default function IntelligencePage() {
     </div>
   );
 }
+

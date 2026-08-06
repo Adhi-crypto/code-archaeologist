@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GitCommit, Copy, Check, ExternalLink, Calendar, User, Layers, FileCode, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 
-export default function BugCommitCard({ commit, repoUrl, isPrimary = true }) {
+export default React.memo(function BugCommitCard({ commit, repoUrl, isPrimary = true }) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -142,4 +142,5 @@ export default function BugCommitCard({ commit, repoUrl, isPrimary = true }) {
       </div>
     </div>
   );
-}
+});
+
