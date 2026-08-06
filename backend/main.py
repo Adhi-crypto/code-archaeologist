@@ -28,7 +28,11 @@ async def lifespan(app: FastAPI):
     logger.info("Startup warm-up complete.")
     
     yield
-    logger.info("Shutting down.")
+    logger.info("Shutting down application...")
+    from app.temporal_rag.snapshot_store import close_chroma_client
+    close_chroma_client()
+    logger.info("Application shutdown complete.")
+
 
 
 app = FastAPI(

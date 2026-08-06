@@ -29,46 +29,39 @@ def clone_or_pull(repo_url: str, repo_id: str) -> Repo:
     return repo
 
 
-from concurrent.futures import ThreadPoolExecutor
-
-def _process_single_commit(commit) -> CommitRecord | None:
-    try:
-        files_changed = list(commit.stats.files.keys()) if commit.stats else []
-        additions = commit.stats.total.get("insertions", 0) if commit.stats else 0
-        deletions = commit.stats.total.get("deletions", 0) if commit.stats else 0
-
-        diff_summary = _build_diff_summary(files_changed, additions, deletions)
-
-        return CommitRecord(
-            sha=commit.hexsha[:10],
-            message=commit.message.strip(),
-            author=str(commit.author),
-            timestamp=datetime.fromtimestamp(commit.committed_date),
-            files_changed=files_changed[:20],
-            additions=additions,
-            deletions=deletions,
-            diff_summary=diff_summary,
-        )
-    except Exception as e:
-        logger.warning(f"Skipping commit {commit.hexsha[:8]}: {e}")
-        return None
-
 def extract_commits(repo: Repo, branch: str = "main", max_commits: int = 500) -> list[CommitRecord]:
     logger.info(f"Extracting up to {max_commits} commits from branch: {branch}")
+    commits = []
 
     try:
         commit_iter = list(repo.iter_commits(branch, max_count=max_commits))
     except Exception:
         commit_iter = list(repo.iter_commits(max_count=max_commits))
 
-    # Parallelize commit stats & diff extraction across thread pool
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        results = list(executor.map(_process_single_commit, commit_iter))
+    for commit in commit_iter:
+        try:
+            files_changed = list(commit.stats.files.keys()) if commit.stats else []
+            additions = commit.stats.total.get("insertions", 0) if commit.stats else 0
+            deletions = commit.stats.total.get("deletions", 0) if commit.stats else 0
 
-    commits = [c for c in results if c is not None]
-    logger.info(f"Extracted {len(commits)} commits (parallelized)")
+            diff_summary = _build_diff_summary(files_changed, additions, deletions)
+
+            commits.append(CommitRecord(
+                sha=commit.hexsha[:10],
+                message=commit.message.strip(),
+                author=str(commit.author),
+                timestamp=datetime.fromtimestamp(commit.committed_date),
+                files_changed=files_changed[:20],
+                additions=additions,
+                deletions=deletions,
+                diff_summary=diff_summary,
+            ))
+        except Exception as e:
+            logger.warning(f"Skipping commit {commit.hexsha[:8]}: {e}")
+            continue
+
+    logger.info(f"Extracted {len(commits)} commits")
     return commits
-
 
 
 def _build_diff_summary(files: list[str], additions: int, deletions: int) -> str:
@@ -98,55 +91,13 @@ def detect_languages(repo: Repo) -> list[str]:
     return sorted(extensions, key=extensions.get, reverse=True)
 
 
-def read_overview_context(repo_path: Path) -> dict:
-    """Reads README, dependency files, and top-level directory tree for deterministic repo overview context."""
-    readme_text = ""
-    for fname in ["README.md", "README.rst", "README.txt", "readme.md", "README"]:
-        r_file = repo_path / fname
-        if r_file.exists():
-            try:
-                readme_text = r_file.read_text(encoding="utf-8", errors="ignore")[:2500]
-                break
-            except Exception:
-                pass
-
-    deps_text = ""
-    for dfname in ["package.json", "pyproject.toml", "requirements.txt", "Cargo.toml", "pom.xml", "go.mod"]:
-        d_file = repo_path / dfname
-        if d_file.exists():
-            try:
-                deps_text += f"\n--- {dfname} ---\n" + d_file.read_text(encoding="utf-8", errors="ignore")[:1000]
-            except Exception:
-                pass
-
-    # Top-level directory tree
-    tree_lines = []
-    try:
-        for item in sorted(repo_path.iterdir()):
-            if item.name.startswith(".") or item.name in ["__pycache__", "node_modules", "venv", ".venv"]:
-                continue
-            item_type = "DIR " if item.is_dir() else "FILE"
-            tree_lines.append(f"  [{item_type}] {item.name}")
-    except Exception:
-        pass
-    file_tree = "\n".join(tree_lines[:30])
-
-    return {
-        "readme": readme_text.strip(),
-        "dependencies": deps_text.strip(),
-        "file_tree": file_tree.strip(),
-    }
-
-
-def ingest_repo(repo_url: str, branch: str = "main", max_commits: int = 500) -> tuple[RepoMetadata, list[CommitRecord], dict]:
+def ingest_repo(repo_url: str, branch: str = "main", max_commits: int = 500) -> tuple[RepoMetadata, list[CommitRecord]]:
     repo_id = get_repo_id(repo_url)
     repo_name = repo_url.rstrip("/").split("/")[-1].replace(".git", "")
 
     repo = clone_or_pull(repo_url, repo_id)
-    repo_path = get_repo_path(repo_id)
     commits = extract_commits(repo, branch, max_commits)
     languages = detect_languages(repo)
-    overview_info = read_overview_context(repo_path)
 
     metadata = RepoMetadata(
         repo_id=repo_id,
@@ -160,4 +111,4 @@ def ingest_repo(repo_url: str, branch: str = "main", max_commits: int = 500) -> 
     )
 
     logger.info(f"Ingestion complete: {repo_name} | {len(commits)} commits | langs: {languages}")
-    return metadata, commits, overview_info
+    return metadata, commits

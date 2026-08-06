@@ -1,4 +1,3 @@
-import asyncio
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from loguru import logger
@@ -64,18 +63,15 @@ async def get_repository_intelligence(request: RepoIntelligenceRequest):
 async def _run_ingestion(request: RepoIngestionRequest):
     repo_id = get_repo_id(request.repo_url)
     try:
-        # Offload sync Git cloning & commit extraction
-        metadata, commits, overview_info = await asyncio.to_thread(
-            ingest_repo,
+        metadata, commits = ingest_repo(
             repo_url=request.repo_url,
             branch=request.branch,
             max_commits=request.max_commits,
         )
 
-        # Store in ChromaDB with temporal metadata & overview info (offloaded sync vector embeddings)
+        # Store in ChromaDB with temporal metadata
         from app.temporal_rag.snapshot_store import store_commit_snapshots
-        await asyncio.to_thread(store_commit_snapshots, metadata, commits, overview_info)
-
+        store_commit_snapshots(metadata, commits)
 
         ingestion_status[repo_id] = IngestionStatus(
             repo_id=repo_id,

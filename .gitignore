@@ -23,10 +23,8 @@ frontend/dist/
 # Jupyter
 .ipynb_checkpoints/
 
-# Runtime repositories & Chroma database
-backend/data/repos/
-backend/data/chroma_db/
-backend/data/chroma/
+# Runtime data & repositories
+backend/data/
 backend/chroma_db/
 backend/chroma/
 backend/cloned_repos/
