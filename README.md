@@ -233,19 +233,20 @@ npm run dev
 ## 🖼️ Application Screenshots
 
 ### Repository Ingestion
-*(Add Screenshot Here)*
-
-### Repository Chat & Causal Reasoning
-*(Add Screenshot Here)*
+![Repository Ingestion Page](docs/screenshots/ingestion_page.png)
 
 ### Repository Intelligence Dashboard
-*(Add Screenshot Here)*
+![Repository Intelligence Dashboard](docs/screenshots/intelligence_page.png)
+
+### Repository Chat & Grounded RAG Reasoning
+![Repository Chat & Grounded RAG Answer](docs/screenshots/chat_page.png)
 
 ### Evolution Timeline
-*(Add Screenshot Here)*
+![Evolution Timeline & Architectural Milestone Narrative](docs/screenshots/evolution_page.png)
 
 ### Bug Origin Analysis
-*(Add Screenshot Here)*
+![Bug Origin Forensic Analysis](docs/screenshots/bug_origin_page.png)
+
 
 ---
 
