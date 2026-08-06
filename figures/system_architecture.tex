@@ -1,0 +1,149 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+
+% Professional ACM/IEEE Color Palette
+\definecolor{acmPrimary}{RGB}{20, 60, 110}       % Deep Academic Navy Blue
+\definecolor{acmSecondary}{RGB}{45, 115, 175}   % Medium Steel Blue
+\definecolor{acmAccent}{RGB}{70, 155, 210}      % Accent Blue
+\definecolor{acmDarkGray}{RGB}{40, 50, 65}       % Slate Dark Gray
+\definecolor{acmLightBg}{RGB}{246, 248, 252}    % Subdued Background Light Gray
+\definecolor{acmBoxBg}{RGB}{255, 255, 255}      % Pure White Box Fill
+\definecolor{acmGroupBg}{RGB}{238, 243, 249}    % Outer Container Fill
+
+\begin{document}
+\begin{tikzpicture}[
+    font=\sffamily\small,
+    >=Stealth,
+    node distance=0.8cm and 1.2cm,
+    % Primary Block Style
+    block/.style={
+        draw=acmPrimary,
+        fill=acmBoxBg,
+        rectangle,
+        rounded corners=4pt,
+        line width=1.1pt,
+        align=center,
+        inner sep=7pt,
+        minimum width=6.5cm,
+        minimum height=0.9cm,
+        font=\sffamily\small\bfseries\color{acmPrimary}
+    },
+    % Sub-Block / Data Style
+    subblock/.style={
+        draw=acmSecondary!70,
+        fill=acmLightBg,
+        rectangle,
+        rounded corners=3pt,
+        line width=0.8pt,
+        align=center,
+        inner sep=5pt,
+        minimum width=5.8cm,
+        font=\sffamily\footnotesize\color{acmDarkGray}
+    },
+    % Container Box Style
+    container/.style={
+        draw=acmPrimary!50,
+        fill=acmGroupBg,
+        rectangle,
+        dashed,
+        rounded corners=6pt,
+        line width=1.0pt,
+        inner sep=8pt
+    },
+    % Arrow Line Style
+    arrow/.style={
+        draw=acmDarkGray,
+        ->,
+        line width=1.1pt
+    },
+    % Connector Label Style
+    labelstyle/.style={
+        font=\sffamily\tiny\bfseries,
+        color=acmDarkGray,
+        fill=acmBoxBg,
+        inner sep=2.5pt,
+        rounded corners=2pt,
+        draw=acmSecondary!40
+    }
+]
+
+    % Node 1: External Source
+    \node (github) [block, fill=acmPrimary!10] {GitHub Repository};
+
+    % Node 2: Ingestion Component
+    \node (ingestion) [block, below=of github] {Repository Ingestion (GitPython)};
+    
+    % Node 3: Extraction Sub-Items
+    \node (extraction) [subblock, below=0.4cm of ingestion] {
+        Commit History Extraction \quad\textbullet\quad README Parsing\\
+        Metadata Extraction \quad\textbullet\quad Directory Tree Indexing
+    };
+
+    % Node 4: Snapshot Builder
+    \node (snapshot) [block, below=0.6cm of extraction] {Temporal Snapshot Builder};
+
+    % Node 5: Embedding Model
+    \node (embedder) [block, below=of snapshot] {Sentence Transformer (all-MiniLM-L6-v2)};
+
+    % Node 6: Vector Store
+    \node (chroma) [block, fill=acmSecondary!15, below=of embedder] {ChromaDB Temporal Vector Store};
+
+    % Node 7: Retriever
+    \node (retriever) [block, below=of chroma] {Temporal Retriever};
+    
+    % Node 8: Retriever Details
+    \node (retriever_details) [subblock, below=0.4cm of retriever] {
+        Semantic Search \quad\textbullet\quad Query Classification\\
+        Chronological Filtering \quad\textbullet\quad Positional Resolution
+    };
+
+    % Node 9: Local LLM Engine
+    \node (llm) [block, fill=acmSecondary!15, below=0.6cm of retriever_details] {Ollama Local LLM (Qwen2.5-Coder 7B)};
+
+    % Node 10: Reasoning Engine
+    \node (reasoning) [block, below=of llm] {Reasoning Engine};
+    \node (reasoning_details) [subblock, below=0.4cm of reasoning] {
+        Repository Chat \quad\textbullet\quad Causal Reasoning (Why)
+    };
+
+    % Node 11: Intelligence Engine (Comprehensive Grid Box)
+    \node (intelligence) [block, fill=acmPrimary!8, below=0.6cm of reasoning_details, minimum width=7.2cm] {Repository Intelligence Engine};
+    \node (intel_details) [subblock, below=0.4cm of intelligence, minimum width=6.8cm] {
+        Repository Health Score \quad\textbullet\quad Developer Analytics\\
+        Developer Bus Factor \quad\textbullet\quad Risk Hotspots \& Churn\\
+        Evolution Milestone Timeline \quad\textbullet\quad Forensic Bug Origin\\
+        Logical File Coupling Co-Evolution
+    };
+
+    % Node 12: User Presentation UI
+    \node (ui) [block, fill=acmPrimary, text=white, below=0.6cm of intel_details, minimum width=7.2cm] {React Dashboard};
+
+    % Grouping / System Boundaries
+    \begin{scope}[on background layer]
+        \node (ingest_group) [container, fit=(ingestion) (extraction) (snapshot)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (ingest_group.north west) {\;INGESTION \& PROCESSING LAYER};
+
+        \node (rag_group) [container, fit=(embedder) (chroma) (retriever) (retriever_details)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (rag_group.north west) {\;TEMPORAL RAG STACK};
+
+        \node (engine_group) [container, fit=(llm) (reasoning) (reasoning_details) (intelligence) (intel_details)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (engine_group.north west) {\;ANALYTICS \& REASONING ENGINE};
+    \end{scope}
+
+    % Connector Arrows
+    \draw [arrow] (github) -- (ingestion);
+    \draw [arrow] (ingestion) -- (extraction);
+    \draw [arrow] (extraction) -- (snapshot);
+    \draw [arrow] (snapshot) -- (embedder);
+    \draw [arrow] (embedder) -- (chroma);
+    \draw [arrow] (chroma) -- (retriever);
+    \draw [arrow] (retriever) -- (retriever_details);
+    \draw [arrow] (retriever_details) -- (llm);
+    \draw [arrow] (llm) -- (reasoning);
+    \draw [arrow] (reasoning) -- (reasoning_details);
+    \draw [arrow] (reasoning_details) -- (intelligence);
+    \draw [arrow] (intelligence) -- (intel_details);
+    \draw [arrow] (intel_details) -- (ui);
+
+\end{tikzpicture}
+\end{document}
