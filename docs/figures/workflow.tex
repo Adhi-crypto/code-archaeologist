@@ -1,4 +1,4 @@
-\documentclass[tikz,border=10pt]{standalone}
+\documentclass[tikz,border=12pt]{standalone}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
 
 % Professional ACM/IEEE Academic Blue Palette
@@ -24,7 +24,7 @@
         line width=1.1pt,
         align=center,
         inner sep=6pt,
-        minimum width=6.0cm,
+        minimum width=6.5cm,
         minimum height=0.85cm,
         font=\sffamily\small\bfseries\color{ieeePrimary}
     },
@@ -37,7 +37,7 @@
         line width=1.2pt,
         align=center,
         inner sep=7pt,
-        minimum width=6.0cm,
+        minimum width=6.5cm,
         font=\sffamily\small\bfseries\color{ieeePrimary}
     },
     % Decision Diamond Style
@@ -48,7 +48,7 @@
         aspect=2.2,
         line width=1.1pt,
         align=center,
-        inner sep=3pt,
+        inner sep=4pt,
         font=\sffamily\footnotesize\bfseries\color{ieeeDarkGray}
     },
     % Data Storage Node
@@ -60,10 +60,10 @@
         line width=1.1pt,
         align=center,
         inner sep=6pt,
-        minimum width=6.0cm,
+        minimum width=6.5cm,
         font=\sffamily\small\bfseries\color{ieeePrimary}
     },
-    % Container Layer Style
+    % Container Layer Style with generous padding
     container/.style={
         draw=ieeePrimary!45,
         fill=ieeeGroupBg,
@@ -71,7 +71,8 @@
         dashed,
         rounded corners=6pt,
         line width=1.0pt,
-        inner sep=8pt
+        inner ysep=14pt,
+        inner xsep=14pt
     },
     % Arrow Connection Style
     arrow/.style={
@@ -83,7 +84,7 @@
 
     % Stage 1: User & Repository Ingestion Phase
     \node (user) [terminal] {User};
-    \node (url) [process, below=of user] {Enter GitHub Repository URL};
+    \node (url) [process, below=1.0cm of user] {Enter GitHub Repository URL};
     \node (clone) [process, below=of url] {Clone Repository};
     \node (commits) [process, below=of clone] {Extract Commit History};
     \node (readme) [process, below=of commits] {Extract README \& Context};
@@ -92,24 +93,24 @@
     \node (chromadb) [storage, below=of embeddings] {Store in ChromaDB Vector Database};
 
     % Stage 2: Conversational Retrieval & Reasoning Phase
-    \node (question) [terminal, below=0.8cm of chromadb] {User Question};
-    \node (intent) [decision, below=of question] {Intent Classification\\(Overview / Historical / Bug Origin)};
-    \node (retrieval) [process, below=of intent] {Temporal Retrieval};
+    \node (question) [terminal, below=1.2cm of chromadb] {User Question};
+    \node (intent) [decision, below=1.0cm of question] {Intent Classification\\(Overview / Historical / Bug Origin)};
+    \node (retrieval) [process, below=0.8cm of intent] {Temporal Retrieval};
     \node (topk) [process, below=of retrieval] {Top-k Commit Selection};
     \node (prompt) [process, below=of topk] {Prompt Construction};
     \node (llm) [storage, below=of prompt] {Local Ollama LLM (Qwen2.5-Coder 7B)};
     \node (response) [process, below=of llm] {Grounded Response Synthesis};
-    \node (display) [terminal, fill=ieeePrimary, text=white, below=of response] {
+    \node (display) [terminal, fill=ieeePrimary, text=white, below=1.0cm of response] {
         Display Evidence + Confidence + Timeline
     };
 
-    % Layer Grouping Containers
+    % Layer Grouping Containers with Header Labels Positioned Cleanly ABOVE Boxes
     \begin{scope}[on background layer]
         \node (ingest_layer) [container, fit=(url) (clone) (commits) (readme) (snapshots) (embeddings) (chromadb)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{ieeePrimary}] at (ingest_layer.north west) {\;STAGE 1: REPOSITORY INGESTION \& TEMPORAL INDEXING};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{ieeePrimary}, yshift=2pt] at (ingest_layer.north west) {STAGE 1: REPOSITORY INGESTION \& TEMPORAL INDEXING};
 
         \node (rag_layer) [container, fit=(intent) (retrieval) (topk) (prompt) (llm) (response)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{ieeePrimary}] at (rag_layer.north west) {\;STAGE 2: TEMPORAL RETRIEVAL \& LLM REASONING};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{ieeePrimary}, yshift=2pt] at (rag_layer.north west) {STAGE 2: TEMPORAL RETRIEVAL \& LLM REASONING};
     \end{scope}
 
     % Connector Arrows

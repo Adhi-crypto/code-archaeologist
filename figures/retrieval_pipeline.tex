@@ -67,7 +67,7 @@
         minimum width=2.6cm,
         font=\sffamily\tiny\bfseries\color{acmDarkGray}
     },
-    % Container Layer Style
+    % Container Layer Style with generous padding
     container/.style={
         draw=acmPrimary!40,
         fill=acmGroupBg,
@@ -75,7 +75,8 @@
         dashed,
         rounded corners=5pt,
         line width=0.9pt,
-        inner sep=6pt
+        inner ysep=14pt,
+        inner xsep=12pt
     },
     % Arrow Style
     arrow/.style={
@@ -109,7 +110,7 @@
     \node (chroma) [storage, right=of qembed] {ChromaDB\\Vector Search};
 
     % Row 2: Pipeline Nodes 7 to 12 (Left to Right)
-    \node (topk) [block, below=1.2cm of chroma] {Top-K Candidate\\Retrieval};
+    \node (topk) [block, below=1.5cm of chroma] {Top-K Candidate\\Retrieval};
     \node (filter) [block, left=of topk] {Temporal\\Filtering};
     \node (ranking) [block, left=of filter] {Commit\\Ranking};
     \node (prompt) [block, left=of ranking] {Prompt Builder};
@@ -125,13 +126,13 @@
         Evolution Timeline
     };
 
-    % Layer Containers
+    % Layer Containers with Title Labels Positioned Cleanly ABOVE Box Lines
     \begin{scope}[on background layer]
         \node (stage1) [container, fit=(query) (norm) (intent) (embedder) (qembed) (chroma)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage1.north west) {\;STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage1.north west) {STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
 
         \node (stage2) [container, fit=(topk) (filter) (ranking) (prompt) (ollama) (response)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage2.north west) {\;STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage2.north west) {STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
     \end{scope}
 
     % Main Horizontal Pipeline Flow Connections
@@ -142,7 +143,7 @@
     \draw [arrow] (qembed) -- (chroma);
     
     % Connecting Row 1 to Row 2
-    \draw [arrow] (chroma.south) -- ++(0,-0.4) -| (topk.north);
+    \draw [arrow] (chroma.south) -- ++(0,-0.5) -| (topk.north);
 
     % Row 2 Connections
     \draw [arrow] (topk) -- (filter);

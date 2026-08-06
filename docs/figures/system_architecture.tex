@@ -1,4 +1,4 @@
-\documentclass[tikz,border=10pt]{standalone}
+\documentclass[tikz,border=12pt]{standalone}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
 
 % Professional ACM/IEEE Color Palette
@@ -14,7 +14,7 @@
 \begin{tikzpicture}[
     font=\sffamily\small,
     >=Stealth,
-    node distance=0.8cm and 1.2cm,
+    node distance=0.75cm and 1.2cm,
     % Primary Block Style
     block/.style={
         draw=acmPrimary,
@@ -24,7 +24,7 @@
         line width=1.1pt,
         align=center,
         inner sep=7pt,
-        minimum width=6.5cm,
+        minimum width=7.2cm,
         minimum height=0.9cm,
         font=\sffamily\small\bfseries\color{acmPrimary}
     },
@@ -36,11 +36,11 @@
         rounded corners=3pt,
         line width=0.8pt,
         align=center,
-        inner sep=5pt,
-        minimum width=5.8cm,
+        inner sep=6pt,
+        minimum width=6.5cm,
         font=\sffamily\footnotesize\color{acmDarkGray}
     },
-    % Container Box Style
+    % Container Box Style with generous padding
     container/.style={
         draw=acmPrimary!50,
         fill=acmGroupBg,
@@ -48,22 +48,14 @@
         dashed,
         rounded corners=6pt,
         line width=1.0pt,
-        inner sep=8pt
+        inner ysep=14pt,
+        inner xsep=14pt
     },
     % Arrow Line Style
     arrow/.style={
         draw=acmDarkGray,
         ->,
         line width=1.1pt
-    },
-    % Connector Label Style
-    labelstyle/.style={
-        font=\sffamily\tiny\bfseries,
-        color=acmDarkGray,
-        fill=acmBoxBg,
-        inner sep=2.5pt,
-        rounded corners=2pt,
-        draw=acmSecondary!40
     }
 ]
 
@@ -71,44 +63,44 @@
     \node (github) [block, fill=acmPrimary!10] {GitHub Repository};
 
     % Node 2: Ingestion Component
-    \node (ingestion) [block, below=of github] {Repository Ingestion (GitPython)};
+    \node (ingestion) [block, below=1.0cm of github] {Repository Ingestion (GitPython)};
     
     % Node 3: Extraction Sub-Items
-    \node (extraction) [subblock, below=0.4cm of ingestion] {
+    \node (extraction) [subblock, below=0.45cm of ingestion] {
         Commit History Extraction \quad\textbullet\quad README Parsing\\
         Metadata Extraction \quad\textbullet\quad Directory Tree Indexing
     };
 
     % Node 4: Snapshot Builder
-    \node (snapshot) [block, below=0.6cm of extraction] {Temporal Snapshot Builder};
+    \node (snapshot) [block, below=0.45cm of extraction] {Temporal Snapshot Builder};
 
     % Node 5: Embedding Model
-    \node (embedder) [block, below=of snapshot] {Sentence Transformer (all-MiniLM-L6-v2)};
+    \node (embedder) [block, below=1.2cm of snapshot] {Sentence Transformer (all-MiniLM-L6-v2)};
 
     % Node 6: Vector Store
-    \node (chroma) [block, fill=acmSecondary!15, below=of embedder] {ChromaDB Temporal Vector Store};
+    \node (chroma) [block, fill=acmSecondary!15, below=0.45cm of embedder] {ChromaDB Temporal Vector Store};
 
     % Node 7: Retriever
-    \node (retriever) [block, below=of chroma] {Temporal Retriever};
+    \node (retriever) [block, below=0.45cm of chroma] {Temporal Retriever};
     
     % Node 8: Retriever Details
-    \node (retriever_details) [subblock, below=0.4cm of retriever] {
+    \node (retriever_details) [subblock, below=0.45cm of retriever] {
         Semantic Search \quad\textbullet\quad Query Classification\\
         Chronological Filtering \quad\textbullet\quad Positional Resolution
     };
 
     % Node 9: Local LLM Engine
-    \node (llm) [block, fill=acmSecondary!15, below=0.6cm of retriever_details] {Ollama Local LLM (Qwen2.5-Coder 7B)};
+    \node (llm) [block, fill=acmSecondary!15, below=1.2cm of retriever_details] {Ollama Local LLM (Qwen2.5-Coder 7B)};
 
     % Node 10: Reasoning Engine
-    \node (reasoning) [block, below=of llm] {Reasoning Engine};
-    \node (reasoning_details) [subblock, below=0.4cm of reasoning] {
+    \node (reasoning) [block, below=0.45cm of llm] {Reasoning Engine};
+    \node (reasoning_details) [subblock, below=0.45cm of reasoning] {
         Repository Chat \quad\textbullet\quad Causal Reasoning (Why)
     };
 
-    % Node 11: Intelligence Engine (Comprehensive Grid Box)
-    \node (intelligence) [block, fill=acmPrimary!8, below=0.6cm of reasoning_details, minimum width=7.2cm] {Repository Intelligence Engine};
-    \node (intel_details) [subblock, below=0.4cm of intelligence, minimum width=6.8cm] {
+    % Node 11: Intelligence Engine
+    \node (intelligence) [block, fill=acmPrimary!8, below=0.45cm of reasoning_details] {Repository Intelligence Engine};
+    \node (intel_details) [subblock, below=0.45cm of intelligence] {
         Repository Health Score \quad\textbullet\quad Developer Analytics\\
         Developer Bus Factor \quad\textbullet\quad Risk Hotspots \& Churn\\
         Evolution Milestone Timeline \quad\textbullet\quad Forensic Bug Origin\\
@@ -116,18 +108,18 @@
     };
 
     % Node 12: User Presentation UI
-    \node (ui) [block, fill=acmPrimary, text=white, below=0.6cm of intel_details, minimum width=7.2cm] {React Dashboard};
+    \node (ui) [block, fill=acmPrimary, text=white, below=1.0cm of intel_details] {React Dashboard};
 
-    % Grouping / System Boundaries
+    % Grouping Containers with Layer Headers Positioned Cleanly ABOVE Box Lines
     \begin{scope}[on background layer]
         \node (ingest_group) [container, fit=(ingestion) (extraction) (snapshot)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (ingest_group.north west) {\;INGESTION \& PROCESSING LAYER};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (ingest_group.north west) {INGESTION \& PROCESSING LAYER};
 
         \node (rag_group) [container, fit=(embedder) (chroma) (retriever) (retriever_details)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (rag_group.north west) {\;TEMPORAL RAG STACK};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (rag_group.north west) {TEMPORAL RAG STACK};
 
         \node (engine_group) [container, fit=(llm) (reasoning) (reasoning_details) (intelligence) (intel_details)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (engine_group.north west) {\;ANALYTICS \& REASONING ENGINE};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (engine_group.north west) {ANALYTICS \& REASONING ENGINE};
     \end{scope}
 
     % Connector Arrows

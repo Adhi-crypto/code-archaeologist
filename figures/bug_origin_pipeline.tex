@@ -25,7 +25,7 @@
         line width=1.1pt,
         align=center,
         inner sep=6pt,
-        minimum width=6.5cm,
+        minimum width=6.8cm,
         minimum height=0.85cm,
         font=\sffamily\small\bfseries\color{acmPrimary}
     },
@@ -38,7 +38,7 @@
         line width=0.9pt,
         align=center,
         inner sep=5pt,
-        minimum width=5.8cm,
+        minimum width=6.0cm,
         minimum height=0.75cm,
         font=\sffamily\footnotesize\bfseries\color{acmDarkGray}
     },
@@ -51,10 +51,10 @@
         line width=1.2pt,
         align=center,
         inner sep=7pt,
-        minimum width=6.5cm,
+        minimum width=6.8cm,
         font=\sffamily\small\bfseries\color{acmPrimary}
     },
-    % Container Layer Style
+    % Container Layer Style with generous padding
     container/.style={
         draw=acmPrimary!45,
         fill=acmGroupBg,
@@ -62,7 +62,8 @@
         dashed,
         rounded corners=6pt,
         line width=1.0pt,
-        inner sep=8pt
+        inner ysep=14pt,
+        inner xsep=14pt
     },
     % Arrow Connection Style
     arrow/.style={
@@ -77,7 +78,9 @@
         fill=acmMathBg,
         draw=acmSecondary!50,
         inner sep=2.5pt,
-        rounded corners=2pt
+        rounded corners=2pt,
+        minimum width=2.6cm,
+        align=center
     }
 ]
 
@@ -88,7 +91,7 @@
     \node (candidates) [block, below=of retrieval] {Candidate Commit Snapshots};
 
     % Stage 2: Multi-Factor Weighting Sub-System
-    \node (scoring_hdr) [block, fill=acmSecondary!15, below=0.8cm of candidates] {Multi-Factor Scoring Engine};
+    \node (scoring_hdr) [block, fill=acmSecondary!15, below=1.2cm of candidates] {Multi-Factor Scoring Engine};
     
     \node (f1) [factor, below=0.45cm of scoring_hdr] {Semantic Similarity Match};
     \node (f2) [factor, below=0.35cm of f1] {File Scope Relevance Match};
@@ -98,15 +101,15 @@
     \node (f6) [factor, below=0.35cm of f5] {Developer Activity Frequency};
 
     % Side Mathematical Weight Labels
-    \node (m1) [mathlabel, right=0.3cm of f1] {$w_1 = 0.40$ (40\%)};
-    \node (m2) [mathlabel, right=0.3cm of f2] {$w_2 = 0.20$ (20\%)};
-    \node (m3) [mathlabel, right=0.3cm of f3] {$w_3 = 0.15$ (15\%)};
-    \node (m4) [mathlabel, right=0.3cm of f4] {$w_4 = 0.10$ (10\%)};
-    \node (m5) [mathlabel, right=0.3cm of f5] {$w_5 = 0.10$ (10\%)};
-    \node (m6) [mathlabel, right=0.3cm of f6] {$w_6 = 0.05$ (5\%)};
+    \node (m1) [mathlabel, right=0.35cm of f1] {$w_1 = 0.40$ (40\%)};
+    \node (m2) [mathlabel, right=0.35cm of f2] {$w_2 = 0.20$ (20\%)};
+    \node (m3) [mathlabel, right=0.35cm of f3] {$w_3 = 0.15$ (15\%)};
+    \node (m4) [mathlabel, right=0.35cm of f4] {$w_4 = 0.10$ (10\%)};
+    \node (m5) [mathlabel, right=0.35cm of f5] {$w_5 = 0.10$ (10\%)};
+    \node (m6) [mathlabel, right=0.35cm of f6] {$w_6 = 0.05$ (5\%)};
 
     % Stage 3: Attribution & Visualization Output
-    \node (weighted) [block, fill=acmPrimary!10, below=0.6cm of f6] {
+    \node (weighted) [block, fill=acmPrimary!10, below=1.2cm of f6] {
         Weighted Score Calculation\\
         $\text{Score} = \sum_{i=1}^{6} w_i \cdot S_i$
     };
@@ -119,16 +122,16 @@
     \node (supporting) [block, below=of probable] {Supporting Commits Identification};
     \node (timeline) [terminal, fill=acmPrimary, text=white, below=of supporting] {Bug Timeline Regression Visualization};
 
-    % Layer Containers
+    % Layer Containers with Title Labels Positioned Cleanly ABOVE Box Lines
     \begin{scope}[on background layer]
         \node (stage1_bg) [container, fit=(desc) (embed) (retrieval) (candidates)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage1_bg.north west) {\;PHASE 1: CANDIDATE COMMIT RETRIEVAL};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage1_bg.north west) {PHASE 1: CANDIDATE COMMIT RETRIEVAL};
 
         \node (stage2_bg) [container, fit=(scoring_hdr) (f1) (f6) (m1) (m6)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage2_bg.north west) {\;PHASE 2: MULTI-FACTOR WEIGHTED CONFIDENCE SCORING};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage2_bg.north west) {PHASE 2: MULTI-FACTOR WEIGHTED CONFIDENCE SCORING};
 
         \node (stage3_bg) [container, fit=(weighted) (probable) (supporting) (timeline)] {};
-        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage3_bg.north west) {\;PHASE 3: FORENSIC ATTRIBUTION \& TIMELINE PROPAGATION};
+        \node[anchor=south west, font=\sffamily\tiny\bfseries\color{acmPrimary}, yshift=2pt] at (stage3_bg.north west) {PHASE 3: FORENSIC ATTRIBUTION \& TIMELINE PROPAGATION};
     \end{scope}
 
     % Connector Arrows
