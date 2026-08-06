@@ -1,0 +1,159 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+
+% Professional ACM/IEEE Academic Color Palette
+\definecolor{acmPrimary}{RGB}{15, 60, 115}       % Deep Academic Blue
+\definecolor{acmSecondary}{RGB}{35, 105, 165}   % Medium Steel Blue
+\definecolor{acmAccent}{RGB}{60, 145, 205}      % Accent Blue
+\definecolor{acmDarkGray}{RGB}{45, 55, 70}       % Dark Text Gray
+\definecolor{acmLightBg}{RGB}{246, 248, 252}    % Box Light Shading
+\definecolor{acmBoxBg}{RGB}{255, 255, 255}      % Card White Fill
+\definecolor{acmGroupBg}{RGB}{236, 242, 249}    % Outer Container Shading
+\definecolor{acmAnnoBg}{RGB}{240, 244, 250}     % Annotation Container Fill
+
+\begin{document}
+\begin{tikzpicture}[
+    font=\sffamily\footnotesize,
+    >=Stealth,
+    node distance=0.55cm and 0.55cm,
+    % Standard Horizontal Pipeline Block Style
+    block/.style={
+        draw=acmPrimary,
+        fill=acmBoxBg,
+        rectangle,
+        rounded corners=4pt,
+        line width=1.0pt,
+        align=center,
+        inner sep=5pt,
+        minimum width=2.4cm,
+        minimum height=1.0cm,
+        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
+    },
+    % Input/Output Terminal Node Style
+    terminal/.style={
+        draw=acmPrimary,
+        fill=acmPrimary!12,
+        rectangle,
+        rounded corners=8pt,
+        line width=1.1pt,
+        align=center,
+        inner sep=6pt,
+        minimum width=2.4cm,
+        minimum height=1.0cm,
+        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
+    },
+    % Storage Node Style
+    storage/.style={
+        draw=acmPrimary,
+        fill=acmSecondary!15,
+        rectangle,
+        rounded corners=4pt,
+        line width=1.1pt,
+        align=center,
+        inner sep=5pt,
+        minimum width=2.4cm,
+        minimum height=1.0cm,
+        font=\sffamily\footnotesize\bfseries\color{acmPrimary}
+    },
+    % Annotation Node Style
+    anno/.style={
+        draw=acmSecondary!60,
+        fill=acmAnnoBg,
+        rectangle,
+        rounded corners=3pt,
+        line width=0.8pt,
+        align=center,
+        inner sep=4pt,
+        minimum width=2.6cm,
+        font=\sffamily\tiny\bfseries\color{acmDarkGray}
+    },
+    % Container Layer Style
+    container/.style={
+        draw=acmPrimary!40,
+        fill=acmGroupBg,
+        rectangle,
+        dashed,
+        rounded corners=5pt,
+        line width=0.9pt,
+        inner sep=6pt
+    },
+    % Arrow Style
+    arrow/.style={
+        draw=acmDarkGray,
+        ->,
+        line width=1.0pt
+    },
+    % Dashed Connector Line
+    dasharrow/.style={
+        draw=acmSecondary,
+        ->,
+        dashed,
+        line width=0.9pt
+    }
+]
+
+    % Left Context Inputs Annotation Box
+    \node (anno_ctx) [anno] {
+        \textbf{INPUT CONTEXT}\\
+        Repository Summary\\
+        Commit Snapshots\\
+        Temporal Metadata
+    };
+
+    % Row 1: Pipeline Nodes 1 to 6 (Left to Right)
+    \node (query) [terminal, right=0.6cm of anno_ctx] {User Query};
+    \node (norm) [block, right=of query] {Normalize Query};
+    \node (intent) [block, right=of norm] {Intent Classifier};
+    \node (embedder) [block, right=of intent] {Sentence Transformer};
+    \node (qembed) [block, right=of embedder] {Query Embedding};
+    \node (chroma) [storage, right=of qembed] {ChromaDB\\Vector Search};
+
+    % Row 2: Pipeline Nodes 7 to 12 (Left to Right)
+    \node (topk) [block, below=1.2cm of chroma] {Top-K Candidate\\Retrieval};
+    \node (filter) [block, left=of topk] {Temporal\\Filtering};
+    \node (ranking) [block, left=of filter] {Commit\\Ranking};
+    \node (prompt) [block, left=of ranking] {Prompt Builder};
+    \node (ollama) [storage, left=of prompt] {Local Ollama LLM\\(Qwen2.5-Coder)};
+    \node (response) [terminal, fill=acmPrimary, text=white, left=of ollama] {Evidence Grounded\\Response};
+
+    % Right Output Metrics Annotation Box
+    \node (anno_out) [anno, left=0.6cm of response] {
+        \textbf{OUTPUT METRICS}\\
+        Evidence Score\\
+        Confidence Score\\
+        Source Citations\\
+        Evolution Timeline
+    };
+
+    % Layer Containers
+    \begin{scope}[on background layer]
+        \node (stage1) [container, fit=(query) (norm) (intent) (embedder) (qembed) (chroma)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage1.north west) {\;STAGE 1: QUERY EMBEDDING \& VECTOR SEED SEARCH};
+
+        \node (stage2) [container, fit=(topk) (filter) (ranking) (prompt) (ollama) (response)] {};
+        \node[anchor=north west, font=\sffamily\tiny\bfseries\color{acmPrimary}] at (stage2.north west) {\;STAGE 2: TEMPORAL RE-RANKING \& RESPONSE SYNTHESIS};
+    \end{scope}
+
+    % Main Horizontal Pipeline Flow Connections
+    \draw [arrow] (query) -- (norm);
+    \draw [arrow] (norm) -- (intent);
+    \draw [arrow] (intent) -- (embedder);
+    \draw [arrow] (embedder) -- (qembed);
+    \draw [arrow] (qembed) -- (chroma);
+    
+    % Connecting Row 1 to Row 2
+    \draw [arrow] (chroma.south) -- ++(0,-0.4) -| (topk.north);
+
+    % Row 2 Connections
+    \draw [arrow] (topk) -- (filter);
+    \draw [arrow] (filter) -- (ranking);
+    \draw [arrow] (ranking) -- (prompt);
+    \draw [arrow] (prompt) -- (ollama);
+    \draw [arrow] (ollama) -- (response);
+
+    % Side Annotation Connectors
+    \draw [dasharrow] (anno_ctx) -- (query);
+    \draw [dasharrow] (response) -- (anno_out);
+
+\end{tikzpicture}
+\end{document}
