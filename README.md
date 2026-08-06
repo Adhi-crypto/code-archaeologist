@@ -17,12 +17,15 @@
 **Code Archaeologist** is an open-source, local-first software repository mining and evolution intelligence system. It bridges the gap between Large Language Models (LLMs) and software engineering history by implementing **Time-Aware Retrieval-Augmented Generation (Temporal RAG)**.
 
 ### The Problem
-Traditional RAG systems treat code text as static documents. However, software codebases are dynamic, evolving entities. Questions such as *"Why was this refactoring introduced?"*, *"What changed in the second commit?"*, or *"Which commit introduced this bug?"* cannot be answered by static vector search because traditional vector databases lack chronological sequence, commit diffs, and author attribution context.
+
+Traditional RAG systems treat code text as static documents. However, software codebases are dynamic, evolving entities. Questions such as _"Why was this refactoring introduced?"_, _"What changed in the second commit?"_, or _"Which commit introduced this bug?"_ cannot be answered by static vector search because traditional vector databases lack chronological sequence, commit diffs, and author attribution context.
 
 ### The Solution: Temporal RAG
+
 Code Archaeologist extracts time-stamped commit snapshots, diff statistics, author activity, and architectural scope metadata into a high-dimensional vector store (**ChromaDB**). It uses a 3-stage temporal context retriever (Overview `repo_summary` $\rightarrow$ Positional `commit_index` $\rightarrow$ Cosine vector similarity) to ground LLM answers in verified software evolution history.
 
 ### Target Users
+
 - **Software Architects & Tech Leads**: Inspect codebase health, author bus factor risks, and logical file coupling.
 - **Developers & Code Reviewers**: Query commit evolution, understand past design rationale, and audit code diffs.
 - **Forensic QA Engineers**: Pinpoint bug origins and root-cause commits via multi-factor weighted confidence scoring.
@@ -32,27 +35,32 @@ Code Archaeologist extracts time-stamped commit snapshots, diff statistics, auth
 ## 🌟 Key Features
 
 ### 📦 1. Repository Ingestion & Multi-Stage Indexing
+
 - **Git Commit Mining**: Asynchronous commit history extraction via `GitPython` with `ThreadPoolExecutor` diff parallelization.
 - **Time-Aware Embeddings**: Embeds commit snapshot metadata (`sha`, `author`, `timestamp_unix`, `files_changed`, `diff_summary`) into 384-dimensional dense vectors using `sentence-transformers` (`all-MiniLM-L6-v2`).
 - **Deterministic Overview Indexing**: Indexes a dedicated `repo_summary` document (`id = {repo_id}_overview`) containing `README.md`, primary dependencies (`package.json`, `pyproject.toml`, `requirements.txt`), and directory trees.
 
 ### 💬 2. Conversational Chat & Causal Reasoning
+
 - **Real-Time Token Streaming**: Streams response tokens live over Server-Sent Events (SSE) with `status`, `metadata`, `token`, and `done` events.
 - **Intent Classification**: Dynamically routes queries to `OVERVIEW`, `HISTORICAL`, `IMPLEMENTATION`, `ARCHITECTURE`, or `BUG_ORIGIN` handlers.
-- **Positional Resolution**: Detects ordinal queries (*"first commit"*, *"2nd commit"*, *"latest commit"*) and fetches exact `commit_index` snapshots directly.
+- **Positional Resolution**: Detects ordinal queries (_"first commit"_, _"2nd commit"_, _"latest commit"_) and fetches exact `commit_index` snapshots directly.
 - **Dynamic Score Evaluation**: Computes real-time **Evidence Match Score (%)** and **Answer Confidence (%)** post-retrieval without hardcoded fallbacks.
 
 ### 📊 3. Repository Intelligence Dashboard
+
 - **Repository Health Score (0–100)**: Evaluates contributor equity, code churn stability, activity regularity, and hotspot risk.
 - **Developer Bus Factor Analytics**: Visualizes author contribution shares and bus factor risks via Recharts.
 - **Hotspot & Churn Heatmap**: Highlights critical files with frequent modifications, multi-author churn, and architectural tags.
 - **Logical File Coupling**: Identifies pairs of files that co-evolve together across commits.
 
 ### ⏳ 4. Architectural Evolution Timeline
+
 - Chronological commit milestone timeline with interactive search, author filtering, and architectural milestone toggles.
 - **Uniform Milestone Sampling**: Step-based sampling ($S = \lceil N / 20 \rceil$) selecting representative commits for LLM macro-evolution narrative generation.
 
 ### 🔍 5. Forensic Bug Origin Analysis
+
 - Multi-factor weighted confidence scoring algorithm to attribute bugs to root-cause commits:
   $$\text{Score} = (0.40 \cdot \text{Semantic}) + (0.20 \cdot \text{File Scope}) + (0.15 \cdot \text{Recency}) + (0.10 \cdot \text{Arch Impact}) + (0.10 \cdot \text{Importance}) + (0.05 \cdot \text{Dev Freq})$$
 
@@ -92,13 +100,13 @@ Code Archaeologist extracts time-stamped commit snapshots, diff statistics, auth
 
 ## 🛠️ Technology Stack
 
-| Domain | Technology | Description |
-| :--- | :--- | :--- |
-| **Frontend** | React 18, Vite 6, Tailwind CSS | High-performance SPA with lazy-loaded Recharts and Lucide icons. |
-| **Backend API** | Python 3.10+, FastAPI, Uvicorn | Asynchronous ASGI server with Pydantic validation and SSE streaming. |
-| **AI / Embeddings** | SentenceTransformers, Ollama | Local dense 384-d `all-MiniLM-L6-v2` embeddings and local GPU LLM. |
-| **Vector Database** | ChromaDB (v0.4+) | Persistent in-process vector database with metadata filtering. |
-| **Repository Mining** | GitPython, ThreadPoolExecutor | Multithreaded Git commit parsing and AST diff summary extraction. |
+| Domain                | Technology                     | Description                                                          |
+| :-------------------- | :----------------------------- | :------------------------------------------------------------------- |
+| **Frontend**          | React 18, Vite 6, Tailwind CSS | High-performance SPA with lazy-loaded Recharts and Lucide icons.     |
+| **Backend API**       | Python 3.10+, FastAPI, Uvicorn | Asynchronous ASGI server with Pydantic validation and SSE streaming. |
+| **AI / Embeddings**   | SentenceTransformers, Ollama   | Local dense 384-d `all-MiniLM-L6-v2` embeddings and local GPU LLM.   |
+| **Vector Database**   | ChromaDB (v0.4+)               | Persistent in-process vector database with metadata filtering.       |
+| **Repository Mining** | GitPython, ThreadPoolExecutor  | Multithreaded Git commit parsing and AST diff summary extraction.    |
 
 ---
 
@@ -128,152 +136,17 @@ code-archaeologist/
 │   ├── package.json                # Node dependencies & scripts
 │   ├── vite.config.js              # Vite configuration & vendor chunk splitting
 │   └── src/
-│       ├── App.jsx                 # Sidebar navigation & router
-│       ├── pages/                  # Page views (Chat, Intelligence, Evolution, Bug Origin)
-│       ├── components/             # Reusable UI cards & Markdown components
-│       ├── services/api.js         # Axios API client & SSE stream handler
-│       └── store/repoStore.jsx     # React Context state management
-├── docker-compose.yml
-└── README.md
+│       ├── App.jsx                # Sidebar Navigation & Router
+│       ├── services/api.js        # Axios API Client Layer
+│       ├── store/repoStore.jsx    # React Context State
+│       ├── pages/                 # Full Page Views
+│       └── components/            # Visual UI Components
+│           ├── timeline/
+│           ├── bug_origin/
+│           └── intelligence/
+├── docs/                          # Project Documentation
+└── docker-compose.yml
 ```
-
----
-
-## 🚀 Installation & Setup Guide
-
-### Prerequisites
-- **Python 3.10+**
-- **Node.js 18+** and **npm**
-- **Ollama** installed and running locally ([https://ollama.ai/](https://ollama.ai/))
-
-### 1. Ollama LLM Setup
-Pull your preferred local coding LLM model:
-```bash
-ollama pull qwen2.5-coder:7b
-# or
-ollama pull deepseek-coder-v2:latest
-```
-
-### 2. Backend Setup
-```bash
-# Navigate to backend directory
-cd backend
-
-# Create and activate virtual environment
-python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On Linux/macOS:
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start FastAPI dev server
-python main.py
-```
-- **API Server**: `http://localhost:8000`
-- **Swagger Documentation**: `http://localhost:8000/docs`
-
-### 3. Frontend Setup
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install Node dependencies
-npm install
-
-# Start Vite dev server
-npm run dev
-```
-- **Application Dashboard**: `http://localhost:5173`
-
----
-
-## 💡 Usage Guide
-
-1. **Ingest a Repository**:
-   - Paste a public Git repository URL (e.g., `https://github.com/NikhilPardhi28/Medical-Chatbot-using-OpenAi`) into the header ingestion bar.
-   - Click **Ingest Repository**. The system clones the repo, extracts commits, and indexes `repo_summary` and commit snapshots into ChromaDB.
-2. **Chat with Codebase**:
-   - Navigate to **Repo Chat** or **Causal Analysis**.
-   - Ask high-level or historical questions (*"What is this repo about?"*, *"What does the second commit do?"*). View real-time SSE token streaming and grounded evidence citations.
-3. **Inspect Repository Intelligence**:
-   - Navigate to **Repository Intelligence** to view the overall Repository Health Score, contributor bus factor charts, and risk hotspot heatmaps.
-4. **Explore Evolution Timeline**:
-   - Navigate to **Evolution Timeline** to explore chronological commit milestones and uniform sampling evolution narratives.
-5. **Run Forensic Bug Analysis**:
-   - Navigate to **Bug Origin Analysis**, input a bug query or error message, and receive multi-factor commit attribution reports.
-
----
-
-## 🔌 REST API Specifications
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `POST` | `/api/repo/ingest` | Triggers background Git cloning, commit extraction, and ChromaDB vector indexing. |
-| `GET` | `/api/repo/status/{repo_id}` | Polls progress status of an active repository ingestion task. |
-| `POST` | `/api/chat/query-stream` | Real-time SSE streaming Q&A endpoint (`status`, `metadata`, `token`, `done` events). |
-| `POST` | `/api/repo/intelligence` | Returns health score (0-100), bus factor analytics, hotspots, and executive AI summary. |
-| `POST` | `/api/evolution` | Returns milestone commit timeline and uniform sampling evolution narrative. |
-| `POST` | `/api/analysis/bug-origin` | Multi-factor forensic analysis to attribute bugs to root-cause commits. |
-| `POST` | `/api/analysis/debug-retrieval` | Diagnostic route returning collection count, raw distance ranks, and candidate scores. |
-
----
-
-## ⚡ Performance & Optimization Highlights
-
-- **Fast First Token Latency (TTFT)**: **51.94 ms – 53.37 ms** achieved via persistent HTTP connection pooling and VRAM model pre-warming (`keep_alive: "60m"`).
-- **Sub-Millisecond Warm Caching**: In-memory LRU/dict caching layers (`_intelligence_cache`, `_evolution_cache`, `_llm_cache`) deliver **0.12 ms – 0.14 ms** warm responses (`[CACHE HIT]`).
-- **Parallelized Git Extraction**: `ThreadPoolExecutor` parallelizes commit diff extraction across 8 CPU worker threads.
-- **Frontend Code Splitting**: Vite chunk splitting separates vendor libraries (`vendor-react`, `vendor-recharts`, `vendor-markdown`), achieving a **345 ms** build time.
-
----
-
-## 🖼️ Application Screenshots
-
-### Repository Ingestion
-![Repository Ingestion Page](docs/screenshots/ingestion_page.png)
-
-### Repository Intelligence Dashboard
-![Repository Intelligence Dashboard](docs/screenshots/intelligence_page.png)
-
-### Repository Chat & Grounded RAG Reasoning
-![Repository Chat & Grounded RAG Answer](docs/screenshots/chat_page.png)
-
-### Evolution Timeline
-![Evolution Timeline & Architectural Milestone Narrative](docs/screenshots/evolution_page.png)
-
-### Bug Origin Analysis
-![Bug Origin Forensic Analysis](docs/screenshots/bug_origin_page.png)
-
-
----
-
-## 🎓 Research Contribution & Academic Impact
-
-- **Time-Aware Retrieval-Augmented Generation (Temporal RAG)**: Demonstrates that injecting chronological metadata and deterministic overview context into vector databases increases grounded evidence match scores from 22.5% to 87.3%.
-- **Deterministic Overview Context**: Solves LLM hallucination on high-level codebase queries by force-fetching structured `repo_summary` documents (`README`, dependencies, directory tree).
-- **Multi-Factor Forensic Attribution**: Combines semantic similarity, file scope, recency, and architectural impact into a verifiable bug origin confidence score.
-
----
-
-## 🔮 Future Work
-
-- **Cross-Repository Co-Evolution**: Extending Temporal RAG to index and correlate dependencies across multiple microservice repositories.
-- **AST Symbol Dependency Graphs**: Integrating tree-sitter AST symbol graphs into commit diff embeddings for function-level call-graph evolution tracking.
-- **Git Tag Versioning**: Incorporating semantic release tags (`v1.0.0`) to group macro-evolutionary timelines by software release milestones.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/amazing-feature`).
-3. Commit your changes (`git commit -m "feat: add amazing feature"`).
-4. Push to the branch (`git push origin feature/amazing-feature`).
-5. Open a Pull Request.
 
 ---
 
