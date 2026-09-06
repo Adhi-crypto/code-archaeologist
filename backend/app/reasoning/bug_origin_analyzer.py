@@ -1,4 +1,5 @@
 import time
+import asyncio
 from loguru import logger
 from app.temporal_rag.temporal_retriever import retrieve_temporal_context
 from app.reasoning.ollama_client import generate
@@ -29,10 +30,7 @@ Provide a clear forensic report answering:
 5. CONFIDENCE EVALUATION: Explain the confidence score."""
 
 
-async def analyze_bug_origin(repo_id: str, query: str, repo_name: str = "Repository") -> dict:
-    start_time = time.time()
-    logger.info(f"Analyzing bug origin for repo {repo_id}: '{query[:60]}'")
-    
+def _sync_analyze_candidates(repo_id: str, query: str) -> tuple[dict, list[dict], str]:
     # 1. Query Understanding
     extracted = extract_query_keywords(query)
     
@@ -40,9 +38,7 @@ async def analyze_bug_origin(repo_id: str, query: str, repo_name: str = "Reposit
     contexts = retrieve_temporal_context(query, repo_id=repo_id, n_results=10)
     
     if not contexts:
-        return {
-            "error": "No indexed commit history found for this repository."
-        }
+        return {}, [], ""
         
     # 3. Candidate Scoring & Ranking
     author_counts = {}
@@ -137,7 +133,7 @@ async def analyze_bug_origin(repo_id: str, query: str, repo_name: str = "Reposit
     likely_commit = ranked_candidates[0]
     supporting_commits = ranked_candidates[1:5]
     
-    # 4. LLM Forensic Reasoning Context
+    # Forensic Context String
     context_parts = []
     for cand in ranked_candidates[:5]:
         context_parts.append(
@@ -149,6 +145,27 @@ async def analyze_bug_origin(repo_id: str, query: str, repo_name: str = "Reposit
         )
     candidate_context_str = "\n\n---\n\n".join(context_parts)
     
+    return likely_commit, supporting_commits, candidate_context_str
+
+
+async def analyze_bug_origin(repo_id: str, query: str, repo_name: str = "Repository") -> dict:
+    cache_key = (repo_id, query)
+    if cache_key in _bug_origin_cache:
+        logger.info(f"Returning cached Bug Origin Analysis for repo {repo_id}: '{query[:40]}'")
+        return _bug_origin_cache[cache_key]
+
+    start_time = time.time()
+    logger.info(f"Analyzing bug origin for repo {repo_id}: '{query[:60]}'")
+    
+    likely_commit, supporting_commits, candidate_context_str = await asyncio.to_thread(
+        _sync_analyze_candidates, repo_id, query
+    )
+
+    if not likely_commit:
+        return {
+            "error": "No indexed commit history found for this repository."
+        }
+
     prompt = bug_origin_prompt(query, repo_name, candidate_context_str)
     
     try:
@@ -185,3 +202,4 @@ def impact_category(is_arch: bool, churn: int) -> str:
     elif churn > 200:
         return "High Churn Changes"
     return "Targeted Refactoring"
+

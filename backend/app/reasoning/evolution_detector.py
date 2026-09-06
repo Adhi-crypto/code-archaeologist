@@ -1,4 +1,7 @@
+import time
+import asyncio
 from loguru import logger
+
 from app.reasoning.ollama_client import generate
 from app.reasoning.prompt_templates import SYSTEM_EVOLUTION, evolution_prompt
 from app.temporal_rag.snapshot_store import get_collection
@@ -39,7 +42,7 @@ def classify_impact(is_arch: bool, total_churn: int) -> str:
         return "Routine Maintenance"
 
 
-async def detect_evolution(repo_id: str, repo_name: str) -> dict:
+def _sync_build_evolution_timeline(repo_id: str) -> tuple[list[dict], list, int]:
     collection = get_collection()
 
     results = collection.get(
@@ -48,7 +51,7 @@ async def detect_evolution(repo_id: str, repo_name: str) -> dict:
     )
 
     if not results or not results["documents"]:
-        return {"error": "No data found for this repo"}
+        return [], [], 0
 
     combined = list(zip(results["documents"], results["metadatas"]))
     combined.sort(key=lambda x: x[1].get("timestamp_unix", 0))
@@ -89,10 +92,41 @@ async def detect_evolution(repo_id: str, repo_name: str) -> dict:
     # Sample up to 20 commits evenly across the timeline for LLM summary
     step = max(1, -(-len(combined) // 20))  # ceiling division
     sampled = combined[::step][:20]
+
+    return timeline, sampled, len(combined)
+
+
+import time
+
+_evolution_cache: dict[str, dict] = {}
+
+def invalidate_evolution_cache(repo_id: str = None):
+    global _evolution_cache
+    if repo_id:
+        if repo_id in _evolution_cache:
+            del _evolution_cache[repo_id]
+            logger.info(f"[CACHE INVALIDATED] Evolution cache cleared for repo {repo_id}")
+    else:
+        _evolution_cache.clear()
+        logger.info("[CACHE INVALIDATED] All evolution caches cleared")
+
+async def detect_evolution(repo_id: str, repo_name: str, force_refresh: bool = False) -> dict:
+    if not force_refresh and repo_id in _evolution_cache:
+        logger.info(f"[CACHE HIT] Returning cached Evolution Timeline for repo {repo_id}")
+        return _evolution_cache[repo_id]
+
+    logger.info(f"[CACHE MISS] Building Evolution Timeline for {repo_name} ({repo_id})")
+    t_start = time.perf_counter()
+
+    timeline, sampled, total_count = await asyncio.to_thread(_sync_build_evolution_timeline, repo_id)
+
+    if not timeline:
+        return {"error": "No data found for this repo"}
+
     context = "\n\n---\n\n".join([doc for doc, _ in sampled])
     prompt = evolution_prompt(repo_name, context)
 
-    logger.info(f"Detecting evolution for {repo_name} ({len(sampled)} sampled commits)")
+    logger.info(f"Detecting evolution narrative for {repo_name} ({len(sampled)} sampled commits)")
     try:
         narrative = await generate(prompt, system=SYSTEM_EVOLUTION)
     except Exception as e:
@@ -100,17 +134,25 @@ async def detect_evolution(repo_id: str, repo_name: str) -> dict:
         arch_count = sum(1 for t in timeline if t["is_architecture_change"])
         narrative = (
             f"### Architectural Evolution Summary for **{repo_name}**\n\n"
-            f"- **Total Commits Analyzed:** {len(combined)}\n"
+            f"- **Total Commits Analyzed:** {total_count}\n"
             f"- **Architectural Milestone Events:** {arch_count}\n"
             f"- **Sampled Milestones Analyzed:** {len(sampled)}\n\n"
             f"*(Local Ollama model connection unavailable. Complete commit timeline rendered with algorithmic impact scoring.)*"
         )
 
-    return {
+    t_total = round((time.perf_counter() - t_start) * 1000, 2)
+    logger.info(f"Evolution Timeline Generation Complete for {repo_id} in {t_total}ms")
+
+    res = {
         "repo_id": repo_id,
         "repo_name": repo_name,
         "narrative": narrative,
         "timeline": timeline,
-        "commits_analyzed": len(combined),
+        "commits_analyzed": total_count,
         "commits_sampled": len(sampled),
+        "execution_time_ms": t_total,
     }
+
+    _evolution_cache[repo_id] = res
+    return res
+
