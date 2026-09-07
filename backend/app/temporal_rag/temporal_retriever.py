@@ -9,6 +9,21 @@ from app.temporal_rag.embedder import embed_text
 from typing import Optional
 
 _vector_search_cache: dict[tuple, list[dict]] = {}
+_overview_cache: dict[str, dict] = {}
+
+
+def invalidate_retrieval_cache(repo_id: str = None):
+    global _vector_search_cache, _overview_cache
+    if repo_id:
+        _overview_cache.pop(repo_id, None)
+        keys_to_del = [k for k in _vector_search_cache if k[0] == repo_id]
+        for k in keys_to_del:
+            del _vector_search_cache[k]
+        logger.info(f"[CACHE INVALIDATED] Retrieval cache cleared for repo {repo_id}")
+    else:
+        _vector_search_cache.clear()
+        _overview_cache.clear()
+        logger.info("[CACHE INVALIDATED] All retrieval caches cleared")
 
 
 def _retrieval_cache_key(query: str, repo_id: str, n_results: int, time_from: Optional[datetime], time_to: Optional[datetime]) -> tuple:
@@ -56,9 +71,6 @@ def retrieve_temporal_context(
 
     t_start = time.perf_counter()
     collection = get_collection()
-    doc_count = collection.count()
-    if doc_count == 0:
-        return []
 
     final_contexts = []
     
@@ -91,25 +103,30 @@ def retrieve_temporal_context(
         except Exception as e:
             logger.warning(f"Positional commit query failed: {e}")
 
-    # 2. Deterministic Overview Summary Resolution
+    # 2. Deterministic Overview Summary Resolution (with in-memory cache)
     is_overview_query = any(k in query.lower() for k in ["about", "overview", "explain the project", "what is this", "architecture", "structure", "summary"])
     if is_overview_query or not final_contexts:
-        try:
-            overview_res = collection.get(
-                ids=[f"{repo_id}_overview"],
-                include=["documents", "metadatas"],
-            )
-            if overview_res and overview_res.get("documents") and overview_res["documents"][0]:
-                doc = overview_res["documents"][0]
-                meta = overview_res["metadatas"][0]
-                final_contexts.insert(0, {
-                    "document": doc,
-                    "metadata": meta,
-                    "relevance_score": 0.95,
-                    "rerank_score": 0.98,
-                })
-        except Exception as e:
-            logger.debug(f"Overview summary fetch notice: {e}")
+        if repo_id in _overview_cache:
+            final_contexts.insert(0, _overview_cache[repo_id])
+        else:
+            try:
+                overview_res = collection.get(
+                    ids=[f"{repo_id}_overview"],
+                    include=["documents", "metadatas"],
+                )
+                if overview_res and overview_res.get("documents") and overview_res["documents"][0]:
+                    doc = overview_res["documents"][0]
+                    meta = overview_res["metadatas"][0]
+                    cached_overview = {
+                        "document": doc,
+                        "metadata": meta,
+                        "relevance_score": 0.95,
+                        "rerank_score": 0.98,
+                    }
+                    _overview_cache[repo_id] = cached_overview
+                    final_contexts.insert(0, cached_overview)
+            except Exception as e:
+                logger.debug(f"Overview summary fetch notice: {e}")
 
     t0 = time.perf_counter()
     query_embedding = embed_text(query)
@@ -133,54 +150,33 @@ def retrieve_temporal_context(
             ]
         }
 
-    # Determine actual matching document count for the target repo to prevent HNSW contiguous array errors
-    matching_ids = []
-    try:
-        matched_get = collection.get(where=where_filter, include=[])
-        if matched_get and matched_get.get("ids"):
-            matching_ids = matched_get["ids"]
-    except Exception as e:
-        logger.warning(f"Could not fetch matching IDs count for repo {repo_id}: {e}")
-
-    actual_match_count = len(matching_ids)
-    if actual_match_count == 0:
-        # Retry with basic repo_id filter
-        where_filter = {"repo_id": repo_id}
-        try:
-            matched_get = collection.get(where=where_filter, include=[])
-            if matched_get and matched_get.get("ids"):
-                actual_match_count = len(matched_get["ids"])
-        except Exception:
-            pass
-
-    fetch_limit = min(20, max(1, actual_match_count)) if actual_match_count > 0 else min(20, doc_count)
+    fetch_limit = min(20, max(5, n_results * 2))
 
     t1 = time.perf_counter()
     results = None
-    if actual_match_count > 0:
+    try:
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=fetch_limit,
+            where=where_filter,
+            include=["documents", "metadatas", "distances"],
+        )
+    except Exception as e:
+        logger.warning(f"ChromaDB direct KNN query notice ({e}), falling back to collection.get()")
         try:
-            results = collection.query(
-                query_embeddings=[query_embedding],
-                n_results=fetch_limit,
+            get_res = collection.get(
                 where=where_filter,
-                include=["documents", "metadatas", "distances"],
+                limit=fetch_limit,
+                include=["documents", "metadatas"],
             )
-        except Exception as e:
-            logger.warning(f"ChromaDB KNN query failed ({e}), falling back to collection.get()")
-            try:
-                get_res = collection.get(
-                    where=where_filter,
-                    limit=fetch_limit,
-                    include=["documents", "metadatas"],
-                )
-                if get_res and get_res.get("documents"):
-                    results = {
-                        "documents": [get_res["documents"]],
-                        "metadatas": [get_res["metadatas"]],
-                        "distances": [[0.3] * len(get_res["documents"])],
-                    }
-            except Exception as e2:
-                logger.error(f"Fallback get query also failed: {e2}")
+            if get_res and get_res.get("documents"):
+                results = {
+                    "documents": [get_res["documents"]],
+                    "metadatas": [get_res["metadatas"]],
+                    "distances": [[0.3] * len(get_res["documents"])],
+                }
+        except Exception as e2:
+            logger.error(f"Fallback get query also failed: {e2}")
     t_vsearch_ms = round((time.perf_counter() - t1) * 1000, 2)
 
 

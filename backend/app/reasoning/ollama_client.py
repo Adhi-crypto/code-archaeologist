@@ -46,25 +46,37 @@ async def warmup_ollama() -> bool:
         logger.warning(f"Ollama pre-warm ping failed (model will load on demand): {e}")
     return False
 
-async def generate(prompt: str, system: str = "") -> str:
-    key = _cache_key(prompt, system)
+def invalidate_llm_cache():
+    global _llm_cache
+    _llm_cache.clear()
+    logger.info("[CACHE INVALIDATED] Ollama LLM cache cleared")
+
+DEFAULT_OPTIONS = {
+    "temperature": 0.2,
+    "top_k": 40,
+    "top_p": 0.9,
+    "num_ctx": 4096,
+    "num_batch": 256,
+}
+
+async def generate(prompt: str, system: str = "", num_predict: int = 512, options: dict = None) -> str:
+    merged_options = {**DEFAULT_OPTIONS, "num_predict": num_predict}
+    if options:
+        merged_options.update(options)
+
+    key = _cache_key(f"{prompt}:::options={merged_options}", system)
     if key in _llm_cache:
         logger.info(f"[CACHE HIT] Returning cached Ollama LLM response (Prompt Key: {key[:12]})")
         return _llm_cache[key]
 
-    logger.info(f"[CACHE MISS] Invoking Ollama LLM model '{settings.OLLAMA_MODEL}' (Prompt Key: {key[:12]})")
+    logger.info(f"[CACHE MISS] Invoking Ollama LLM model '{settings.OLLAMA_MODEL}' (Prompt Key: {key[:12]}, num_predict={merged_options['num_predict']})")
     payload = {
         "model": settings.OLLAMA_MODEL,
         "prompt": prompt,
         "system": system,
         "stream": False,
         "keep_alive": "60m",
-        "options": {
-            "temperature": 0.2,
-            "top_k": 40,
-            "top_p": 0.9,
-            "num_predict": 768,
-        },
+        "options": merged_options,
     }
     t_start = time.perf_counter()
     try:
@@ -85,27 +97,26 @@ async def generate(prompt: str, system: str = "") -> str:
         logger.error(f"Ollama generation failed after {round((time.perf_counter() - t_start) * 1000, 2)}ms: {e}")
         raise RuntimeError(f"LLM unavailable: {e}")
 
-async def generate_stream(prompt: str, system: str = ""):
+async def generate_stream(prompt: str, system: str = "", num_predict: int = 512, options: dict = None):
     """Async generator streaming LLM tokens in real-time from Ollama."""
-    key = _cache_key(prompt, system)
+    merged_options = {**DEFAULT_OPTIONS, "num_predict": num_predict}
+    if options:
+        merged_options.update(options)
+
+    key = _cache_key(f"{prompt}:::options={merged_options}", system)
     if key in _llm_cache:
         logger.info(f"[CACHE HIT] Streaming cached Ollama LLM response (Prompt Key: {key[:12]})")
         yield _llm_cache[key]
         return
 
-    logger.info(f"[CACHE MISS] Initiating Ollama LLM stream for '{settings.OLLAMA_MODEL}' (Prompt Key: {key[:12]})")
+    logger.info(f"[CACHE MISS] Initiating Ollama LLM stream for '{settings.OLLAMA_MODEL}' (Prompt Key: {key[:12]}, num_predict={merged_options['num_predict']})")
     payload = {
         "model": settings.OLLAMA_MODEL,
         "prompt": prompt,
         "system": system,
         "stream": True,
         "keep_alive": "60m",
-        "options": {
-            "temperature": 0.2,
-            "top_k": 40,
-            "top_p": 0.9,
-            "num_predict": 768,
-        },
+        "options": merged_options,
     }
     full_response = []
     t_start = time.perf_counter()

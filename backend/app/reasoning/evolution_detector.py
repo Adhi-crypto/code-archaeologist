@@ -96,19 +96,30 @@ def _sync_build_evolution_timeline(repo_id: str) -> tuple[list[dict], list, int]
     return timeline, sampled, len(combined)
 
 
-import time
-
 _evolution_cache: dict[str, dict] = {}
+_timeline_cache: dict[str, tuple] = {}
 
 def invalidate_evolution_cache(repo_id: str = None):
-    global _evolution_cache
+    global _evolution_cache, _timeline_cache
     if repo_id:
         if repo_id in _evolution_cache:
             del _evolution_cache[repo_id]
-            logger.info(f"[CACHE INVALIDATED] Evolution cache cleared for repo {repo_id}")
+        if repo_id in _timeline_cache:
+            del _timeline_cache[repo_id]
+        logger.info(f"[CACHE INVALIDATED] Evolution cache cleared for repo {repo_id}")
     else:
         _evolution_cache.clear()
+        _timeline_cache.clear()
         logger.info("[CACHE INVALIDATED] All evolution caches cleared")
+
+def get_deterministic_timeline(repo_id: str) -> tuple[list[dict], list[dict], int]:
+    """Return deterministic timeline events in <10ms without LLM synthesis."""
+    if repo_id in _timeline_cache:
+        return _timeline_cache[repo_id]
+    timeline, sampled, total_count = _sync_build_evolution_timeline(repo_id)
+    if timeline:
+        _timeline_cache[repo_id] = (timeline, sampled, total_count)
+    return timeline, sampled, total_count
 
 async def detect_evolution(repo_id: str, repo_name: str, force_refresh: bool = False) -> dict:
     if not force_refresh and repo_id in _evolution_cache:
@@ -118,17 +129,27 @@ async def detect_evolution(repo_id: str, repo_name: str, force_refresh: bool = F
     logger.info(f"[CACHE MISS] Building Evolution Timeline for {repo_name} ({repo_id})")
     t_start = time.perf_counter()
 
-    timeline, sampled, total_count = await asyncio.to_thread(_sync_build_evolution_timeline, repo_id)
+    timeline, sampled, total_count = await asyncio.to_thread(get_deterministic_timeline, repo_id)
 
     if not timeline:
         return {"error": "No data found for this repo"}
 
-    context = "\n\n---\n\n".join([doc for doc, _ in sampled])
+    # Compress commit context: extract structural milestone signals instead of raw snapshot documents
+    step = max(1, -(-len(timeline) // 15))
+    sampled_events = timeline[::step][:15]
+    milestone_lines = []
+    for evt in sampled_events:
+        files_preview = ", ".join(evt["files"][:4]) if evt["files"] else "various"
+        milestone_lines.append(
+            f"- [{evt['date']}] {evt['sha']} ({evt['author']}): \"{evt['message']}\" "
+            f"| Impact: {evt['impact_type']} (+{evt['additions']}/-{evt['deletions']}) | Files: {files_preview}"
+        )
+    context = "\n".join(milestone_lines)
     prompt = evolution_prompt(repo_name, context)
 
-    logger.info(f"Detecting evolution narrative for {repo_name} ({len(sampled)} sampled commits)")
+    logger.info(f"Detecting evolution narrative for {repo_name} ({len(sampled_events)} compressed milestones)")
     try:
-        narrative = await generate(prompt, system=SYSTEM_EVOLUTION)
+        narrative = await generate(prompt, system=SYSTEM_EVOLUTION, num_predict=384)
     except Exception as e:
         logger.warning(f"Ollama generation fallback for evolution narrative: {e}")
         arch_count = sum(1 for t in timeline if t["is_architecture_change"])
@@ -136,7 +157,7 @@ async def detect_evolution(repo_id: str, repo_name: str, force_refresh: bool = F
             f"### Architectural Evolution Summary for **{repo_name}**\n\n"
             f"- **Total Commits Analyzed:** {total_count}\n"
             f"- **Architectural Milestone Events:** {arch_count}\n"
-            f"- **Sampled Milestones Analyzed:** {len(sampled)}\n\n"
+            f"- **Sampled Milestones Analyzed:** {len(sampled_events)}\n\n"
             f"*(Local Ollama model connection unavailable. Complete commit timeline rendered with algorithmic impact scoring.)*"
         )
 
@@ -149,7 +170,7 @@ async def detect_evolution(repo_id: str, repo_name: str, force_refresh: bool = F
         "narrative": narrative,
         "timeline": timeline,
         "commits_analyzed": total_count,
-        "commits_sampled": len(sampled),
+        "commits_sampled": len(sampled_events),
         "execution_time_ms": t_total,
     }
 

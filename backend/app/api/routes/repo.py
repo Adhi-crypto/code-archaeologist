@@ -43,13 +43,18 @@ async def list_repos():
 class RepoIntelligenceRequest(BaseModel):
     repo_id: str
     repo_name: str = "Repository"
+    deterministic_only: bool = False
 
 
 @router.post("/intelligence", response_model=APIResponse)
 async def get_repository_intelligence(request: RepoIntelligenceRequest):
-    from app.reasoning.repository_intelligence import analyze_repository_intelligence
+    from app.reasoning.repository_intelligence import analyze_repository_intelligence, get_deterministic_intelligence
     try:
-        result = await analyze_repository_intelligence(request.repo_id, request.repo_name)
+        if request.deterministic_only:
+            result = get_deterministic_intelligence(request.repo_id, request.repo_name)
+        else:
+            result = await analyze_repository_intelligence(request.repo_id, request.repo_name)
+
         if "error" in result:
             raise HTTPException(status_code=404, detail=result["error"])
         return APIResponse(success=True, message="Repository intelligence generated", data=result)
@@ -64,6 +69,14 @@ async def get_repository_intelligence(request: RepoIntelligenceRequest):
 async def _run_ingestion(request: RepoIngestionRequest):
     repo_id = get_repo_id(request.repo_url)
     try:
+        ingestion_status[repo_id] = IngestionStatus(
+            repo_id=repo_id,
+            status="running",
+            progress=0,
+            total=request.max_commits,
+            message="Extracting commits and diff history from Git...",
+        )
+
         # Offload sync Git cloning & commit extraction
         metadata, commits, overview_info = await asyncio.to_thread(
             ingest_repo,
@@ -72,10 +85,38 @@ async def _run_ingestion(request: RepoIngestionRequest):
             max_commits=request.max_commits,
         )
 
+        ingestion_status[repo_id] = IngestionStatus(
+            repo_id=repo_id,
+            status="running",
+            progress=int(len(commits) * 0.2),
+            total=len(commits),
+            message=f"Extracted {len(commits)} commits. Analyzing languages and structure...",
+        )
+
+        def progress_cb(stage_msg: str, current: int, total_items: int):
+            pct = 0.2 + (0.75 * (current / max(1, total_items)))
+            ingestion_status[repo_id] = IngestionStatus(
+                repo_id=repo_id,
+                status="running",
+                progress=int(len(commits) * pct),
+                total=len(commits),
+                message=stage_msg,
+            )
+
         # Store in ChromaDB with temporal metadata & overview info (offloaded sync vector embeddings)
         from app.temporal_rag.snapshot_store import store_commit_snapshots
-        await asyncio.to_thread(store_commit_snapshots, metadata, commits, overview_info)
+        await asyncio.to_thread(store_commit_snapshots, metadata, commits, overview_info, progress_cb)
 
+        # Invalidate caches for freshly ingested repo
+        from app.reasoning.repository_intelligence import invalidate_intelligence_cache
+        from app.reasoning.evolution_detector import invalidate_evolution_cache
+        from app.temporal_rag.temporal_retriever import invalidate_retrieval_cache
+        from app.reasoning.ollama_client import invalidate_llm_cache
+
+        invalidate_intelligence_cache(repo_id)
+        invalidate_evolution_cache(repo_id)
+        invalidate_retrieval_cache(repo_id)
+        invalidate_llm_cache()
 
         ingestion_status[repo_id] = IngestionStatus(
             repo_id=repo_id,

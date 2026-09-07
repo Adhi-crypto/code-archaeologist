@@ -29,7 +29,7 @@ def clone_or_pull(repo_url: str, repo_id: str) -> Repo:
     return repo
 
 
-from concurrent.futures import ThreadPoolExecutor
+import subprocess
 
 def _process_single_commit(commit) -> CommitRecord | None:
     try:
@@ -55,19 +55,81 @@ def _process_single_commit(commit) -> CommitRecord | None:
 
 def extract_commits(repo: Repo, branch: str = "main", max_commits: int = 500) -> list[CommitRecord]:
     logger.info(f"Extracting up to {max_commits} commits from branch: {branch}")
+    repo_path = repo.working_tree_dir or repo.git_dir
 
+    # High-speed unified batch git log execution (avoids thread-unsafe pipe deadlocks)
+    cmd = [
+        "git", "-C", str(repo_path), "log",
+        f"-n{max_commits}",
+        "--numstat",
+        "--format=COMMIT_START%x1f%H%x1f%an%x1f%ct%x1f%B%x1e"
+    ]
     try:
-        commit_iter = list(repo.iter_commits(branch, max_count=max_commits))
-    except Exception:
-        commit_iter = list(repo.iter_commits(max_count=max_commits))
+        try:
+            res = subprocess.run(cmd + [branch], capture_output=True, text=True, check=True)
+        except subprocess.CalledProcessError:
+            res = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
-    # Parallelize commit stats & diff extraction across thread pool
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        results = list(executor.map(_process_single_commit, commit_iter))
+        raw = res.stdout
+        commits = []
+        chunks = raw.split("COMMIT_START\x1f")
+        for chunk in chunks:
+            if not chunk.strip():
+                continue
+            header_and_body, *rest = chunk.split("\x1e", 1)
+            parts = header_and_body.split("\x1f")
+            if len(parts) < 4:
+                continue
+            hexsha = parts[0].strip()
+            author = parts[1].strip()
+            ct_str = parts[2].strip()
+            message = parts[3].strip()
 
-    commits = [c for c in results if c is not None]
-    logger.info(f"Extracted {len(commits)} commits (parallelized)")
-    return commits
+            dt = datetime.fromtimestamp(int(ct_str)) if ct_str.isdigit() else datetime.now()
+
+            files_changed = []
+            additions = 0
+            deletions = 0
+            if rest:
+                for line in rest[0].strip().split("\n"):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    tokens = line.split("\t")
+                    if len(tokens) >= 3:
+                        ins_s, del_s, fpath = tokens[0], tokens[1], tokens[2]
+                        files_changed.append(fpath)
+                        if ins_s.isdigit():
+                            additions += int(ins_s)
+                        if del_s.isdigit():
+                            deletions += int(del_s)
+
+            diff_summary = _build_diff_summary(files_changed, additions, deletions)
+
+            commits.append(CommitRecord(
+                sha=hexsha[:10],
+                message=message,
+                author=author,
+                timestamp=dt,
+                files_changed=files_changed[:20],
+                additions=additions,
+                deletions=deletions,
+                diff_summary=diff_summary,
+            ))
+
+        logger.info(f"Extracted {len(commits)} commits (batch parsed in single git operation)")
+        return commits
+    except Exception as e:
+        logger.warning(f"Batch git log extraction failed ({e}), falling back to safe sequential extraction")
+        try:
+            commit_iter = list(repo.iter_commits(branch, max_count=max_commits))
+        except Exception:
+            commit_iter = list(repo.iter_commits(max_count=max_commits))
+
+        results = [_process_single_commit(c) for c in commit_iter]
+        commits = [c for c in results if c is not None]
+        logger.info(f"Extracted {len(commits)} commits (sequential fallback)")
+        return commits
 
 
 
@@ -82,19 +144,37 @@ def _build_diff_summary(files: list[str], additions: int, deletions: int) -> str
 def detect_languages(repo: Repo) -> list[str]:
     extensions = {}
     ext_map = {
-        ".py": "Python", ".js": "JavaScript", ".ts": "TypeScript",
+        ".py": "Python", ".js": "JavaScript", ".jsx": "JavaScript",
+        ".ts": "TypeScript", ".tsx": "TypeScript",
         ".java": "Java", ".go": "Go", ".rs": "Rust", ".cpp": "C++",
         ".c": "C", ".rb": "Ruby", ".php": "PHP", ".cs": "C#",
+        ".vue": "Vue", ".svelte": "Svelte", ".html": "HTML", ".css": "CSS",
     }
     try:
-        for item in repo.tree().traverse():
-            if hasattr(item, "path"):
-                ext = Path(item.path).suffix.lower()
+        repo_path = Path(repo.working_tree_dir or repo.git_dir)
+        for item in repo_path.rglob("*"):
+            if item.is_file():
+                # Ignore hidden dirs, node_modules, pycache, venv
+                parts = item.parts
+                if any(p.startswith(".") or p in ["__pycache__", "node_modules", "venv", ".venv", "dist", "build"] for p in parts):
+                    continue
+                ext = item.suffix.lower()
                 if ext in ext_map:
                     lang = ext_map[ext]
                     extensions[lang] = extensions.get(lang, 0) + 1
     except Exception:
         pass
+
+    if not extensions:
+        try:
+            for item in repo.tree().traverse():
+                if hasattr(item, "path"):
+                    ext = Path(item.path).suffix.lower()
+                    if ext in ext_map:
+                        lang = ext_map[ext]
+                        extensions[lang] = extensions.get(lang, 0) + 1
+        except Exception:
+            pass
     return sorted(extensions, key=extensions.get, reverse=True)
 
 

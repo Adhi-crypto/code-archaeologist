@@ -1,7 +1,17 @@
+import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_TELEMETRY__ANONYMIZED_TELEMETRY"] = "false"
+try:
+    import posthog
+    posthog.disabled = True
+except Exception:
+    pass
+
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 from loguru import logger
 from datetime import datetime
+from typing import Callable, Optional
 from app.core.config import settings
 from app.models.repo import CommitRecord, RepoMetadata
 from app.temporal_rag.embedder import embed_text, embed_batch
@@ -31,6 +41,14 @@ def get_collection():
     return _collection
 
 
+def close_chroma_client():
+    """Cleanly close and reset persistent ChromaDB client references on application shutdown."""
+    global _client, _collection
+    _collection = None
+    _client = None
+    logger.info("ChromaDB client connection cleanly closed.")
+
+
 def build_commit_document(commit: CommitRecord, repo_id: str, repo_name: str) -> str:
     """Build a rich text document for each commit snapshot — this is what gets embedded."""
     return f"""Repository: {repo_name}
@@ -43,13 +61,20 @@ Changes: +{commit.additions} -{commit.deletions} lines
 Summary: {commit.diff_summary}"""
 
 
-def store_commit_snapshots(metadata: RepoMetadata, commits: list[CommitRecord], overview_info: dict = None):
+def store_commit_snapshots(
+    metadata: RepoMetadata,
+    commits: list[CommitRecord],
+    overview_info: dict = None,
+    progress_callback: Optional[Callable[[str, int, int], None]] = None,
+):
     """Store all commits as time-stamped embeddings in ChromaDB, skipping already indexed SHAs."""
     collection = get_collection()
     repo_id = metadata.repo_id
     repo_name = metadata.repo_name
 
     logger.info(f"Checking existing snapshots in ChromaDB for {repo_name}")
+    if progress_callback:
+        progress_callback("Checking existing snapshots in ChromaDB...", 0, max(1, len(commits)))
 
     documents = []
     metadatas = []
@@ -84,15 +109,16 @@ Key Project Dependencies:
         metadatas.append(summary_meta)
         ids.append(summary_id)
 
-    # Query existing commit IDs to avoid re-embedding
+    # Query existing commit IDs in a single call to avoid re-embedding
     target_ids = [f"{repo_id}_{c.sha}" for c in commits]
     existing_ids = set()
-    try:
-        existing_res = collection.get(ids=target_ids, include=[])
-        if existing_res and existing_res.get("ids"):
-            existing_ids = set(existing_res["ids"])
-    except Exception as e:
-        logger.warning(f"Could not query existing IDs in Chroma: {e}")
+    if target_ids:
+        try:
+            existing_res = collection.get(ids=target_ids, include=[])
+            if existing_res and existing_res.get("ids"):
+                existing_ids = set(existing_res["ids"])
+        except Exception as e:
+            logger.warning(f"Could not query existing IDs in Chroma: {e}")
 
     skipped_count = 0
     for i, commit in enumerate(commits):
@@ -127,10 +153,15 @@ Key Project Dependencies:
         return
 
     # Batch embed missing documents
+    if progress_callback:
+        progress_callback(f"Generating vector embeddings for {len(documents)} snapshots...", len(commits) - len(documents), len(commits))
     embeddings = embed_batch(documents)
 
-    # Batch upsert into ChromaDB in chunks of 100
-    chunk_size = 100
+    # Batch upsert into ChromaDB
+    if progress_callback:
+        progress_callback(f"Indexing {len(ids)} snapshots in ChromaDB...", len(commits), len(commits))
+
+    chunk_size = 200
     for start in range(0, len(ids), chunk_size):
         end = start + chunk_size
         collection.upsert(

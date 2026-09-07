@@ -131,22 +131,38 @@ export default function IngestPage() {
       </form>
 
       {status && (
-        <div className="mt-6 bg-white rounded-xl border border-slate-200 p-5">
+        <div className="mt-6 bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
           <div className="flex items-center gap-3">
-            {status.status === 'complete' && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
-            {status.status === 'running' && <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />}
-            {status.status === 'failed' && <XCircle className="w-5 h-5 text-red-500" />}
-            <div>
-              <p className="text-sm font-medium text-slate-900 capitalize">{status.status}</p>
-              <p className="text-sm text-slate-500">{status.message}</p>
+            {status.status === 'complete' && <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />}
+            {status.status === 'running' && <Loader2 className="w-5 h-5 text-blue-500 animate-spin flex-shrink-0" />}
+            {status.status === 'failed' && <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-slate-900 capitalize">
+                  {status.status === 'running' ? 'Ingestion In Progress' : status.status}
+                </p>
+                {status.total > 0 && (
+                  <span className="text-xs font-mono font-medium text-slate-500">
+                    {Math.min(100, Math.round((status.progress / status.total) * 100))}%
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-slate-600 mt-0.5 break-words">{status.message}</p>
             </div>
           </div>
           {status.status === 'running' && status.total > 0 && (
-            <div className="mt-3 w-full bg-slate-100 rounded-full h-2">
-              <div
-                className="bg-blue-500 h-2 rounded-full transition-all"
-                style={{ width: `${(status.progress / status.total) * 100}%` }}
-              />
+            <div className="mt-4 space-y-2">
+              <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${Math.min(100, (status.progress / status.total) * 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-slate-400">
+                <span>Git Extraction</span>
+                <span>Vector Embeddings</span>
+                <span>ChromaDB Indexing</span>
+              </div>
             </div>
           )}
         </div>

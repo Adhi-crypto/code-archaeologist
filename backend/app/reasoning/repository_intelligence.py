@@ -188,14 +188,28 @@ def _sync_calculate_repository_intelligence(repo_id: str, repo_name: str) -> dic
     }
 
 
+_metrics_cache: dict[str, dict] = {}
+
+def get_deterministic_intelligence(repo_id: str, repo_name: str = "Repository") -> dict:
+    """Return algorithmic intelligence metrics in <100ms without LLM synthesis."""
+    if repo_id in _metrics_cache:
+        return _metrics_cache[repo_id]
+    data = _sync_calculate_repository_intelligence(repo_id, repo_name)
+    if "error" not in data:
+        _metrics_cache[repo_id] = data
+    return data
+
 def invalidate_intelligence_cache(repo_id: str = None):
-    global _intelligence_cache
+    global _intelligence_cache, _metrics_cache
     if repo_id:
         if repo_id in _intelligence_cache:
             del _intelligence_cache[repo_id]
-            logger.info(f"[CACHE INVALIDATED] Intelligence cache cleared for repo {repo_id}")
+        if repo_id in _metrics_cache:
+            del _metrics_cache[repo_id]
+        logger.info(f"[CACHE INVALIDATED] Intelligence cache cleared for repo {repo_id}")
     else:
         _intelligence_cache.clear()
+        _metrics_cache.clear()
         logger.info("[CACHE INVALIDATED] All intelligence caches cleared")
 
 
@@ -207,8 +221,7 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
     logger.info(f"[CACHE MISS] Generating Repository Intelligence report for {repo_name} ({repo_id})")
     start_time = time.time()
 
-
-    data = await asyncio.to_thread(_sync_calculate_repository_intelligence, repo_id, repo_name)
+    data = await asyncio.to_thread(get_deterministic_intelligence, repo_id, repo_name)
     if "error" in data:
         return data
 
@@ -222,7 +235,7 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
     total_deletions = data["total_deletions"]
     recommendation = data["recommendation"]
 
-    # AI Summary Generation
+    # AI Summary Generation - concise prompt with num_predict=384
     summary_prompt = (
         f"Generate an executive technical summary for repository '{repo_name}'.\n"
         f"ANALYTICS METRICS:\n"
@@ -235,7 +248,7 @@ async def analyze_repository_intelligence(repo_id: str, repo_name: str = "Reposi
     )
 
     try:
-        summary = await generate(summary_prompt, system=SYSTEM_INTELLIGENCE_SUMMARY)
+        summary = await generate(summary_prompt, system=SYSTEM_INTELLIGENCE_SUMMARY, num_predict=384)
     except Exception as e:
         logger.warning(f"Ollama generation fallback for repository intelligence summary: {e}")
         summary = (
